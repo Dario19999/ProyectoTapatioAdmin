@@ -1,0 +1,234 @@
+<div class="container-fluid animated fadeIn fast mt-3">
+
+    <div class="card mb-3 border-dark">
+        <div class="card-header border-dark">
+            <h4>Vista Previa</h4>
+        </div>
+        <div class="card-body">
+            <div class="card mb-3 border-primary">
+                <div class="card-header border-primary">
+                    <h4>Nombre de Evento</h4>
+                    <!-- <form [formGroup]=""></form> -->
+                </div>
+                <div class="card-body">
+                    <!-- <owl-carousel-o [options]="customOptions">
+                  <ng-template carouselSlide>
+                      <div class="slide">
+                          <img src="https://i.picsum.photos/id/905/400/300.jpg">
+                      </div>
+                  </ng-template>
+                  <ng-template carouselSlide>
+                      <div class="slide">
+                          <img src="https://i.picsum.photos/id/507/400/300.jpg">
+                      </div>
+                  </ng-template>
+                  <ng-template carouselSlide>
+                      <div class="slide">
+                          <img src="https://i.picsum.photos/id/609/400/300.jpg">
+                      </div>
+                  </ng-template>
+                  <ng-template carouselSlide>
+                      <div class="slide">
+                          <img src="https://i.picsum.photos/id/995/400/300.jpg">
+                      </div>
+                  </ng-template>
+                  <ng-template carouselSlide>
+                      <div class="slide">
+                          <img src="https://i.picsum.photos/id/1054/400/300.jpg">
+                      </div>
+                  </ng-template>
+              </owl-carousel-o> -->
+                    <hr>
+                    <div class="container-fluid">
+                        <h4>Descrpición</h4>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur excepturi facilis voluptatum tempore quam deleniti molestias vero atque? Magni culpa commodi ipsam soluta et sit quod blanditiis fugit nostrum similique.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text"><small class="text-muted">20/04/2020 - 22/04/2020</small></p>
+                </div>
+            </div>
+
+            <div class="card mb-3 border-success">
+                <div class="card-header border-success">
+                    <h4>Boletos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row h-100">
+                            <div class="col-md-3">
+                                <h5>En inventario:</h5>
+                                <h1>0</h1>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Precio Por Boleto:</h5>
+                                <h1>$0</h1>
+                            </div>
+                            <div class="col-md-3">
+                                <h5>Promoción:</h5>
+                                <h1>N/A</h1>
+                            </div>
+                            <div class="col-md-3 my-auto">
+                                <!-- <form> -->
+                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                              <option selected>Selecciona la Promoción a Aplicar</option>
+                              <option value="1">Promo 1</option>
+                              <option value="2">Promo 2</option>
+                              <option value="3">Promo 3</option>
+                           </select>
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn btn-outline-success">Aplicar Promoción</button>
+                                </div>
+                                <!-- </form> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mb-3 border-primary">
+        <div class="card-header border-primary">
+            <h4>Opciones de edición</h4>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-outline-primary btn-block text-center collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                             Información Principal
+                          </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <form [formGroup]="formInfo" (ngSubmit)="guardarInfo()">
+                                <div class="form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="nombreEvento">Nombre:</label>
+                                        <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="enlaceEvento">Enlace:</label>
+                                        <input type="text" class="form-control" id="enlaceEvento" placeholder="Ingrese el Enlace del Evento" formControlName="enlace">
+                                    </div>
+                                </div>
+
+                            </form>
+                            <div class="input-group form-row mb-3">
+                                <div class="col-md-6">
+                                    <label for="tipo">Tipo:</label>
+                                    <select id="tipo" class="form-control" formControlName="tipo">
+                                        <option value="evento">Evento</option>
+                                        <option value="fiesta">Fiesta</option>
+                                      </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="descEvento">Descripción:</label>
+                                    <textarea id="descEvento" class="form-control" rows="5" formControlName="desc"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="input-group form-row mb-3">
+                                <div class="col-md-12 text-center">
+                                    <button class="btn btn-success" type="submit">Guardar cambios</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-outline-primary btn-block text-center collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Fechas y Horarios
+                          </button>
+                        </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <form [formGroup]="formFechas" (ngSubmit)="guardarFechas()">
+                                <div class="input-group form-row mb-3" formGroupName="fecha">
+                                    <div class="col-md-6">
+                                        <label for="fechaInicio">Fecha de inicio:</label>
+                                        <input type="date" id="fechaInicio" class="form-control" formControlName="inicio">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="fechaCierre">Fecha de cierre:</label>
+                                        <input type="date" id="fechaCierre" class="form-control" formControlName="cierre">
+
+                                    </div>
+                                </div>
+
+                                <div class="input-group form-row mb-3" formGroupName="horario">
+                                    <div class="col-md-6">
+                                        <label for="horaInicio">Hora de inicio:</label>
+                                        <input type="time" id="horaInicio" class="form-control" formControlName="inicio">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="horaCierre">Hora de cierre:</label>
+                                        <input type="time" id="horaCierre" class="form-control" formControlName="cierre">
+                                    </div>
+                                </div>
+
+                                <div class="input-group form-row mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-success" type="submit">Guardar cambios</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h2 class="mb-0">
+                            <button class="btn btn-outline-primary btn-block text-center collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Imágenes
+                          </button>
+                        </h2>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <form [formGroup]="formImg" (ngSubmit)="guardarImg()">
+                                <div class="input-group form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="imgPrincipal">Imagen Principal (Carousel):</label>
+                                        <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
+                                        <img [src]="urlPrincipal"><br/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="ordenImg">Orden de Img Principal: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
+                                        <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg">
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="img-evento">Imagenes del Evento:</label><br>
+                                        <input type='file' id="img-evento" (change)="multiImg($event)" multiple>
+                                        <img *ngFor='let url of urls' [src]="url" height="200"><br/>
+                                    </div>
+                                </div>
+
+
+                                <div class="input-group form-row mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-success" type="submit">Guardar cambios</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

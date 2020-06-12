@@ -1,134 +1,168 @@
-<div class="container-fluid">
-    <table class="table table-striped table-bordered">
+<div class="container-fluid table-responsive animated fadeIn">
+    <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark text-center">
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Inventario</th>
-                <th scope="col">Acciones</th>
+                <th scope="col" style="width: 5%;">ID</th>
+                <th scope="col" style="width: 30%;">Nombre</th>
+                <th scope="col" style="width: 10%;">Inventario</th>
+                <th scope="col" style="width: 10%;">Acciones</th>
             </tr>
         </thead>
-        <tbody class="text-center ">
+        <tbody class="text-center">
             <tr>
-                <th scope="row">1</th>
-                <td>212</td>
-                <td>5 Boletos.</td>
-                <td>
-                    <button class="btn btn-success">Editar</button>
-                    <button class="btn btn-danger ml-4"> Eliminar</button>
+                <th scope="row" class="align-middle">1</th>
+                <td class="align-middle">212</td>
+                <td class="align-middle">5 Boletos.</td>
+                <td class="align-middle">
+                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
+                    <button class="btn btn-danger ml-4" type="button"> Eliminar</button>
                 </td>
             </tr>
             <tr>
-                <th scope="row">2</th>
-                <td> La arrolladora en C3</td>
-                <td>500 Boletos.</td>
-                <td>
-                    <button class="btn btn-success">Editar</button>
-                    <button class="btn btn-danger ml-4"> Eliminar</button>
+                <th scope="row" class="align-middle">2</th>
+                <td class="align-middle">La arrolladora en C3</td>
+                <td class="align-middle">500 Boletos.</td>
+                <td class="align-middle">
+                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
+                    <button class="btn btn-danger ml-4" type="button"> Eliminar</button>
                 </td>
             </tr>
             <tr>
-                <th scope="row">3</th>
-                <td>Competencia de Buscaminas</td>
-                <td>Agotado.</td>
-                <td>
-                    <button class="btn btn-success">Editar</button>
-                    <button class="btn btn-danger ml-4"> Eliminar</button>
+                <th scope="row" class="align-middle">3</th>
+                <td class="align-middle">Competencia de Buscaminas</td>
+                <td class="align-middle">Agotado.</td>
+                <td class="align-middle">
+                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
+                    <button class="btn btn-danger ml-4" type="button"> Eliminar</button>
                 </td>
             </tr>
             <tr>
-                <th scope="row">4</th>
-                <td>Peregrinación a la Barranca de Huentitán</td>
-                <td>Agotado.</td>
-                <td>
-                    <button class="btn btn-success">Editar</button>
-                    <button class="btn btn-danger ml-4"> Eliminar</button>
+                <th scope="row" class="align-middle">4</th>
+                <td class="align-middle">Peregrinación a la Barranca de Huentitán</td>
+                <td class="align-middle">Agotado.</td>
+                <td class="align-middle">
+                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
+                    <button class="btn btn-danger ml-4" type="button"> Eliminar</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <div class="container-fluid">
-        <div class="card card-info">
-            <div class="card-header text-center">
-                <h4>Crear Evento</h4>
+        <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#modalEvento">
+        + Crear un Nuevo Evento
+      </button>
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalEvento" tabindex="-1" role="dialog" aria-labelledby="modalEventoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEventoLabel">Crear Evento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <div class="card-body">
-                <form class="offset-md-3">
-                    <div class="form-row mb-3" style="width: 70%;">
+            <div class="modal-body">
+                <form [formGroup]="formEventos" (ngSubmit)="guardarEvento()">
+
+                    <div class="form-row mb-3">
                         <div class="col-md-12">
                             <label for="nombreEvento">Nombre: <small class="text-danger">*</small></label>
-                            <input name="nombreEvento" type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento">
+                            <input name="nombreEvento" type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre">
+                            <small *ngIf="validacionNombre" class="form-text text-danger">Obligatorio.</small>
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
+                    <div class="input-group form-row mb-3" formGroupName="fecha">
                         <div class="col-md-6">
                             <label for="fechaInicio">Fecha de inicio: <small class="text-danger">*</small></label>
-                            <input type="date" name="fechaInicio" id="fechaInicio" class="form-control">
+                            <input type="date" name="fechaInicio" id="fechaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionFechaInicio">
+                            <small *ngIf="validacionFechaInicio" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
                         </div>
                         <div class="col-md-6">
                             <label for="fechaCierre">Fecha de cierre: <small class="text-danger">*</small></label>
-                            <input type="date" name="fechaCierre" id="fechaCierre" class="form-control">
+                            <input type="date" name="fechaCierre" id="fechaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionFechaCierre">
+                            <small *ngIf="validacionFechaCierre" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
+
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
+                    <div class="input-group form-row mb-3" formGroupName="horario">
                         <div class="col-md-6">
                             <label for="horaInicio">Hora de inicio: <small class="text-danger">*</small></label>
-                            <input type="time" name="horaInicio" id="horaInicio" class="form-control">
+                            <input type="time" name="horaInicio" id="horaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionHorarioInicio">
+                            <small *ngIf="validacionHorarioInicio" class="form-text text-danger">Obligatorio. Horario no válido.</small>
                         </div>
                         <div class="col-md-6">
                             <label for="horaCierre">Hora de cierre: <small class="text-danger">*</small></label>
-                            <input type="time" name="horaCierre" id="horaCierre" class="form-control">
+                            <input type="time" name="horaCierre" id="horaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionHorarioCierre">
+                            <small *ngIf="validacionHorarioCierre" class="form-text text-danger">Obligatorio. Horario no válido.</small>
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
-                        <div class="col-md-6">
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-12">
                             <label for="tipo">Tipo: <small class="text-danger">*</small></label>
-                            <select name="tipo" id="tipo" class="form-control">
-                          <option selected>Elija un Tipo de Evento</option>
-                          <option value="evento">Evento</option>
-                          <option value="fiesta">Fiesta</option>
-                        </select>
+                            <select name="tipo" id="tipo" class="form-control" formControlName="tipo" [class.is-invalid]="validacionTipo">
+                                  <option value="evento">Evento</option>
+                                  <option value="fiesta">Fiesta</option>
+                                </select>
+                            <small *ngIf="validacionTipo" class="form-text text-danger">Obligatorio.</small>
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
+                    <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="enlaceEvento">Enlace:</label>
-                            <input name="enlaceEvento" type="text" class="form-control" id="enlaceEvento" placeholder="Ingrese el Enlace del Evento">
-                        </div>
-                    </div>
-                    <div class="input-group form-row mb-3" style="width: 70%;">
-                        <label for="descEvento">Descripción:<small class="text-danger">*</small></label>
-                        <div class="col-md-12">
-                            <textarea name="descEvento" id="descEvento" class="form-control" rows="5"></textarea>
+                            <input name="enlaceEvento" type="text" class="form-control" id="enlaceEvento" placeholder="Ingrese el Enlace del Evento" formControlName="enlace">
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
+                    <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgPrincipal">Imagen Principal (Carousel)<small class="text-danger">*</small></label>
-                            <input type="file" name="imgPrincipal" id="imgPrincipal" class="form-control">
+                            <label for="descEvento">Descripción: <small class="text-danger">*</small></label>
+                            <textarea name="descEvento" id="descEvento" class="form-control" rows="5" formControlName="desc" [class.is-invalid]="validacionDesc"></textarea>
+                            <small *ngIf="validacionDesc" class="form-text text-danger">Breve Descripción Obligatoria.</small>
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
-                        <div class="col-md-12">
-                            <label for="imgPrincipal">Imagen Principal (Carousel)<small class="text-danger">*</small></label>
-                            <input type="file" name="imgPrincipal" id="imgPrincipal" class="form-control">
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-6">
+                            <label for="ordenImg">Orden de Img Principal: <small class="text-danger">*</small> <small>(Posición de imagen principal en el carousel de eventos)</small></label>
+                            <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg" [class.is-invalid]="validacionOrden">
+                            <small *ngIf="validacionOrden" class="form-text text-danger">Orden Obligatorio.</small>
                         </div>
                     </div>
 
-                    <div class="input-group form-row mb-3" style="width: 70%;">
+                    <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgPrincipal">Imagen Principal (Carousel)<small class="text-danger">*</small></label>
-                            <input type="file" name="imgPrincipal" id="imgPrincipal" class="form-control">
+                            <input type="file" name="imgPrincipal" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
+                            <small *ngIf="validacionImg" class="form-text text-danger">Imagen Principal Obligatoria.</small>
+                            <img [src]="urlPrincipal" height="200"><br/>
+                        </div>
+                    </div>
+
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-12" formArrayName="imgsEvento">
+                            <label for="imgPrincipal">Imagenes del Evento:</label>
+                            <input type='file' (change)="multiImg($event)" multiple>
+                            <img *ngFor='let url of urls' [src]="url" height="200"><br/>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-success" type="submit">Crear</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+</div>

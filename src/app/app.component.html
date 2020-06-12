@@ -7,16 +7,14 @@
                 </li>
             </ul>
 
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
+            <div class="input-group input-group-sm w-25">
+                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-navbar">
                           <i class="fas fa-search"></i>
-                        </button>
-                    </div>
+                    </button>
                 </div>
-            </form>
+            </div>
         </nav>
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -51,13 +49,13 @@
                         </li>
                         <li class="nav-item">
                             <a [routerLink]="['usuarios']" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
+                                <i class="nav-icon fas fa-user"></i>
                                 <p>Usuarios</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a [routerLink]="['repartidores']" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
+                                <i class="nav-icon fas fa-address-card"></i>
                                 <p>Repartidores</p>
                             </a>
                         </li>
