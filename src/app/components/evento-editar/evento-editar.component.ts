@@ -7,16 +7,28 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class EventoEditarComponent implements OnInit {
 
-  formInfo:FormGroup
-  formFechas:FormGroup
-  formImg:FormGroup
+  formInfo:FormGroup;
+  formFechas:FormGroup;
+  formImg:FormGroup;
+  formBoletos:FormGroup;
+
+  promoFechas:FormGroup;
+  promoEvento:FormGroup;
+  promoCodigo:FormGroup;
 
   urls = [];
   urlPrincipal = "";
+  tiposBoleto:number[] = [];
 
-  constructor(private fb:FormBuilder) { }
+  constructor(private fb:FormBuilder) {
+    this.formBoeltosInit();
+   }
 
   ngOnInit() {
+    this.formInfoInit();
+    this.formFechasInit();
+    this.formImgInit();
+    this.formBoeltosInit();
   }
 
   formInfoInit(){
@@ -42,16 +54,28 @@ export class EventoEditarComponent implements OnInit {
   }
 
   formImgInit(){
-  this.formImg = this.fb.group({
-    imgPrincipal:['',],
-    ordenImg:['',],
-    imgsEvento: ['']
-  })
+    this.formImg = this.fb.group({
+      imgPrincipal:['',],
+      ordenImg:['',],
+      imgsEvento: ['']
+    })
   }
 
+  formBoeltosInit(){
+    this.formBoletos = this.fb.group({
+      nombre:['', Validators.required],
+      desc:['', Validators.required],
+      inventario:['', Validators.required],
+      precio:['', Validators.required]
+    })
+  }
   guardarInfo(){}
   guardarFechas(){}
   guardarImg(){}
+
+  guardarBoletos(){
+     console.log(this.formBoletos.value);
+  }
 
   imgPrincipal(event){
     if (event.target.files && event.target.files[0]) {
@@ -79,6 +103,11 @@ export class EventoEditarComponent implements OnInit {
           reader.readAsDataURL(event.target.files[i]);
         }
     }
+  }
+
+  crearBoletos( cant:number ){
+    for( let i = 0; i < cant; i++)
+    this.tiposBoleto.push(i);
   }
 
 }

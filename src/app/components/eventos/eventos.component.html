@@ -1,4 +1,4 @@
-<div class="container-fluid table-responsive animated fadeIn">
+<div class="container-fluid table-responsive animated fadeIn fast">
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark text-center">
             <tr>
@@ -71,7 +71,7 @@
                     <div class="form-row mb-3">
                         <div class="col-md-12">
                             <label for="nombreEvento">Nombre: <small class="text-danger">*</small></label>
-                            <input name="nombreEvento" type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre">
+                            <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre">
                             <small *ngIf="validacionNombre" class="form-text text-danger">Obligatorio.</small>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                     <div class="input-group form-row mb-3" formGroupName="fecha">
                         <div class="col-md-6">
                             <label for="fechaInicio">Fecha de inicio: <small class="text-danger">*</small></label>
-                            <input type="date" name="fechaInicio" id="fechaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionFechaInicio">
+                            <input type="date" id="fechaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionFechaInicio">
                             <small *ngIf="validacionFechaInicio" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
                         </div>
                         <div class="col-md-6">
@@ -93,12 +93,12 @@
                     <div class="input-group form-row mb-3" formGroupName="horario">
                         <div class="col-md-6">
                             <label for="horaInicio">Hora de inicio: <small class="text-danger">*</small></label>
-                            <input type="time" name="horaInicio" id="horaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionHorarioInicio">
+                            <input type="time" id="horaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionHorarioInicio">
                             <small *ngIf="validacionHorarioInicio" class="form-text text-danger">Obligatorio. Horario no válido.</small>
                         </div>
                         <div class="col-md-6">
                             <label for="horaCierre">Hora de cierre: <small class="text-danger">*</small></label>
-                            <input type="time" name="horaCierre" id="horaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionHorarioCierre">
+                            <input type="time" id="horaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionHorarioCierre">
                             <small *ngIf="validacionHorarioCierre" class="form-text text-danger">Obligatorio. Horario no válido.</small>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="tipo">Tipo: <small class="text-danger">*</small></label>
-                            <select name="tipo" id="tipo" class="form-control" formControlName="tipo" [class.is-invalid]="validacionTipo">
+                            <select id="tipo" class="form-control" formControlName="tipo" [class.is-invalid]="validacionTipo">
                                   <option value="evento">Evento</option>
                                   <option value="fiesta">Fiesta</option>
                                 </select>
@@ -117,14 +117,14 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="enlaceEvento">Enlace:</label>
-                            <input name="enlaceEvento" type="text" class="form-control" id="enlaceEvento" placeholder="Ingrese el Enlace del Evento" formControlName="enlace">
+                            <input type="text" class="form-control" id="enlaceEvento" placeholder="Ingrese el Enlace del Evento" formControlName="enlace">
                         </div>
                     </div>
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="descEvento">Descripción: <small class="text-danger">*</small></label>
-                            <textarea name="descEvento" id="descEvento" class="form-control" rows="5" formControlName="desc" [class.is-invalid]="validacionDesc"></textarea>
+                            <textarea id="descEvento" class="form-control" rows="5" formControlName="desc" [class.is-invalid]="validacionDesc"></textarea>
                             <small *ngIf="validacionDesc" class="form-text text-danger">Breve Descripción Obligatoria.</small>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-6">
                             <label for="ordenImg">Orden de Img Principal: <small class="text-danger">*</small> <small>(Posición de imagen principal en el carousel de eventos)</small></label>
-                            <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg" [class.is-invalid]="validacionOrden">
+                            <input type="number" class="form-control" id="ordenImg" min="0" step="1" value="0" formControlName="ordenImg" [class.is-invalid]="validacionOrden">
                             <small *ngIf="validacionOrden" class="form-text text-danger">Orden Obligatorio.</small>
                         </div>
                     </div>
@@ -140,14 +140,14 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgPrincipal">Imagen Principal (Carousel)<small class="text-danger">*</small></label>
-                            <input type="file" name="imgPrincipal" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
+                            <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
                             <small *ngIf="validacionImg" class="form-text text-danger">Imagen Principal Obligatoria.</small>
-                            <img [src]="urlPrincipal" height="200"><br/>
+                            <img [src]="urlPrincipal"><br/>
                         </div>
                     </div>
 
                     <div class="input-group form-row mb-3">
-                        <div class="col-md-12" formArrayName="imgsEvento">
+                        <div class="col-md-12">
                             <label for="imgPrincipal">Imagenes del Evento:</label>
                             <input type='file' (change)="multiImg($event)" multiple>
                             <img *ngFor='let url of urls' [src]="url" height="200"><br/>

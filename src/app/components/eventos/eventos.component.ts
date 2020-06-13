@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class EventosComponent implements OnInit {
 
   formEventos:FormGroup;
+
   urls = [];
   urlPrincipal = "";
 
@@ -80,6 +81,10 @@ export class EventosComponent implements OnInit {
     return this.formEventos.get('ordenImg').invalid && this.formEventos.get('ordenImg').touched
   }
 
+  // get validacionTipoBoletos(){
+  //   return this.formEventos.get('tipoBoletos').invalid && this.formEventos.get('tipoBoletos').touched
+  // }
+
   imgPrincipal(event){
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
@@ -122,5 +127,9 @@ export class EventosComponent implements OnInit {
       return;
     }
     console.log(this.formEventos);
+  }
+
+  guardarBoletos(){
+
   }
 }
