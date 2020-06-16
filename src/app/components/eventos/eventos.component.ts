@@ -12,6 +12,7 @@ export class EventosComponent implements OnInit {
 
   urls = [];
   urlPrincipal = "";
+  urlCarousel = "";
 
   constructor(private fb:FormBuilder,
               private router:Router) {
@@ -33,10 +34,11 @@ export class EventosComponent implements OnInit {
         cierre:['', [Validators.required]],
       }),
       tipo:['', [Validators.required]],
-      enlace:[''],
+      enlace:['', Validators.required],
       desc:['', [Validators.required]],
-      imgPrincipal:['', [Validators.required]],
       ordenImg:['', Validators.required],
+      imgPrincipal:['', [Validators.required]],
+      imgCarousel:['', [Validators.required]],
       imgsEvento: ['']
     })
   }
@@ -69,6 +71,10 @@ export class EventosComponent implements OnInit {
     return this.formEventos.get('tipo').invalid && this.formEventos.get('tipo').touched
   }
 
+  get validacionEnlace(){
+    return this.formEventos.get('enlace').invalid && this.formEventos.get('enlace').touched
+  }
+
   get validacionDesc(){
     return this.formEventos.get('desc').invalid && this.formEventos.get('desc').touched
   }
@@ -77,13 +83,13 @@ export class EventosComponent implements OnInit {
     return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').touched
   }
 
+  get validacionImgCarousel(){
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').touched
+  }
+
   get validacionOrden(){
     return this.formEventos.get('ordenImg').invalid && this.formEventos.get('ordenImg').touched
   }
-
-  // get validacionTipoBoletos(){
-  //   return this.formEventos.get('tipoBoletos').invalid && this.formEventos.get('tipoBoletos').touched
-  // }
 
   imgPrincipal(event){
     if (event.target.files && event.target.files[0]) {
@@ -93,6 +99,18 @@ export class EventosComponent implements OnInit {
       reader.onload = (event:any) => {
         console.log(event.target.result);
           this.urlPrincipal = event.target.result;
+      }
+    }
+  }
+
+  imgCarousel(event){
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (event:any) => {
+        console.log(event.target.result);
+          this.urlCarousel = event.target.result;
       }
     }
   }
@@ -127,9 +145,5 @@ export class EventosComponent implements OnInit {
       return;
     }
     console.log(this.formEventos);
-  }
-
-  guardarBoletos(){
-
   }
 }

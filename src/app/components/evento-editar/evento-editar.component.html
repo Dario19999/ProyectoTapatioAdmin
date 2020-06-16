@@ -1,4 +1,4 @@
-<div class="container-fluid animated fadeIn fast mt-3">
+<div class="container-fluid animated fadeIn fast mt-2">
 
     <div class="card mb-3 border-dark">
         <div class="card-header border-dark">
@@ -64,6 +64,12 @@
                             <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoCodigo">Promocion por Codigo</button>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h5>Inventario</h5>
+                            <p>0 Boletos</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <table class="table table-borderless table-sm">
@@ -121,6 +127,12 @@
                             <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoFechas">Promocion por Fechas</button>
                             <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoEvento">Promocion por Evento Relacionado</button>
                             <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoCodigo">Promocion por Codigo</button>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-9">
+                            <h5>Inventario</h5>
+                            <p>0 Boletos</p>
                         </div>
                     </div>
                 </div>
@@ -285,14 +297,14 @@
                                         <img [src]="urlPrincipal"><br/>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="ordenImg">Orden de Img Principal: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
+                                        <label for="ordenImg">Orden de Evento: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
                                         <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg">
                                     </div>
                                 </div>
                                 <div class="form-row mb-3">
                                     <div class="col-md-6">
                                         <label for="img-evento">Imagenes del Evento:</label><br>
-                                        <input type='file' id="img-evento" (change)="multiImg($event)" multiple>
+                                        <input type='file' id="img-evento" accept=".jpg" (change)="multiImg($event)" multiple>
                                         <img *ngFor='let url of urls' [src]="url" height="200"><br/>
                                     </div>
                                 </div>
@@ -319,22 +331,56 @@
                     </div>
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
                         <div class="card-body">
+
                             <div class="input-group form-row mb-3">
-                                <div class="col-md-6">
-                                    <label for="cantTipos">Cantidad de Tipos de Boleto <small class="text-danger">*</small></label>
-                                    <input type="number" class="form-control" id="cantTipos" min="0" step="1" value="0" #cantTipo>
+                                <div class="col-md-12">
+                                    <button class="btn btn-outline-success btn-block mx-auto" style="width: 50%; display: block;" type="button" (click)="crearBoleto()">+ Crear Boleto</button>
                                 </div>
                             </div>
 
-                            <div class="input-group form-row mb-3">
-                                <div class="col-md-12 text-center">
-                                    <button class="btn btn-success" type="button" (click)="crearBoletos(cantTipo.value)">Crear Boletos</button>
-                                </div>
-                            </div>
+                            <form [formGroup]="formBoletos" (ngSubmit)="guardarBoletos()">
+                                <div *ngFor="let boleto of boletos.controls; let i = index" formArrayName="boletos">
+                                    <div [formGroupName]="i" class="border rounded mb-3 p-3">
+                                        <div class="row p-0">
+                                            <div class="col-md-11">
+                                                <h5>Boleto {{ i+1 }}</h5>
+                                            </div>
+                                            <div class="col-md-1 float-right">
+                                                <button type="button" aria-label="Close" class="btn btn-danger" (click)="quitarBoleto(i)">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group form-row mb-2">
+                                            <div class="col-md-6">
+                                                <label for="nobmre">Nombre del Boleto: <small class="text-danger">*</small></label>
+                                                <input type="text" id="nombre" class="form-control" placeholder="Ingrese el Nombre del Boleto" formControlName="nombre">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="inventario">Inventario: <small class="text-danger">*</small></label>
+                                                <input type="number" min="0" step="1" value="0" id="inventario" class="form-control" formControlName="inventario">
+                                            </div>
+                                        </div>
 
-                            <div *ngFor="let boleto of tiposBoleto; let i = index">
-                                <p>boleto {{ i+1 }}</p>
-                            </div>
+                                        <div class="input-group form-row mb-2">
+                                            <div class="col-md-6">
+                                                <label for="desc">Descripción: <small class="text-danger">*</small></label>
+                                                <textarea id="desc" rows="5" class="form-control" formControlName="desc"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="precio">Precio por Boleto: <small class="text-danger">*</small></label>
+                                                <input type="number" min="0" step="1" value="0" id="precio" class="form-control" formControlName="precio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="cantBoletos > 0">
+                                    <button class="btn btn-success btn-block mx-auto" style="width: 25%; display: block;" type="submit">Guardar Boletos</button>
+                                </div>
+
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -376,7 +422,6 @@
                         <input type="number" min="0" step="1" value="0" id="precio" class="form-control">
                     </div>
                 </div>
-                <!-- </form> -->
                 <hr>
             </div>
             <div class="row pb-2 mt-0">
@@ -452,7 +497,7 @@
                 <div class="input-group form-row mb-3">
                     <div class="col-md-6">
                         <label for="codigo">Código: <small>(Clave única de 10 caracteres.)</small></label>
-                        <input type="text" maxlength="10" id="codigo" class="form-control" placeholder="AAAAAAAAAA">
+                        <input type="text" minlength="10" maxlength="10" id="codigo" class="form-control" placeholder="AAAAAAAAAA">
                     </div>
                 </div>
                 <div class="input-group form-row mb-3">

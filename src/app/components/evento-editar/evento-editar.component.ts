@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-evento-editar',
@@ -10,25 +10,25 @@ export class EventoEditarComponent implements OnInit {
   formInfo:FormGroup;
   formFechas:FormGroup;
   formImg:FormGroup;
-  formBoletos:FormGroup;
 
   promoFechas:FormGroup;
   promoEvento:FormGroup;
   promoCodigo:FormGroup;
 
+  formBoletos:FormGroup;
+
   urls = [];
   urlPrincipal = "";
-  tiposBoleto:number[] = [];
 
-  constructor(private fb:FormBuilder) {
-    this.formBoeltosInit();
-   }
+  cantBoletos:number = 0;
+
+  constructor(private fb:FormBuilder) {}
 
   ngOnInit() {
     this.formInfoInit();
     this.formFechasInit();
     this.formImgInit();
-    this.formBoeltosInit();
+    this.formBoletosInit();
   }
 
   formInfoInit(){
@@ -61,20 +61,24 @@ export class EventoEditarComponent implements OnInit {
     })
   }
 
-  formBoeltosInit(){
+  formBoletosInit(){
     this.formBoletos = this.fb.group({
-      nombre:['', Validators.required],
-      desc:['', Validators.required],
-      inventario:['', Validators.required],
-      precio:['', Validators.required]
+      boletos: this.fb.array([
+
+      ])
     })
   }
+
+  get boletos(){
+    return this.formBoletos.get('boletos') as FormArray;
+  }
+
   guardarInfo(){}
   guardarFechas(){}
   guardarImg(){}
 
   guardarBoletos(){
-     console.log(this.formBoletos.value);
+     console.log(this.formBoletos);
   }
 
   imgPrincipal(event){
@@ -105,9 +109,24 @@ export class EventoEditarComponent implements OnInit {
     }
   }
 
-  crearBoletos( cant:number ){
-    for( let i = 0; i < cant; i++)
-    this.tiposBoleto.push(i);
+  crearBoleto(){
+    this.cantBoletos++;
+    const BOLETOS = <FormArray>this.formBoletos.get('boletos');
+
+    BOLETOS.push(
+      this.fb.group({
+        nombre:['', Validators.required],
+        desc:['', Validators.required],
+        inventario:['', Validators.required],
+        precio:['', Validators.required]
+      })
+    );
+  }
+
+  quitarBoleto( index:number ){
+
+    this.cantBoletos--;
+    this.boletos.removeAt(index);
   }
 
 }
