@@ -7,6 +7,7 @@ import { RepartidoresComponent } from './components/repartidores/repartidores.co
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { EventoEditarComponent } from './components/evento-editar/evento-editar.component';
 import { PublicacionEditarComponent } from './components/publicacion-editar/publicacion-editar.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
 
 const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'repartidores', component: RepartidoresComponent },
   { path: 'editar-evento', component: EventoEditarComponent },
   { path: 'editar-publicacion', component: PublicacionEditarComponent },
+  { path: 'perfil', component: PerfilComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
 ];
 
