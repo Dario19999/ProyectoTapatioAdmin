@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-evento-editar',
@@ -7,9 +8,9 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 })
 export class EventoEditarComponent implements OnInit {
 
-  formInfo:FormGroup;
+  formInfoE:FormGroup;
   formFechas:FormGroup;
-  formImg:FormGroup;
+  formImgE:FormGroup;
 
   promoFechas:FormGroup;
   promoEvento:FormGroup;
@@ -18,9 +19,35 @@ export class EventoEditarComponent implements OnInit {
   formBoletos:FormGroup;
 
   urls = [];
-  urlPrincipal = "";
+  urlPrincipal = null;
+  urlCarousel = null;
 
   cantBoletos:number = 0;
+
+  customOptions: OwlOptions = {
+    loop: true,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: false,
+    dots: true,
+    navSpeed: 700,
+    navText: ['Anterior', 'Siguietne'],
+    responsive: {
+      0: {
+        items: 1
+      },
+      400: {
+        items: 2
+      },
+      740: {
+        items: 3
+      },
+      940: {
+        items: 3
+      }
+    },
+    nav: true
+  }
 
   constructor(private fb:FormBuilder) {}
 
@@ -32,7 +59,7 @@ export class EventoEditarComponent implements OnInit {
   }
 
   formInfoInit(){
-    this.formInfo = this.fb.group({
+    this.formInfoE = this.fb.group({
       nombre:['',],
       tipo:['',],
       desc:['',],
@@ -54,10 +81,11 @@ export class EventoEditarComponent implements OnInit {
   }
 
   formImgInit(){
-    this.formImg = this.fb.group({
+    this.formImgE = this.fb.group({
       imgPrincipal:['',],
       ordenImg:['',],
-      imgsEvento: ['']
+      imgsEvento: [''],
+      imgCarousel:['']
     })
   }
 
@@ -73,13 +101,74 @@ export class EventoEditarComponent implements OnInit {
     return this.formBoletos.get('boletos') as FormArray;
   }
 
-  guardarInfo(){}
-  guardarFechas(){}
-  guardarImg(){}
+  guardarInfo(){
+    // if(this.formEventos.invalid){
+    //   Object.values(this.formEventos.controls).forEach( control =>{
+
+    //     if(control instanceof FormGroup){
+    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
+    //     }
+    //     else{
+    //       control.markAllAsTouched();
+    //     }
+    //   });
+    //   return;
+    // }
+    console.log(this.formInfoE);
+  }
+  guardarFechas(){
+    // if(this.formEventos.invalid){
+    //   Object.values(this.formEventos.controls).forEach( control =>{
+
+    //     if(control instanceof FormGroup){
+    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
+    //     }
+    //     else{
+    //       control.markAllAsTouched();
+    //     }
+    //   });
+    //   return;
+    // }
+    console.log(this.formFechas);
+  }
+  guardarImg(){
+    // if(this.formEventos.invalid){
+    //   Object.values(this.formEventos.controls).forEach( control =>{
+
+    //     if(control instanceof FormGroup){
+    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
+    //     }
+    //     else{
+    //       control.markAllAsTouched();
+    //     }
+    //   });
+    //   return;
+    // }
+    console.log(this.formImgE);
+  }
 
   guardarBoletos(){
      console.log(this.formBoletos);
   }
+
+  borrarImgPrincipal(){
+    this.urlPrincipal = null;
+    this.formImgE.controls['imgPrincipal'].setValue("")
+  }
+
+  borrarImgCarousel(){
+    this.urlCarousel = null;
+    this.formImgE.controls['imgCarousel'].setValue("")
+  }
+
+  borrarImgs( index:number ){
+    if (index !== -1) {
+      this.urls.splice(index, 1);
+    }
+
+    this.formImgE.controls['imgsEvento'].setValue("");
+  }
+
 
   imgPrincipal(event){
     if (event.target.files && event.target.files[0]) {
@@ -93,8 +182,19 @@ export class EventoEditarComponent implements OnInit {
     }
   }
 
-  multiImg(event) {
+  imgCarousel(event){
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
+      reader.onload = (event:any) => {
+        console.log(event.target.result);
+          this.urlCarousel = event.target.result;
+      }
+    }
+  }
+
+  multiImg(event) {
     if (event.target.files && event.target.files[0]) {
         var filesAmount = event.target.files.length;
         for (let i = 0; i < filesAmount; i++) {

@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
@@ -12,6 +14,8 @@ import { RepartidoresComponent } from './components/repartidores/repartidores.co
 
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { EventoEditarComponent } from './components/evento-editar/evento-editar.component';
+import { PublicacionEditarComponent } from './components/publicacion-editar/publicacion-editar.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
 
 @NgModule({
   declarations: [
@@ -21,11 +25,15 @@ import { EventoEditarComponent } from './components/evento-editar/evento-editar.
     PublicacionesComponent,
     UsuariosComponent,
     RepartidoresComponent,
-    EventoEditarComponent
+    EventoEditarComponent,
+    PublicacionEditarComponent,
+    PerfilComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    CarouselModule,
     AppRoutingModule
   ],
   providers: [

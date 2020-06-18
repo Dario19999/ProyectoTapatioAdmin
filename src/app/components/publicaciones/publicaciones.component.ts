@@ -11,7 +11,7 @@ export class PublicacionesComponent implements OnInit {
   formPublicaciones:FormGroup
 
   urls = [];
-  urlPrincipal = "";
+  urlPrincipal = null;
 
   constructor(private router:Router,
               private fb:FormBuilder
@@ -72,6 +72,22 @@ export class PublicacionesComponent implements OnInit {
           this.urlPrincipal = event.target.result;
       }
     }
+  }
+
+  borrarImgPrincipal(){
+    this.urlPrincipal = null;
+    this.formPublicaciones.controls['imgPrincipal'].setValue("")
+  }
+
+  borrarImgs( index:number ){
+    if (index !== -1) {
+      this.urls.splice(index, 1);
+    }
+
+    this.formPublicaciones.controls['imgsPublicacion'].setValue("");
+  }
+  editarPublicacion(){
+    this.router.navigate(['editar-publicacion'])
   }
 
   guardarPublicacion(){

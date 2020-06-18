@@ -1,7 +1,7 @@
 <div class="container-fluid table-responsive animated fadeIn fast">
     <div class="row ">
         <div class="col-md-12 text-center">
-            <h2>Busca a Tus Publicaciones</h2>
+            <h2>Busca Tus Publicaciones</h2>
         </div>
     </div>
     <div class="row mb-4">
@@ -20,9 +20,9 @@
         <thead class="thead-dark text-center">
             <tr>
                 <th scope="col" style="width: 5%;">ID</th>
-                <th scope="col" style="width: 30%;">Título</th>
-                <th scope="col" style="width: 55%;">Cuerpo de Publicación</th>
-                <th scope="col" style="width: 10%;">Acciones</th>
+                <th scope="col" style="width: 25%;">Título</th>
+                <th scope="col" style="width: 45%;">Cuerpo de Publicación</th>
+                <th scope="col" style="width: 20%;">Acciones</th>
             </tr>
         </thead>
         <tbody class="text-center">
@@ -31,7 +31,8 @@
                 <td class="align-middle">Título 1</td>
                 <td class="text-left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta perspiciatis enim ad alias nobis quasi, placeat nihil labore esse harum voluptatibus? Harum provident incidunt culpa, tempora porro cumque sapiente.</td>
                 <td class="align-middle">
-                    <button class="btn btn-danger" type="button">Eliminar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
+                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
                 </td>
             </tr>
             <tr>
@@ -39,7 +40,8 @@
                 <td class="align-middle">Título 2</td>
                 <td class="text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora ad, voluptatum quis unde, dolorem ipsa voluptatibus dolor cumque sed et similique at sit voluptatem? Cum nisi illum atque a dolor?</td>
                 <td class="align-middle">
-                    <button class="btn btn-danger" type="button">Eliminar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
+                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
                 </td>
             </tr>
             <tr>
@@ -47,7 +49,8 @@
                 <td class="align-middle">Título 3</td>
                 <td class="text-left">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias unde ipsam dolorum impedit, debitis voluptates. Delectus suscipit ipsam, ratione dolorum esse officia sapiente rem incidunt unde dignissimos qui enim praesentium.</td>
                 <td class="align-middle">
-                    <button class="btn btn-danger" type="button">Eliminar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
+                    <button class="btn btn-danger ml-2" type="button">Eliminar</button>
                 </td>
             </tr>
             <tr>
@@ -55,7 +58,8 @@
                 <td class="align-middle">Título 4</td>
                 <td class="text-left">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum unde corporis doloremque facilis molestias odio accusamus a libero pariatur tempora earum, illo quisquam doloribus sit omnis vel hic, nihil nobis.</td>
                 <td class="align-middle">
-                    <button class="btn btn-danger" type="button">Eliminar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
+                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
                 </td>
             </tr>
         </tbody>
@@ -101,7 +105,16 @@
                             <label for="principal">Imagen Principal: <small class="text-danger">*</small></label><br>
                             <input type="file" id="principal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
                             <small *ngIf="validacionImgPrincipal" class="form-text text-danger">Imagen Principal Obligatoria.</small>
-                            <img [src]="urlPrincipal" height="200"><br/>
+                            <div class="row" *ngIf="urlPrincipal != null">
+                                <div class="col-md-7">
+                                    <img [src]="urlPrincipal" height="200" class="float-right"><br>
+                                </div>
+                                <div class="col-md-5">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgPrincipal()">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -110,7 +123,16 @@
                             <label for="imgsPublicacion">Imagenes de la Publicación:</label>
                             <input type='file' id="imgsPublicacion" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsPublicacion">
                             <small *ngIf="validacionImgs" class="form-text text-danger">Imagen Principal Obligatoria.</small>
-                            <img *ngFor='let url of urls' [src]="url" height="200"><br/>
+                            <div class="row" *ngFor='let url of urls; let i = index'>
+                                <div class="col-md-7">
+                                    <img [src]="url " height="200 " class="float-right"><br>
+                                </div>
+                                <div class="col-md-5">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>

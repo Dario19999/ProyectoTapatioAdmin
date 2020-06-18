@@ -1,7 +1,7 @@
 <div class="container-fluid table-responsive animated fadeIn fast">
     <div class="row ">
         <div class="col-md-12 text-center">
-            <h2>Busca a Tus Eventos</h2>
+            <h2>Busca Tus Eventos</h2>
         </div>
     </div>
     <div class="row mb-4">
@@ -158,19 +158,37 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgPrincipal">Imagen Principal del Evento<small class="text-danger">*</small></label>
+                            <label for="imgPrincipal">Imagen Principal del Evento: <small class="text-danger">*</small></label>
                             <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
                             <small *ngIf="validacionImg" class="form-text text-danger">Imagen Principal Obligatoria.</small>
-                            <img [src]="urlPrincipal" height="200"><br/>
+                            <div class="row" *ngIf="urlPrincipal != null">
+                                <div class="col-md-7">
+                                    <img [src]="urlPrincipal" height="200" class="float-right"><br>
+                                </div>
+                                <div class="col-md-5">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgPrincipal()">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgPrincipal">Imagen de Carousel<small class="text-danger">*</small></label>
+                            <label for="imgPrincipal">Imagen de Carousel: <small class="text-danger">*</small></label>
                             <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgCarousel($event)" formControlName="imgCarousel">
                             <small *ngIf="validacionImgCarousel" class="form-text text-danger">Imagen de Carousel Obligatoria.</small>
-                            <img [src]="urlCarousel" height="200"><br/>
+                            <div class="row" *ngIf="urlCarousel != null">
+                                <div class="col-md-7">
+                                    <img [src]="urlCarousel" height="200" class="float-right"><br>
+                                </div>
+                                <div class="col-md-5">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgCarousel()">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -178,7 +196,16 @@
                         <div class="col-md-12">
                             <label for="imgsEvento">Imagenes del Evento:</label>
                             <input type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
-                            <img *ngFor='let url of urls' [src]="url" height="200"><br/>
+                            <div class="row" *ngFor='let url of urls; let i = index'>
+                                <div class="col-md-7">
+                                    <img [src]="url " height="200 " class="float-right"><br>
+                                </div>
+                                <div class="col-md-5">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

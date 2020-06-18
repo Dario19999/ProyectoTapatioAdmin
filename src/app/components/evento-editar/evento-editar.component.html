@@ -10,33 +10,33 @@
                     <h4>Nombre de Evento</h4>
                 </div>
                 <div class="card-body">
-                    <!-- <owl-carousel-o [options]="customOptions">
-                  <ng-template carouselSlide>
-                      <div class="slide">
-                          <img src="https://i.picsum.photos/id/905/400/300.jpg">
-                      </div>
-                  </ng-template>
-                  <ng-template carouselSlide>
-                      <div class="slide">
-                          <img src="https://i.picsum.photos/id/507/400/300.jpg">
-                      </div>
-                  </ng-template>
-                  <ng-template carouselSlide>
-                      <div class="slide">
-                          <img src="https://i.picsum.photos/id/609/400/300.jpg">
-                      </div>
-                  </ng-template>
-                  <ng-template carouselSlide>
-                      <div class="slide">
-                          <img src="https://i.picsum.photos/id/995/400/300.jpg">
-                      </div>
-                  </ng-template>
-                  <ng-template carouselSlide>
-                      <div class="slide">
-                          <img src="https://i.picsum.photos/id/1054/400/300.jpg">
-                      </div>
-                  </ng-template>
-              </owl-carousel-o> -->
+                    <owl-carousel-o [options]="customOptions">
+                        <ng-template carouselSlide>
+                            <div class="slide">
+                                <img src="assets/img/eventos/img-e1.jpg" height="350px" class="p-1">
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide>
+                            <div class="slide">
+                                <img src="assets/img/eventos/img-e2.jpg" height="350px" class="p-1">
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide>
+                            <div class="slide">
+                                <img src="assets/img/eventos/img-e3.jpg" height="350px" class="p-1">
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide>
+                            <div class="slide">
+                                <img src="assets/img/eventos/img-e4.jpg" height="350px" class="p-1">
+                            </div>
+                        </ng-template>
+                        <ng-template carouselSlide>
+                            <div class="slide">
+                                <img src="assets/img/eventos/img-e5.jpg" height="350px" class="p-1">
+                            </div>
+                        </ng-template>
+                    </owl-carousel-o>
                     <hr>
                     <div class="container-fluid">
                         <h4>Descrpición</h4>
@@ -198,7 +198,7 @@
 
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
-                            <form [formGroup]="formInfo" (ngSubmit)="guardarInfo()">
+                            <form [formGroup]="formInfoE" (ngSubmit)="guardarInfo()">
                                 <div class="form-row mb-3">
                                     <div class="col-md-6">
                                         <label for="nombreEvento">Nombre:</label>
@@ -289,12 +289,21 @@
                     </div>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                         <div class="card-body">
-                            <form [formGroup]="formImg" (ngSubmit)="guardarImg()">
+                            <form [formGroup]="formImgE" (ngSubmit)="guardarImg()">
                                 <div class="input-group form-row mb-3">
                                     <div class="col-md-6">
-                                        <label for="imgPrincipal">Imagen Principal (Carousel):</label>
+                                        <label for="imgPrincipal">Imagen Principal del Evento:</label><br>
                                         <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
-                                        <img [src]="urlPrincipal"><br/>
+                                        <div class="row" *ngIf="urlPrincipal != null">
+                                            <div class="col-md-7">
+                                                <img [src]="urlPrincipal" height="200" class="float-right">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgPrincipal()">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="ordenImg">Orden de Evento: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
@@ -303,12 +312,35 @@
                                 </div>
                                 <div class="form-row mb-3">
                                     <div class="col-md-6">
-                                        <label for="img-evento">Imagenes del Evento:</label><br>
-                                        <input type='file' id="img-evento" accept=".jpg" (change)="multiImg($event)" multiple>
-                                        <img *ngFor='let url of urls' [src]="url" height="200"><br/>
+                                        <label for="imgEvento">Imagenes del Evento:</label><br>
+                                        <input type='file' id="imgEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                                        <div class="row" *ngFor='let url of urls; let i = index'>
+                                            <div class="col-md-7">
+                                                <img [src]="url " height="200 " class="float-right">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="imgCarousel">Imagen de Carousel:</label><br>
+                                        <input type="file" id="imgCarousel" accept=".jpg" (change)="imgCarousel($event)" formControlName="imgCarousel">
+                                        <div class="row" *ngIf="urlCarousel != null">
+                                            <div class="col-md-7">
+                                                <img [src]="urlCarousel" height="200" class="float-right">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgCarousel()">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
 
                                 <div class="input-group form-row mb-3">
                                     <div class="col-md-12 text-center">
@@ -345,7 +377,7 @@
                                             <div class="col-md-11">
                                                 <h5>Boleto {{ i+1 }}</h5>
                                             </div>
-                                            <div class="col-md-1 float-right">
+                                            <div class="col-md-1">
                                                 <button type="button" aria-label="Close" class="btn btn-danger" (click)="quitarBoleto(i)">
                                                 <span aria-hidden="true">&times;</span>
                                               </button>
@@ -378,9 +410,7 @@
                                 <div *ngIf="cantBoletos > 0">
                                     <button class="btn btn-success btn-block mx-auto" style="width: 25%; display: block;" type="submit">Guardar Boletos</button>
                                 </div>
-
                             </form>
-
                         </div>
                     </div>
                 </div>

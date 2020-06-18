@@ -11,8 +11,8 @@ export class EventosComponent implements OnInit {
   formEventos:FormGroup;
 
   urls = [];
-  urlPrincipal = "";
-  urlCarousel = "";
+  urlPrincipal = null;
+  urlCarousel = null;
 
   constructor(private fb:FormBuilder,
               private router:Router) {
@@ -129,6 +129,24 @@ export class EventosComponent implements OnInit {
           reader.readAsDataURL(event.target.files[i]);
         }
     }
+  }
+
+  borrarImgPrincipal(){
+    this.urlPrincipal = null;
+    this.formEventos.controls['imgPrincipal'].setValue("")
+  }
+
+  borrarImgCarousel(){
+    this.urlCarousel = null;
+    this.formEventos.controls['imgCarousel'].setValue("")
+  }
+
+  borrarImgs( index:number ){
+    if (index !== -1) {
+      this.urls.splice(index, 1);
+    }
+
+    this.formEventos.controls['imgsEvento'].setValue("");
   }
 
   guardarEvento(){
