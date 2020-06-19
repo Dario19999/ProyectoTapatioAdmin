@@ -21,42 +21,15 @@
             <tr>
                 <th scope="col" style="width: 5%;">ID</th>
                 <th scope="col" style="width: 30%;">Nombre</th>
-                <th scope="col" style="width: 10%;">Inventario</th>
+                <th scope="col" style="width: 10%;">Descripcion</th>
                 <th scope="col" style="width: 10%;">Acciones</th>
             </tr>
         </thead>
         <tbody class="text-center">
-            <tr>
-                <th scope="row" class="align-middle">1</th>
-                <td class="align-middle">212</td>
-                <td class="align-middle">5 Boletos.</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button"> Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">2</th>
-                <td class="align-middle">La arrolladora en C3</td>
-                <td class="align-middle">500 Boletos.</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button"> Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">3</th>
-                <td class="align-middle">Competencia de Buscaminas</td>
-                <td class="align-middle">Agotado.</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button"> Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">4</th>
-                <td class="align-middle">Peregrinación a la Barranca de Huentitán</td>
-                <td class="align-middle">Agotado.</td>
+            <tr *ngFor="let evento of eventos">
+                <th scope="row" class="align-middle">{{ evento.id_evento }}</th>
+                <td class="align-middle">{{ evento.nombre_evento }}</td>
+                <td class="align-middle">{{ evento.descripcion_evento }}</td>
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
                     <button class="btn btn-danger ml-lg-2" type="button"> Eliminar</button>

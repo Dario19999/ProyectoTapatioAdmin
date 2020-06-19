@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
@@ -16,6 +17,9 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { EventoEditarComponent } from './components/evento-editar/evento-editar.component';
 import { PublicacionEditarComponent } from './components/publicacion-editar/publicacion-editar.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
+
+import { UsuariosService } from './services/usuarios.service';
+import { EventosService } from './services/eventos.service';
 
 @NgModule({
   declarations: [
@@ -34,9 +38,12 @@ import { PerfilComponent } from './components/perfil/perfil.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     CarouselModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [
+    UsuariosService,
+    EventosService,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]

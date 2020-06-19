@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EventosService } from '../../services/eventos.service';
+
 
 @Component({
   selector: 'app-eventos',
@@ -14,12 +16,25 @@ export class EventosComponent implements OnInit {
   urlPrincipal = null;
   urlCarousel = null;
 
+  eventos = null;
+
+  evento = {
+    id_evento:null,
+    nombre_evento:null,
+    descripcion_evento:null
+  }
+
   constructor(private fb:FormBuilder,
-              private router:Router) {
-    this.formInit()
-   }
+              private router:Router,
+              private eventosService:EventosService) {}
 
   ngOnInit() {
+    this.getEventos();
+    this.formInit();
+  }
+
+  getEventos(){
+    this.eventosService.getEventos().subscribe( resultado => this.eventos = resultado);
   }
 
   formInit(){
