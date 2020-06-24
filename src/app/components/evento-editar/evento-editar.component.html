@@ -294,7 +294,8 @@
                                     <div class="col-md-6">
                                         <label for="imgPrincipal">Imagen Principal del Evento:</label><br>
                                         <input type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
-                                        <div class="row" *ngIf="urlPrincipal != null">
+                                        <small *ngIf="validacionTamImg" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
+                                        <div class="row" *ngIf="(urlPrincipal != null) && (!validacionTamImg)">
                                             <div class="col-md-7">
                                                 <img [src]="urlPrincipal" height="200" class="float-right">
                                             </div>
@@ -329,7 +330,8 @@
                                     <div class="col-md-6">
                                         <label for="imgCarousel">Imagen de Carousel:</label><br>
                                         <input type="file" id="imgCarousel" accept=".jpg" (change)="imgCarousel($event)" formControlName="imgCarousel">
-                                        <div class="row" *ngIf="urlCarousel != null">
+                                        <small *ngIf="validacionTamImgCarousel" class="form-text text-danger">Error: Tamaño mínimo 1250x690. Tamaño Máximo: 4096x2160</small>
+                                        <div class="row" *ngIf="(urlCarousel != null) && (!validacionTamImgCarousel)">
                                             <div class="col-md-7">
                                                 <img [src]="urlCarousel" height="200" class="float-right">
                                             </div>

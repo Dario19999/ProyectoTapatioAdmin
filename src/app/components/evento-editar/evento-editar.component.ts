@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-evento-editar',
@@ -82,11 +83,19 @@ export class EventoEditarComponent implements OnInit {
 
   formImgInit(){
     this.formImgE = this.fb.group({
-      imgPrincipal:['',],
+      imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
       ordenImg:['',],
       imgsEvento: [''],
-      imgCarousel:['']
+      imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]
     })
+  }
+
+  get validacionTamImg(){
+    return this.formImgE.get('imgPrincipal').invalid && this.formImgE.get('imgPrincipal').dirty
+  }
+
+  get validacionTamImgCarousel(){
+    return this.formImgE.get('imgCarousel').invalid && this.formImgE.get('imgCarousel').dirty
   }
 
   formBoletosInit(){

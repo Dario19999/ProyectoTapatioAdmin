@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-publicaciones',
@@ -25,8 +26,8 @@ export class PublicacionesComponent implements OnInit {
     this.formPublicaciones = this.fb.group({
       titulo:['', [Validators.required]],
       cuerpo:['', [Validators.required]],
-      imgPrincipal:['', [Validators.required]],
-      imgsPublicacion:['', [Validators.required]],
+      imgPrincipal:['', [Validators.required, RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]],
+      imgsPublicacion:['', [RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]]
     })
   }
 
@@ -39,11 +40,19 @@ export class PublicacionesComponent implements OnInit {
   }
 
   get validacionImgPrincipal(){
-    return this.formPublicaciones.get('imgPrincipal').invalid && this.formPublicaciones.get('imgPrincipal').touched
+    return this.formPublicaciones.get('imgPrincipal').invalid && this.formPublicaciones.get('imgPrincipal').touched && this.formPublicaciones.get('imgPrincipal').pristine
   }
 
   get validacionImgs(){
-    return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').touched
+    return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').touched && this.formPublicaciones.get('imgsPublicacion').pristine
+  }
+
+  get validacionTamImg(){
+    return this.formPublicaciones.get('imgPrincipal').invalid && this.formPublicaciones.get('imgPrincipal').dirty
+  }
+
+  get validacionTamImgs(){
+    return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').dirty
   }
 
   multiImg(event) {
@@ -54,7 +63,7 @@ export class PublicacionesComponent implements OnInit {
           var reader = new FileReader();
 
           reader.onload = (event:any) => {
-            console.log(event.target.result);
+            // console.log(event.target.result);
               this.urls.push(event.target.result);
           }
           reader.readAsDataURL(event.target.files[i]);
@@ -68,7 +77,7 @@ export class PublicacionesComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        console.log(event.target.result);
+        // console.log(event.target.result);
           this.urlPrincipal = event.target.result;
       }
     }

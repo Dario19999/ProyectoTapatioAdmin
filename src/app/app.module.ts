@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpClientModule } from '@angular/common/http';
+import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators"
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
@@ -36,6 +37,7 @@ import { EventosService } from './services/eventos.service';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    RxReactiveFormsModule ,
     BrowserAnimationsModule,
     CarouselModule,
     HttpClientModule,

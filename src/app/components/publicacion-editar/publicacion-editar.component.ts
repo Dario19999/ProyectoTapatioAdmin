@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-publicacion-editar',
@@ -58,8 +58,8 @@ export class PublicacionEditarComponent implements OnInit {
 
   formImgPInit(){
     this.formImgP = this.fb.group({
-      imgPrincipal:[''],
-      imgsPublicacion:['']
+      imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
+      imgsPublicacion:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]
     })
   }
 
@@ -79,6 +79,15 @@ export class PublicacionEditarComponent implements OnInit {
 
     this.formImgP.controls['imgsPublicacion'].setValue("");
   }
+
+  get validacionTamImg(){
+    return this.formImgP.get('imgPrincipal').invalid && this.formImgP.get('imgPrincipal').dirty
+  }
+
+  get validacionTamImgs(){
+    return this.formImgP.get('imgsPublicacion').invalid && this.formImgP.get('imgsPublicacion').dirty
+  }
+
   guardarImg(){
     // if(this.formImgP.invalid){
     //   Object.values(this.formImgP.controls).forEach( control =>{

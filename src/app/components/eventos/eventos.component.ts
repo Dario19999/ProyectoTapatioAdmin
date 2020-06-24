@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 
 @Component({
@@ -52,8 +53,8 @@ export class EventosComponent implements OnInit {
       enlace:['', Validators.required],
       desc:['', [Validators.required]],
       ordenImg:['', Validators.required],
-      imgPrincipal:['', [Validators.required]],
-      imgCarousel:['', [Validators.required]],
+      imgPrincipal:['', [Validators.required, RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]],
+      imgCarousel:['', [Validators.required, RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]],
       imgsEvento: ['']
     })
   }
@@ -95,11 +96,19 @@ export class EventosComponent implements OnInit {
   }
 
   get validacionImg(){
-    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').touched
+    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').pristine && this.formEventos.get('imgPrincipal').touched
   }
 
   get validacionImgCarousel(){
-    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').touched
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').pristine && this.formEventos.get('imgCarousel').touched
+  }
+
+  get validacionTamImg(){
+    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').dirty
+  }
+
+  get validacionTamImgCarousel(){
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').dirty
   }
 
   get validacionOrden(){
@@ -112,7 +121,7 @@ export class EventosComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        console.log(event.target.result);
+        // console.log(event.target.result);
           this.urlPrincipal = event.target.result;
       }
     }
@@ -124,7 +133,7 @@ export class EventosComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        console.log(event.target.result);
+        // console.log(event.target.result);
           this.urlCarousel = event.target.result;
       }
     }
@@ -138,7 +147,7 @@ export class EventosComponent implements OnInit {
           var reader = new FileReader();
 
           reader.onload = (event:any) => {
-            console.log(event.target.result);
+            // console.log(event.target.result);
               this.urls.push(event.target.result);
           }
           reader.readAsDataURL(event.target.files[i]);
@@ -165,6 +174,7 @@ export class EventosComponent implements OnInit {
   }
 
   guardarEvento(){
+    console.log(this.formEventos);
     if(this.formEventos.invalid){
       Object.values(this.formEventos.controls).forEach( control =>{
 
@@ -177,6 +187,5 @@ export class EventosComponent implements OnInit {
       });
       return;
     }
-    console.log(this.formEventos);
   }
 }
