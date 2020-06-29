@@ -70,27 +70,27 @@
                         <div class="col-md-6">
                             <label for="fechaInicio">Fecha de inicio: <small class="text-danger">*</small></label>
                             <input type="date" id="fechaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionFechaInicio">
-                            <small *ngIf="validacionFechaInicio" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
-                        </div>
+                            <small *ngIf="validacionFechaInicio" class="form-text text-danger">Obligatorio.</small> </div>
                         <div class="col-md-6">
                             <label for="fechaCierre">Fecha de cierre: <small class="text-danger">*</small></label>
                             <input type="date" name="fechaCierre" id="fechaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionFechaCierre">
                             <small *ngIf="validacionFechaCierre" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
-
                         </div>
+                        <small *ngIf="compararFechas()" class="form-text text-danger text-center">Fechas no válidas. El evento no puede terminar antes de empezar.</small>
                     </div>
 
                     <div class="input-group form-row mb-3" formGroupName="horario">
                         <div class="col-md-6">
                             <label for="horaInicio">Hora de inicio: <small class="text-danger">*</small></label>
                             <input type="time" id="horaInicio" class="form-control" formControlName="inicio" [class.is-invalid]="validacionHorarioInicio">
-                            <small *ngIf="validacionHorarioInicio" class="form-text text-danger">Obligatorio. Horario no válido.</small>
+                            <small *ngIf="validacionHorarioInicio" class="form-text text-danger">Obligatorio.</small>
                         </div>
                         <div class="col-md-6">
                             <label for="horaCierre">Hora de cierre: <small class="text-danger">*</small></label>
                             <input type="time" id="horaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionHorarioCierre">
-                            <small *ngIf="validacionHorarioCierre" class="form-text text-danger">Obligatorio. Horario no válido.</small>
+                            <small *ngIf="validacionHorarioCierre" class="form-text text-danger">Obligatorio.</small>
                         </div>
+                        <small *ngIf="compararHorarios()" class="form-text text-danger">Horarios no válidos. El evento no puede terminar antes de empezar.</small>
                     </div>
 
                     <div class="input-group form-row mb-3">
@@ -169,16 +169,17 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgsEvento">Imagenes del Evento:</label>
-                            <input type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                            <label for="imgsEvento">Imagenes del Evento: <small class="text-danger">*</small></label>
+                            <input [writeFile]="true" type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                            <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngFor='let url of urls; let i = index'>
                                 <div class="col-md-9">
                                     <img [src]="url " height="200 " class="float-right"><br>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
                                 </div>
                             </div>
                         </div>

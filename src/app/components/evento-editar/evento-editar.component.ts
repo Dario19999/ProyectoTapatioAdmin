@@ -85,13 +85,17 @@ export class EventoEditarComponent implements OnInit {
     this.formImgE = this.fb.group({
       imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
       ordenImg:['',],
-      imgsEvento: [''],
+      imgsEvento: ['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
       imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]
     })
   }
 
   get validacionTamImg(){
     return this.formImgE.get('imgPrincipal').invalid && this.formImgE.get('imgPrincipal').dirty
+  }
+
+  get validacionTamImgs(){
+    return this.formImgE.get('imgsEvento').invalid && this.formImgE.get('imgsEvento').dirty
   }
 
   get validacionTamImgCarousel(){

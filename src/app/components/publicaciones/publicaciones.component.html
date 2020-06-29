@@ -26,37 +26,10 @@
             </tr>
         </thead>
         <tbody class="text-center">
-            <tr>
-                <th scope="row" class="align-middle">1</th>
-                <td class="align-middle">Título 1</td>
-                <td class="text-left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta perspiciatis enim ad alias nobis quasi, placeat nihil labore esse harum voluptatibus? Harum provident incidunt culpa, tempora porro cumque sapiente.</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
-                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">2</th>
-                <td class="align-middle">Título 2</td>
-                <td class="text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora ad, voluptatum quis unde, dolorem ipsa voluptatibus dolor cumque sed et similique at sit voluptatem? Cum nisi illum atque a dolor?</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
-                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">3</th>
-                <td class="align-middle">Título 3</td>
-                <td class="text-left">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias unde ipsam dolorum impedit, debitis voluptates. Delectus suscipit ipsam, ratione dolorum esse officia sapiente rem incidunt unde dignissimos qui enim praesentium.</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
-                    <button class="btn btn-danger ml-2" type="button">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="align-middle">4</th>
-                <td class="align-middle">Título 4</td>
-                <td class="text-left">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum unde corporis doloremque facilis molestias odio accusamus a libero pariatur tempora earum, illo quisquam doloribus sit omnis vel hic, nihil nobis.</td>
+            <tr *ngFor="let publicacion of publicaciones">
+                <th scope="row" class="align-middle"> {{ publicacion.id_publicacion }} </th>
+                <td class="align-middle"> {{ publicacion.titulo_pub }} </td>
+                <td class="text-left align-middle"> {{ publicacion.articulo_pub }} </td>
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
                     <button class="btn btn-danger  ml-2" type="button">Eliminar</button>

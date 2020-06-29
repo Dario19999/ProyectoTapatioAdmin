@@ -21,6 +21,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 
 import { UsuariosService } from './services/usuarios.service';
 import { EventosService } from './services/eventos.service';
+import { PublicacionesService } from './services/publicaciones.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { EventosService } from './services/eventos.service';
   providers: [
     UsuariosService,
     EventosService,
+    PublicacionesService,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]

@@ -85,7 +85,7 @@
                                 <th scope="row">1</th>
                                 <td>Promocion por Fechas</td>
                                 <td>
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </td>
@@ -94,7 +94,7 @@
                                 <th scope="row">2</th>
                                 <td>Promoción por Evento Relacionado</td>
                                 <td>
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </td>
@@ -103,7 +103,7 @@
                                 <th scope="row">3</th>
                                 <td>Promoción por Codigo</td>
                                 <td class="align-middle">
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </td>
@@ -150,7 +150,7 @@
                                 <th scope="row">1</th>
                                 <td>Promocion por Fechas</td>
                                 <td>
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                 </td>
@@ -159,7 +159,7 @@
                                 <th scope="row">2</th>
                                 <td>Promoción por Evento Relacionado</td>
                                 <td>
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                 </td>
@@ -168,7 +168,7 @@
                                 <th scope="row">3</th>
                                 <td>Promoción por Codigo</td>
                                 <td class="align-middle">
-                                    <button type="button" aria-label="Close">
+                                    <button type="button" aria-label="Close" class="btn btn-danger">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                 </td>
@@ -315,16 +315,19 @@
                                     <div class="col-md-6">
                                         <label for="imgEvento">Imagenes del Evento:</label><br>
                                         <input type='file' id="imgEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
-                                        <div class="row" *ngFor='let url of urls; let i = index'>
-                                            <div class="col-md-7">
-                                                <img [src]="url " height="200 " class="float-right">
+                                        <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
+                                        <ng-container *ngIf="(urls != null) && (!validacionTamImgs)">
+                                            <div class="row" *ngFor='let url of urls; let i = index'>
+                                                <div class="col-md-7">
+                                                    <img [src]="url " height="200 " class="float-right">
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                                </div>
                                             </div>
-                                            <div class="col-md-5">
-                                                <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                            </div>
-                                        </div>
+                                        </ng-container>
                                     </div>
 
                                     <div class="col-md-6">

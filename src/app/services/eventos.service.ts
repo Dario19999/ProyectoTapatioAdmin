@@ -8,11 +8,9 @@ import { retry } from 'rxjs/operators';
 export class EventosService {
 
   // url = "http://proyectotapatio.com/PT-API-P/eventos/";
-
   url = "http://localhost:8080/PT-API/eventos/";
 
-
-  constructor( private http:HttpClient ) { }
+  constructor(private http:HttpClient ) { }
 
   getEventos(){
     return this.http.get(`${this.url}getEventos.php`).pipe(retry(3));

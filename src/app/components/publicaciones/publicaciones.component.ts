@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { PublicacionesService } from '../../services/publicaciones.service';
 
 @Component({
   selector: 'app-publicaciones',
@@ -14,11 +15,21 @@ export class PublicacionesComponent implements OnInit {
   urls = [];
   urlPrincipal = null;
 
+  publicaciones = null;
+
+  publicacion = {
+    id_publicacion:null,
+    titulo_pub:null,
+    articulo_pub:null
+  }
+
   constructor(private router:Router,
-              private fb:FormBuilder
-    ) {}
+              private fb:FormBuilder,
+              private publicacionesService:PublicacionesService
+            ) { }
 
   ngOnInit() {
+    this.getPublicaciones();
     this.formPublicacionesInit();
   }
 
@@ -29,6 +40,10 @@ export class PublicacionesComponent implements OnInit {
       imgPrincipal:['', [Validators.required, RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]],
       imgsPublicacion:['', [RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]]
     })
+  }
+
+  getPublicaciones(){
+    this.publicacionesService.getPublicaciones().subscribe( resultado => this.publicaciones = resultado )
   }
 
   get validacionTitulo(){
