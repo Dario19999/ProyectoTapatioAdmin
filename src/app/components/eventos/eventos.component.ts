@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { RxwebValidators, json } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-eventos',
@@ -17,12 +17,6 @@ export class EventosComponent implements OnInit {
   urlCarousel = null;
 
   eventos = null;
-
-  evento = {
-    id_evento:null,
-    nombre_evento:null,
-    descripcion_evento:null
-  }
 
   event: any;
   imgSeleccionada: File;
@@ -45,6 +39,17 @@ export class EventosComponent implements OnInit {
 
   getEventos(){
     this.eventosService.getEventos().subscribe( resultado => this.eventos = resultado);
+  }
+
+  eliminarEvento( id:number ) {
+    console.log(id);
+    if(confirm("Está seguro de querer eliminar este evento?")){
+      this.eventosService.eliminarEvento(id).subscribe(datos => {
+        if (datos['resultado']=='OK') {
+          this.getEventos();
+        }
+      });
+    }
   }
 
   formInit(){
@@ -105,6 +110,7 @@ export class EventosComponent implements OnInit {
       }
     }
   }
+
   get validacionNombre(){
     return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').touched
   }
@@ -227,6 +233,7 @@ export class EventosComponent implements OnInit {
 
   guardarEvento(){
     console.log(this.formEventos);
+
     if(this.formEventos.invalid){
       Object.values(this.formEventos.controls).forEach( control =>{
 
@@ -238,6 +245,28 @@ export class EventosComponent implements OnInit {
         }
       });
       return;
+    }
+    else{
+      console.log(this.formEventos.value);
+      this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
+          if(datos['resultado'] == 'OK'){
+            this.getEventos();
+          }
+          else if(datos['resultado'] == 'ERROR'){
+            confirm("Error");
+          }
+        }
+      );
+      this.formEventos.reset();
+      this.urlPrincipal = null;
+      this.formEventos.controls['imgPrincipal'].setValue("");
+
+      this.urlCarousel = null;
+      this.formEventos.controls['imgCarousel'].setValue("");
+
+      this.urls = [];
+      this.formEventos.controls['imgsEvento'].setValue("");
+
     }
   }
 

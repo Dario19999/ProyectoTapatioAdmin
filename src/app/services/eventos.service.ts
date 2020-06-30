@@ -15,4 +15,16 @@ export class EventosService {
   getEventos(){
     return this.http.get(`${this.url}getEventos.php`).pipe(retry(3));
   }
+
+  getEvento( id:number ){
+    return this.http.get(`${this.url}getEvento.php?id_evento=${id}`).pipe(retry(3))
+  }
+
+  crearEvento( evento:any ){
+    return this.http.post(`${this.url}crearEvento.php`, JSON.stringify( evento )).pipe(retry(3))
+  }
+
+  eliminarEvento( id:number ){
+    return this.http.get(`${this.url}eliminarEvento.php?id=${id}`).pipe(retry(3))
+  }
 }

@@ -32,7 +32,7 @@
                 <td class="align-middle">{{ evento.descripcion_evento }}</td>
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button"> Eliminar</button>
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( evento.id_evento )">Eliminar</button>
                 </td>
             </tr>
         </tbody>
@@ -96,10 +96,10 @@
                     <div class="input-group form-row mb-3">
                         <label for="tipo-col">Tipo: <small class="text-danger">*</small></label><br>
                         <div class="col-md-12" id="tipo-col">
-                            <input type="radio" id="tipo1" value="F" formControlName="tipo" [class.is-invalid]="validacionTipo">
+                            <input type="radio" id="tipo1" value="0" formControlName="tipo" [class.is-invalid]="validacionTipo">
                             <label for="tipo1" class="form-check-label"> Fiesta</label><br>
 
-                            <input type="radio" id="tipo2" value="E" formControlName="tipo" [class.is-invalid]="validacionTipo">
+                            <input type="radio" id="tipo2" value="1" formControlName="tipo" [class.is-invalid]="validacionTipo">
                             <label for="tipo2" class="form-check-label"> Evento</label>
                             <small *ngIf="validacionTipo" class="form-text text-danger">Obligatorio.</small>
                         </div>
