@@ -1,50 +1,42 @@
 <div class="container-fluid animated fadeIn fast mt-2">
 
-    <div class="card mb-3 border-dark">
-        <div class="card-header border-dark">
+    <div class="card mb-3">
+        <div class="card-header text-center">
             <h4>Vista Previa</h4>
         </div>
         <div class="card-body">
             <div class="card mb-3 border-primary">
-                <div class="card-header border-primary">
-                    <h4>Nombre de Evento</h4>
+                <div class="card-header border-primary text-center">
+                    <h4> {{ evento.nombre_evento}} </h4>
                 </div>
-                <div class="card-body">
+                <div class="pt-4 text-center mb-3">
+                    <h4>Imagen Principal.</h4>
+                    <img [src]="'assets/img/eventos/'+evento.evento_img" alt="img_principal" class="figure-img img-fluid d-block rounded mx-auto" width="950" height="650">
+                </div>
+                <div class="pt-4 text-center mb-3">
+                    <h4>Imagen en Carousel.</h4>
+                    <img [src]="'assets/img/eventos/'+evento.carousel_img" alt="img_carousel" class="figure-img img-fluid d-block rounded mx-auto" width="950" height="650">
+                </div>
+                <div class="card-body text-center">
+                    <h4>Imágenes Generales.</h4>
                     <owl-carousel-o [options]="customOptions">
-                        <ng-template carouselSlide>
+                        <ng-template carouselSlide *ngFor="let img of imgs">
                             <div class="slide">
-                                <img src="assets/img/eventos/img-e1.jpg" height="350px" class="p-1">
-                            </div>
-                        </ng-template>
-                        <ng-template carouselSlide>
-                            <div class="slide">
-                                <img src="assets/img/eventos/img-e2.jpg" height="350px" class="p-1">
-                            </div>
-                        </ng-template>
-                        <ng-template carouselSlide>
-                            <div class="slide">
-                                <img src="assets/img/eventos/img-e3.jpg" height="350px" class="p-1">
-                            </div>
-                        </ng-template>
-                        <ng-template carouselSlide>
-                            <div class="slide">
-                                <img src="assets/img/eventos/img-e4.jpg" height="350px" class="p-1">
-                            </div>
-                        </ng-template>
-                        <ng-template carouselSlide>
-                            <div class="slide">
-                                <img src="assets/img/eventos/img-e5.jpg" height="350px" class="p-1">
+                                <img [src]="'assets/img/eventos/'+img.ruta_imagen_eve" alt="imgs" width="300px" height="300px" class="p-1 figure-img rounded">
                             </div>
                         </ng-template>
                     </owl-carousel-o>
                     <hr>
-                    <div class="container-fluid">
+                    <div class="container-fluid text-left">
                         <h4>Descrpición</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur excepturi facilis voluptatum tempore quam deleniti molestias vero atque? Magni culpa commodi ipsam soluta et sit quod blanditiis fugit nostrum similique.</p>
+                        <p> {{evento.descripcion_evento}} </p>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-text"><small class="text-muted">20/04/2020 - 22/04/2020</small></p>
+                    <p class="card-text">
+                        <small class="text-muted"> Inicio: {{ evento.dia_inicio_evento | date:'fullDate' }} </small><br>
+                        <small class="text-muted"> Cierre: {{ evento.dia_conclusion_evento | date:'fullDate' }} </small>
+                    </p>
                 </div>
             </div>
 
@@ -227,6 +219,12 @@
                                 </div>
 
                                 <div class="input-group form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="ordenImg">Orden de Evento: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
+                                        <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg">
+                                    </div>
+                                </div>
+                                <div class="input-group form-row mb-3">
                                     <div class="col-md-12 text-center">
                                         <button class="btn btn-success" type="submit">Guardar cambios</button>
                                     </div>
@@ -307,12 +305,6 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="ordenImg">Orden de Evento: <small>(Posición de imagen principal en el carousel de eventos)</small></label>
-                                        <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg">
-                                    </div>
-                                </div>
-                                <div class="form-row mb-3">
-                                    <div class="col-md-6">
                                         <label for="imgEvento">Imagenes del Evento:</label><br>
                                         <input type='file' id="imgEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
                                         <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
@@ -329,6 +321,8 @@
                                             </div>
                                         </ng-container>
                                     </div>
+                                </div>
+                                <div class="form-row mb-3">
 
                                     <div class="col-md-6">
                                         <label for="imgCarousel">Imagen de Carousel:</label><br>

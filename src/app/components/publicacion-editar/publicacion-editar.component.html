@@ -7,11 +7,11 @@
         <div class="card-body">
             <div class="card mb-3 border-primary">
                 <div class="card-header border-primary">
-                    <h4>Título</h4>
+                    <h4>{{ publicacion.titulo_pub }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="container-fluid">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur excepturi facilis voluptatum tempore quam deleniti molestias vero atque? Magni culpa commodi ipsam soluta et sit quod blanditiis fugit nostrum similique.</p>
+                        <p>{{ publicacion.articulo_pub }}</p>
                     </div>
                     <hr>
                     <div class="container-fluid">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <p class="card-text"><small class="text-muted">20/04/2020</small></p>
+                    <p class="card-text"><small class="text-muted">{{ publicacion.creacion_pub | date:' dd/mm/yyyy h:mm a' }}</small></p>
                 </div>
             </div>
         </div>

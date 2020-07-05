@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { ActivatedRoute } from '@angular/router';
+import { PublicacionesService } from '../../services/publicaciones.service';
 
 @Component({
   selector: 'app-publicacion-editar',
@@ -14,6 +16,8 @@ export class PublicacionEditarComponent implements OnInit {
 
   urls = [];
   urlPrincipal = null;
+
+  publicacion:any = {};
 
   customOptions: OwlOptions = {
     loop: true,
@@ -40,13 +44,18 @@ export class PublicacionEditarComponent implements OnInit {
     nav: true
   }
 
-  constructor( private fb:FormBuilder ) {
+  constructor( private fb:FormBuilder,
+               private activatedRoute:ActivatedRoute,
+               private publicacionesService:PublicacionesService ) {
 
    }
 
   ngOnInit() {
     this.formInfoPInit();
     this.formImgPInit();
+    this.activatedRoute.params.subscribe( params => {
+      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => this.publicacion = resultado[0])
+    })
   }
 
   formInfoPInit(){

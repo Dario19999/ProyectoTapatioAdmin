@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +22,9 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { UsuariosService } from './services/usuarios.service';
 import { EventosService } from './services/eventos.service';
 import { PublicacionesService } from './services/publicaciones.service';
+import es from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(es)
 
 @NgModule({
   declarations: [
@@ -48,6 +51,7 @@ import { PublicacionesService } from './services/publicaciones.service';
     UsuariosService,
     EventosService,
     PublicacionesService,
+    { provide: LOCALE_ID, useValue: 'es-Mx' },
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]

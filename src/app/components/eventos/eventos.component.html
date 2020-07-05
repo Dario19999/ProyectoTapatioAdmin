@@ -31,7 +31,7 @@
                 <td class="align-middle">{{ evento.nombre_evento }}</td>
                 <td class="align-middle">{{ evento.descripcion_evento }}</td>
                 <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarEvento()">Editar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>
                     <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( evento.id_evento )">Eliminar</button>
                 </td>
             </tr>
@@ -46,12 +46,12 @@
 
 </div>
 
-<div class="modal fade" id="modalEvento" tabindex="-1" role="dialog" aria-labelledby="modalEventoLabel" aria-hidden="true">
+<div class="modal fade" id="modalEvento" tabindex="-1" role="dialog" aria-labelledby="modalEventoLabel">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalEventoLabel">Crear Evento</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #cerrar type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -61,11 +61,11 @@
                     <div class="form-row mb-3">
                         <div class="col-md-12">
                             <label for="nombreEvento">Nombre: <small class="text-danger">*</small></label>
-                            <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre">
+                            <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre || nombreExistente">
                             <small *ngIf="validacionNombre" class="form-text text-danger">Obligatorio.</small>
+                            <small *ngIf="nombreExistente" class="form-text text-danger">Ya existe un evento con este nombre.</small>
                         </div>
                     </div>
-
                     <div class="input-group form-row mb-3" formGroupName="fecha">
                         <div class="col-md-6">
                             <label for="fechaInicio">Fecha de inicio: <small class="text-danger">*</small></label>
@@ -132,7 +132,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgPrincipal">Imagen Principal del Evento: <small class="text-danger">*</small></label>
-                            <input [writeFile]="true" type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
+                            <input #imgInputP [writeFile]="true" type="file" id="imgPrincipal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
                             <small *ngIf="validacionImg" class="form-text text-danger">Imagen Principal Obligatoria.</small>
                             <small *ngIf="validacionTamImg" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngIf="(urlPrincipal != null) && (!validacionTamImg)">
@@ -151,7 +151,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgCarousel">Imagen de Carousel: <small class="text-danger">*</small></label>
-                            <input [writeFile]="true" type="file" id="imgCarousel" accept=".jpg" (change)="imgCarousel($event)" formControlName="imgCarousel">
+                            <input #imgInputC [writeFile]="true" type="file" id="imgCarousel" accept=".jpg" (change)="imgCarousel($event)" formControlName="imgCarousel">
                             <small *ngIf="validacionImgCarousel" class="form-text text-danger">Imagen de Carousel Obligatoria.</small>
                             <small *ngIf="validacionTamImgCarousel" class="form-text text-danger">Error: Tamaño mínimo 1250x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngIf="(urlCarousel != null) && (!validacionTamImgCarousel)">
@@ -170,14 +170,15 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgsEvento">Imagenes del Evento: <small class="text-danger">*</small></label>
-                            <input [writeFile]="true" type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                            <input #imgsInput [writeFile]="true" type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                            <small *ngIf="validacionImgs" class="form-text text-danger">Mínimo una imágen.</small>
                             <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngFor='let url of urls; let i = index'>
                                 <div class="col-md-9">
                                     <img [src]="url " height="200 " class="float-right"><br>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(i)">
+                                    <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(url, i)">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
@@ -189,8 +190,9 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-success" type="submit">Crear</button>
+                            <button [disabled]="formEventos.invalid" class="btn btn-success" type="submit">Crear</button>
                         </div>
+                        <small class="text-danger" *ngIf="nombreExistente">Existen errores en el Formulario.</small>
                     </div>
                 </form>
             </div>

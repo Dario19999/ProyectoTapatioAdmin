@@ -26,7 +26,7 @@ export class PublicacionesComponent implements OnInit {
   constructor(private router:Router,
               private fb:FormBuilder,
               private publicacionesService:PublicacionesService
-            ) { }
+             ) { }
 
   ngOnInit() {
     this.getPublicaciones();
@@ -110,8 +110,19 @@ export class PublicacionesComponent implements OnInit {
 
     this.formPublicaciones.controls['imgsPublicacion'].setValue("");
   }
-  editarPublicacion(){
-    this.router.navigate(['editar-publicacion'])
+
+  editarPublicacion( id:number ){
+    this.router.navigate(['editar-publicacion', id])
+  }
+
+  eliminarPublicacion( id:number ){
+    if(confirm("Está seguro de querer eliminar este evento?")){
+      this.publicacionesService.eliminarPublicacion(id).subscribe(datos => {
+        if (datos['resultado']=='OK') {
+          this.getPublicaciones();
+        }
+      });
+    }
   }
 
   guardarPublicacion(){

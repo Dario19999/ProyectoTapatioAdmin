@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
-import { RxwebValidators, json } from '@rxweb/reactive-form-validators';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { ViewChild,ElementRef } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-eventos',
@@ -18,11 +21,16 @@ export class EventosComponent implements OnInit {
 
   eventos = null;
 
-  event: any;
   imgSeleccionada: File;
   imgCarouselSeleccionada: File;
   imgsSeleccionadas:File[] = [];
+  listaImg:any[] = [];
   values:any;
+
+  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
+  @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
+  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
+  @ViewChild('cerrar',{ static: false }) cerrar;
 
   constructor(private fb:FormBuilder,
               private router:Router,
@@ -31,10 +39,7 @@ export class EventosComponent implements OnInit {
   ngOnInit() {
     this.getEventos();
     this.formInit();
-    this.formEventos.valueChanges.subscribe(()=>{
-      this.formEventos.value.image = this.formEventos;
-      this.values = this.formEventos.value;
-    });
+    this.cargarEvento();
   }
 
   getEventos(){
@@ -42,7 +47,6 @@ export class EventosComponent implements OnInit {
   }
 
   eliminarEvento( id:number ) {
-    console.log(id);
     if(confirm("Está seguro de querer eliminar este evento?")){
       this.eventosService.eliminarEvento(id).subscribe(datos => {
         if (datos['resultado']=='OK') {
@@ -73,15 +77,36 @@ export class EventosComponent implements OnInit {
     })
   }
 
-  editarEvento(){
-    this.router.navigate(['editar-evento'])
+  cargarEvento(){
+    this.formEventos.setValue({
+      nombre:"nombre",
+      fecha: {
+        inicio:"2020-07-04",
+        cierre:"2020-07-11",
+      },
+      horario:{
+        inicio:"15:28",
+        cierre:"15:28",
+      },
+      tipo:"0",
+      enlace:"asdasd",
+      desc:"asdasda",
+      ordenImg:"1",
+      imgPrincipal:"",
+      imgCarousel:"",
+      imgsEvento: ""
+    })
+  }
+
+  editarEvento( id:number ){
+    this.router.navigate(['editar-evento', id])
   }
 
   compararFechas(){
     let inicio = new Date(this.formEventos.get('fecha.inicio').value);
     let cierre = new Date(this.formEventos.get('fecha.cierre').value);
 
-    if( inicio > cierre){
+    if( (inicio != null && cierre != null) && (inicio > cierre)){
       this.formEventos.get('fecha').setErrors({'incorrect':true});
       return true
     }
@@ -112,7 +137,11 @@ export class EventosComponent implements OnInit {
   }
 
   get validacionNombre(){
-    return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').touched
+    return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').touched && this.formEventos.get('nombre').pristine
+  }
+
+  get nombreExistente(){
+    return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').value != "" && !this.formEventos.get('nombre').pristine
   }
 
   get validacionFechaInicio(){
@@ -144,23 +173,27 @@ export class EventosComponent implements OnInit {
   }
 
   get validacionImg(){
-    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').pristine && this.formEventos.get('imgPrincipal').touched
+    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').touched
   }
 
   get validacionImgCarousel(){
-    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').pristine && this.formEventos.get('imgCarousel').touched
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').touched
+  }
+
+  get validacionImgs(){
+    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').touched
   }
 
   get validacionTamImg(){
-    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').dirty
+    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').dirty && this.formEventos.get('imgPrincipal').value != ""
   }
 
   get validacionTamImgCarousel(){
-    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').dirty
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').dirty && this.formEventos.get('imgCarousel').value != ""
   }
 
   get validacionTamImgs(){
-    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').dirty
+    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').dirty && this.formEventos.get('imgsEvento').value != ""
   }
 
   get validacionOrden(){
@@ -169,14 +202,13 @@ export class EventosComponent implements OnInit {
 
   imgPrincipal(event){
     this.imgSeleccionada = <File>event.target.files[0];
-    this.formEventos.value.image = this.imgSeleccionada;
+    this.formEventos.controls['imgPrincipal'].setValue(this.imgSeleccionada);
 
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        // console.log(event.target.result);
           this.urlPrincipal = event.target.result;
       }
     }
@@ -184,51 +216,58 @@ export class EventosComponent implements OnInit {
 
   imgCarousel(event){
     this.imgCarouselSeleccionada = <File>event.target.files[0];
-    this.formEventos.value.image = this.imgCarouselSeleccionada;
+    this.formEventos.controls['imgCarousel'].setValue(this.imgCarouselSeleccionada);
 
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        // console.log(event.target.result);
           this.urlCarousel = event.target.result;
       }
     }
   }
 
   multiImg(event) {
-    this.imgsSeleccionadas.push(<File>event.target.files);
-    this.formEventos.value.image = this.imgsSeleccionadas;
 
     if (event.target.files && event.target.files[0]) {
-        var filesAmount = event.target.files.length;
-        for (let i = 0; i < filesAmount; i++) {
+        for (let i = 0; i < event.target.files.length; i++) {
+
           var reader = new FileReader();
 
           reader.onload = (event:any) => {
-            // console.log(event.target.result);
-              this.urls.push(event.target.result);
+            this.urls.push(event.target.result);
           }
           reader.readAsDataURL(event.target.files[i]);
+
+          var selectedFile = event.target.files[i];
+          this.imgsSeleccionadas.push(selectedFile);
+          this.listaImg.push(selectedFile.name)
         }
-    }
+      }
+      console.log(this.formEventos);
+
+      this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+
   }
 
   borrarImgPrincipal(){
     this.urlPrincipal = null;
     this.formEventos.controls['imgPrincipal'].setValue("");
+    this.imgInputP.nativeElement.value = null;
   }
 
   borrarImgCarousel(){
     this.urlCarousel = null;
     this.formEventos.controls['imgCarousel'].setValue("");
+    this.imgInputC.nativeElement.value = null;
   }
 
-  borrarImgs( index:number ){
-    if (index !== -1) {
-      this.urls.splice(index, 1);
-    }
+  borrarImgs( url:any, index:number ){
+    this.urls = this.urls.filter((a) => a !== url);
+    this.listaImg.splice(index, 1);
+    this.imgsSeleccionadas.splice(index, 1);
+
   }
 
   guardarEvento(){
@@ -247,27 +286,30 @@ export class EventosComponent implements OnInit {
       return;
     }
     else{
-      console.log(this.formEventos.value);
+
       this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
+          console.log(datos['resultado']);
           if(datos['resultado'] == 'OK'){
             this.getEventos();
+            this.formEventos.reset();
+            console.log(this.formEventos);
+
+            this.urlPrincipal = null;
+            this.imgInputP.nativeElement.value = null;
+
+            this.urlCarousel = null;
+            this.imgInputC.nativeElement.value = null;
+
+            this.urls = [];
+            this.imgsInput.nativeElement.value = null;
+            this.cerrar.nativeElement.click();
           }
-          else if(datos['resultado'] == 'ERROR'){
-            confirm("Error");
-          }
+        },(err:HttpErrorResponse)=>{
+          this.formEventos.get('nombre').setErrors({'incorrect':true});
+          console.log(err);
+          return throwError(err);
         }
       );
-      this.formEventos.reset();
-      this.urlPrincipal = null;
-      this.formEventos.controls['imgPrincipal'].setValue("");
-
-      this.urlCarousel = null;
-      this.formEventos.controls['imgCarousel'].setValue("");
-
-      this.urls = [];
-      this.formEventos.controls['imgsEvento'].setValue("");
-
     }
   }
-
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { ActivatedRoute } from '@angular/router';
+import { EventosService } from '../../services/eventos.service';
 
 @Component({
   selector: 'app-evento-editar',
@@ -22,6 +24,9 @@ export class EventoEditarComponent implements OnInit {
   urls = [];
   urlPrincipal = null;
   urlCarousel = null;
+
+  evento:any = {};
+  imgs:any = null;
 
   cantBoletos:number = 0;
 
@@ -50,13 +55,19 @@ export class EventoEditarComponent implements OnInit {
     nav: true
   }
 
-  constructor(private fb:FormBuilder) {}
+  constructor(private fb:FormBuilder,
+              private activatedRoute:ActivatedRoute,
+              private eventosService:EventosService) {}
 
   ngOnInit() {
     this.formInfoInit();
     this.formFechasInit();
     this.formImgInit();
     this.formBoletosInit();
+    this.activatedRoute.params.subscribe( params => {
+      this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
+      this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado)
+    });
   }
 
   formInfoInit(){
@@ -64,6 +75,7 @@ export class EventoEditarComponent implements OnInit {
       nombre:['',],
       tipo:['',],
       desc:['',],
+      ordenImg:['',],
       enlace:['',]
     })
   }
@@ -84,7 +96,6 @@ export class EventoEditarComponent implements OnInit {
   formImgInit(){
     this.formImgE = this.fb.group({
       imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
-      ordenImg:['',],
       imgsEvento: ['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
       imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]
     })

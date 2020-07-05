@@ -15,8 +15,8 @@ const routes: Routes = [
   { path: 'publicaciones', component: PublicacionesComponent },
   { path: 'usuarios', component: UsuariosComponent },
   { path: 'repartidores', component: RepartidoresComponent },
-  { path: 'editar-evento', component: EventoEditarComponent },
-  { path: 'editar-publicacion', component: PublicacionEditarComponent },
+  { path: 'editar-evento/:id', component: EventoEditarComponent },
+  { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
 ];

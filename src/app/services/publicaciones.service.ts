@@ -20,4 +20,8 @@ export class PublicacionesService {
     return this.http.get(`${this.url}getPublicacion.php?id_publicacion=${id_pub}`).pipe(retry(3))
   }
 
+  eliminarPublicacion( id_pub:number ){
+    return this.http.get(`${this.url}eliminarPublicacion.php?id_publicacion=${id_pub}`).pipe(retry(3))
+  }
+
 }

@@ -31,8 +31,8 @@
                 <td class="align-middle"> {{ publicacion.titulo_pub }} </td>
                 <td class="text-left align-middle"> {{ publicacion.articulo_pub }} </td>
                 <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarPublicacion()">Editar</button>
-                    <button class="btn btn-danger  ml-2" type="button">Eliminar</button>
+                    <button class="btn btn-primary" type="button" (click)="editarPublicacion( publicacion.id_publicacion )">Editar</button>
+                    <button class="btn btn-danger  ml-2" type="button" (click)="eliminarPublicacion( publicacion.id_publicacion )">Eliminar</button>
                 </td>
             </tr>
         </tbody>
