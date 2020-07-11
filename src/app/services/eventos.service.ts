@@ -27,6 +27,10 @@ export class EventosService {
     return this.http.get(`${this.url}getImagenes.php?id_evento=${id}`).pipe(retry(3))
   }
 
+  eliminarImgs( id:number ){
+    return this.http.get(`${this.url}eliminarImgs.php?id_imagen=${id}`).pipe(retry(3))
+  }
+
   crearEvento( evento:any ){
     const EVENTO_FD = serialize(evento);
     return this.http.post(`${this.url}crearEvento.php`, EVENTO_FD).pipe(retry(3))

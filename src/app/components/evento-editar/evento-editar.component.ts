@@ -26,8 +26,8 @@ export class EventoEditarComponent implements OnInit {
 
   evento:any = {};
 
-  imgSeleccionada: File;
-  imgCarouselSeleccionada: File;
+  imgSeleccionada:File = null;
+  imgCarouselSeleccionada:File = null;
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
 
@@ -239,6 +239,7 @@ export class EventoEditarComponent implements OnInit {
   refresh(){
     this.activatedRoute.params.subscribe( params => {
       this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
+      this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado)
     });
   }
 
@@ -289,9 +290,16 @@ export class EventoEditarComponent implements OnInit {
         return
       }else if(datos['resultado'] == "OK"){
         this.refresh();
+
+        this.borrarImgPrincipal();
+        this.borrarImgCarousel();
+
+        this.urls = [];
+        this.imgsSeleccionadas = [];
+        this.imgsInput.nativeElement.value = null;
         window.confirm("Imagen(es) modificada(s) con éxito");
       }
-    })
+    });
   }
 
   guardarBoletos(){
@@ -364,6 +372,16 @@ export class EventoEditarComponent implements OnInit {
     this.urls = this.urls.filter((a) => a !== url);
     this.listaImg.splice(index, 1);
     this.imgsSeleccionadas.splice(index, 1);
+  }
+
+  eliminarImg( id:number ){
+    if(confirm("Está seguro de querer eliminar este evento?")){
+      this.eventosService.eliminarImgs(id).subscribe( datos => {
+        if(datos['resultado'] == "OK"){
+          this.refresh();
+        }
+      })
+    }
   }
 
   crearBoleto(){
