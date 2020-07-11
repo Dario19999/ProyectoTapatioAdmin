@@ -28,22 +28,24 @@ export class EventosService {
   }
 
   crearEvento( evento:any ){
-    const formdata_evento = serialize(evento);
-    console.log(...formdata_evento);
-    return this.http.post(`${this.url}crearEvento.php`, formdata_evento).pipe(retry(3))
+    const EVENTO_FD = serialize(evento);
+    return this.http.post(`${this.url}crearEvento.php`, EVENTO_FD).pipe(retry(3))
   }
 
+  modificarInfoEvento( info:any ){
+    const INFOEVENTO_FD = serialize(info);
+    return this.http.post(`${this.url}modificarInfoEvento.php`, INFOEVENTO_FD).pipe(retry(3))
+  }
 
-  // toFormData( evento:any ){
-  //   const formData = new FormData();
-  //   for (const key of Object.keys(evento)) {
-  //     const value = evento[key];
-  //     if (value != null) {
-  //       formData.append(key, value);
-  //     }
-  //   }
-  //   return formData;
-  // }
+  modificarHorarioEvento( horario:any ){
+    const HORARIOEVENTO_FD = serialize(horario);
+    return this.http.post(`${this.url}modificarHorarioEvento.php`, HORARIOEVENTO_FD).pipe(retry(3))
+  }
+
+  modificarImgsEvento( imgs:any ){
+    const IMGSEVENTO_FD = serialize(imgs);
+    return this.http.post(`${this.url}modificarImgsEvento.php`, IMGSEVENTO_FD).pipe(retry(3))
+  }
 
   eliminarEvento( id:number ){
     return this.http.get(`${this.url}eliminarEvento.php?id=${id}`).pipe(retry(3))

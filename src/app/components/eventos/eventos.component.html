@@ -74,9 +74,9 @@
                         <div class="col-md-6">
                             <label for="fechaCierre">Fecha de cierre: <small class="text-danger">*</small></label>
                             <input type="date" name="fechaCierre" id="fechaCierre" class="form-control" formControlName="cierre" [class.is-invalid]="validacionFechaCierre">
-                            <small *ngIf="validacionFechaCierre" class="form-text text-danger">Obligatorio. Fecha no válida.</small>
+                            <small *ngIf="validacionFechaCierre" class="form-text text-danger">Obligatorio.</small>
                         </div>
-                        <small *ngIf="compararFechas()" class="form-text text-danger text-center">Fechas no válidas. El evento no puede terminar antes de empezar.</small>
+                        <small *ngIf="compararFechas()" class="form-text text-danger text-center ml-1">Fechas no válidas. {{ mensajeError }}</small>
                     </div>
 
                     <div class="input-group form-row mb-3" formGroupName="horario">
@@ -124,7 +124,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-6">
                             <label for="ordenImg">Orden de Evento: <small class="text-danger">*</small> <small>(Posición de imagen principal en el carousel de eventos)</small></label>
-                            <input type="number" class="form-control" id="ordenImg" min="1" max="15" step="1" value="1" formControlName="ordenImg" [class.is-invalid]="validacionOrden">
+                            <input type="number" class="form-control" id="ordenImg" min="1" max="15" step="1" value="1" formControlName="orden" [class.is-invalid]="validacionOrden">
                             <small *ngIf="validacionOrden" class="form-text text-danger">Orden Obligatorio.</small>
                         </div>
                     </div>
@@ -187,7 +187,6 @@
                     </div>
 
                     <hr>
-
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
                             <button [disabled]="formEventos.invalid" class="btn btn-success" type="submit">Crear</button>
@@ -198,4 +197,25 @@
             </div>
         </div>
     </div>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalError"></button>
+    <div #modalError class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="modalErrorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    <h5></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

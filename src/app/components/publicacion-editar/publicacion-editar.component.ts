@@ -18,6 +18,7 @@ export class PublicacionEditarComponent implements OnInit {
   urlPrincipal = null;
 
   publicacion:any = {};
+  imgs:any = null;
 
   customOptions: OwlOptions = {
     loop: true,
@@ -46,15 +47,14 @@ export class PublicacionEditarComponent implements OnInit {
 
   constructor( private fb:FormBuilder,
                private activatedRoute:ActivatedRoute,
-               private publicacionesService:PublicacionesService ) {
-
-   }
+               private publicacionesService:PublicacionesService ) {}
 
   ngOnInit() {
     this.formInfoPInit();
     this.formImgPInit();
     this.activatedRoute.params.subscribe( params => {
-      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => this.publicacion = resultado[0])
+      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => this.publicacion = resultado[0]);
+      this.publicacionesService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
     })
   }
 

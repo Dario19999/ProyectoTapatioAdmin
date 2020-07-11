@@ -24,6 +24,7 @@ import { EventosService } from './services/eventos.service';
 import { PublicacionesService } from './services/publicaciones.service';
 import es from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { BoletoEditarComponent } from './components/boleto-editar/boleto-editar.component';
 registerLocaleData(es)
 
 @NgModule({
@@ -36,7 +37,8 @@ registerLocaleData(es)
     RepartidoresComponent,
     EventoEditarComponent,
     PublicacionEditarComponent,
-    PerfilComponent
+    PerfilComponent,
+    BoletoEditarComponent
   ],
   imports: [
     BrowserModule,

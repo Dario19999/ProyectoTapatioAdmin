@@ -25,12 +25,14 @@ export class EventosComponent implements OnInit {
   imgCarouselSeleccionada: File;
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
-  values:any;
+
+  mensajeError = "";
 
   @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
   @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
   @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
   @ViewChild('cerrar',{ static: false }) cerrar;
+  @ViewChild('modalError',{static: false}) modalError:ElementRef;
 
   constructor(private fb:FormBuilder,
               private router:Router,
@@ -39,7 +41,7 @@ export class EventosComponent implements OnInit {
   ngOnInit() {
     this.getEventos();
     this.formInit();
-    this.cargarEvento();
+    // this.cargarEvento();
   }
 
   getEventos(){
@@ -70,7 +72,7 @@ export class EventosComponent implements OnInit {
       tipo:['', [Validators.required]],
       enlace:['', Validators.required],
       desc:['', [Validators.required]],
-      ordenImg:['', Validators.required],
+      orden:['', Validators.required],
       imgPrincipal:['', [Validators.required, RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]],
       imgCarousel:['', [Validators.required, RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]],
       imgsEvento: ['', [Validators.required, RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]]
@@ -104,16 +106,34 @@ export class EventosComponent implements OnInit {
 
   compararFechas(){
     let inicio = new Date(this.formEventos.get('fecha.inicio').value);
-    let cierre = new Date(this.formEventos.get('fecha.cierre').value);
+    inicio.setMinutes(inicio.getMinutes() + inicio.getTimezoneOffset())
 
-    if( (inicio != null && cierre != null) && (inicio > cierre)){
+    let cierre = new Date(this.formEventos.get('fecha.cierre').value);
+    cierre.setMinutes(cierre.getMinutes() + cierre.getTimezoneOffset())
+
+    let hoy = new Date();
+    hoy.setSeconds(0);
+    hoy.setMinutes(0);
+    hoy.setHours(0);
+
+    if(inicio > cierre){
+      this.mensajeError = "El evento no puede terminar antes de empezar."
+      this.formEventos.get('fecha').setErrors({'incorrect':true});
+      return true
+    }
+    else if( hoy > inicio ){
+      this.mensajeError = "El evento no puede empezar hoy o antes de hoy."
+      this.formEventos.get('fecha').setErrors({'incorrect':true});
+      return true
+    }
+    else if( hoy > cierre ){
+      this.mensajeError = "El evento no puede terminar hoy o antes de hoy."
       this.formEventos.get('fecha').setErrors({'incorrect':true});
       return true
     }
     else{
       return false
     }
-
   }
 
   compararHorarios(){
@@ -197,7 +217,7 @@ export class EventosComponent implements OnInit {
   }
 
   get validacionOrden(){
-    return this.formEventos.get('ordenImg').invalid && this.formEventos.get('ordenImg').touched
+    return this.formEventos.get('orden').invalid && this.formEventos.get('orden').touched
   }
 
   imgPrincipal(event){
@@ -232,7 +252,6 @@ export class EventosComponent implements OnInit {
 
     if (event.target.files && event.target.files[0]) {
         for (let i = 0; i < event.target.files.length; i++) {
-
           var reader = new FileReader();
 
           reader.onload = (event:any) => {
@@ -245,10 +264,7 @@ export class EventosComponent implements OnInit {
           this.listaImg.push(selectedFile.name)
         }
       }
-      console.log(this.formEventos);
-
       this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
-
   }
 
   borrarImgPrincipal(){
@@ -267,7 +283,19 @@ export class EventosComponent implements OnInit {
     this.urls = this.urls.filter((a) => a !== url);
     this.listaImg.splice(index, 1);
     this.imgsSeleccionadas.splice(index, 1);
+  }
 
+  lugarOcupado(){
+    let lugarElegido = this.formEventos.get('orden').value;
+
+    if(lugarElegido == "1"){
+      console.log(lugarElegido);
+      this.modalError.nativeElement.modal("show");
+      return true
+    }
+    else{
+      return false
+    }
   }
 
   guardarEvento(){
@@ -294,11 +322,9 @@ export class EventosComponent implements OnInit {
             this.formEventos.reset();
             console.log(this.formEventos);
 
-            this.urlPrincipal = null;
-            this.imgInputP.nativeElement.value = null;
+            this.borrarImgPrincipal();
 
-            this.urlCarousel = null;
-            this.imgInputC.nativeElement.value = null;
+            this.borrarImgCarousel();
 
             this.urls = [];
             this.imgsInput.nativeElement.value = null;

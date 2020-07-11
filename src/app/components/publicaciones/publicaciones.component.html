@@ -50,7 +50,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalPublicacionLabel">Crear Publicación</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #cerrar type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>
@@ -62,21 +62,22 @@
                             <label for="titulo">Título: <small class="text-danger">*</small></label>
                             <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Titulo" formControlName="titulo" [class.is-invalid]="validacionTitulo">
                             <small *ngIf="validacionTitulo" class="form-text text-danger">Título Obligatorio.</small>
+                            <small *ngIf="tituloExistente" class="form-text text-danger">Ya existe una publicacion con este título.</small>
                         </div>
                     </div>
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="descEvento">Cuerpo de Publicación: <small class="text-danger">*</small></label>
-                            <textarea id="descEvento" class="form-control" rows="5" formControlName="cuerpo" [class.is-invalid]="validacionCuerpo"></textarea>
-                            <small *ngIf="validacionCuerpo" class="form-text text-danger">Cuerpo de Publicación Obligatorio.</small>
+                            <textarea id="descEvento" class="form-control" rows="5" formControlName="articulo" [class.is-invalid]="validacionArticulo"></textarea>
+                            <small *ngIf="validacionArticulo" class="form-text text-danger">Cuerpo de Publicación Obligatorio.</small>
                         </div>
                     </div>
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="principal">Imagen Principal: <small class="text-danger">*</small></label><br>
-                            <input type="file" id="principal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
+                            <input #imgInputP [writeFile]="true" type="file" id="principal" accept=".jpg" (change)="imgPrincipal($event)" formControlName="imgPrincipal">
                             <small *ngIf="validacionImgPrincipal" class="form-text text-danger">Imagen Principal Obligatoria.</small>
                             <small *ngIf="validacionTamImg" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngIf="(urlPrincipal != null) && (!validacionTamImg)">
@@ -94,8 +95,9 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgsPublicacion">Imagenes de la Publicación:</label>
-                            <input type='file' id="imgsPublicacion" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsPublicacion">
+                            <label for="imgsPublicacion">Imagenes de la Publicación: <small class="text-danger">*</small></label>
+                            <input #imgsInput [writeFile]="true" type='file' id="imgsPublicacion" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsPublicacion">
+                            <small *ngIf="validacionImgs" class="form-text text-danger">>Mínimo una imágen.</small>
                             <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <ng-container *ngIf="(urls != null) && (!validacionTamImgs)">
                                 <div class="row" *ngFor='let url of urls; let i = index'>

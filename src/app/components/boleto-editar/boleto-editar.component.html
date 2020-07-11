@@ -1,0 +1,236 @@
+<div class="container-fluid animated fadeIn fast mt-2">
+    <div class="card mb-3 border-success">
+        <div class="card-header border-success">
+            <h4>Boleto General</h4>
+        </div>
+        <div class="card-body">
+            <div class="row h-100">
+                <div class="col-md-9">
+                    <h5>Descripción</h5>
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente a delectus nemo suscipit asperiores ea, odio libero culpa veritatis officiis accusantium dignissimos vero inventore iure nobis alias neque eligendi assumenda?</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <h5>Inventario</h5>
+                    <p>0 Boletos</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <h5 class="text-center">Promociones</h5>
+            <hr>
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table table-bordered table-sm">
+                        <thead class="text-center">
+                            <tr>
+                                <th scope="col" style="width: 60%;">Promociones</th>
+                                <th scope="col" style="width: 20%;">Aplicada</th>
+                                <th scope="col" style="width: 20%;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr>
+                                <td class="align-middle">Por Fechas</td>
+                                <td class="align-middle"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></td>
+                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">Por Evento Relacionado</td>
+                                <td class="align-middle"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></td>
+                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">Por Codigo</td>
+                                <td class="align-middle"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></td>
+                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4 my-auto">
+                    <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoFechas">Promocion por Fechas</button>
+                    <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoEvento">Promocion por Evento Relacionado</button>
+                    <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#promoCodigo">Promocion por Codigo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3 border-primary">
+        <div class="card-header border-primary">
+            <h4>Opciones de edición</h4>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-outline-primary btn-block text-center collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                           Información Principal
+                        </button>
+                        </h2>
+                    </div>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <form [formGroup]="">
+                                <div class="form-row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="nombreEvento">Nombre:</label>
+                                        <input type="text" class="form-control mb-3" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre">
+                                        <label for="ordenImg">Inventario:</label>
+                                        <input type="number" class="form-control" id="ordenImg" min="0" step="1" formControlName="ordenImg">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="descEvento">Descripción:</label>
+                                        <textarea id="descEvento" class="form-control" rows="5" formControlName="desc"></textarea>
+                                    </div>
+                                </div>
+                                <div class="input-group form-row mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-success" type="submit">Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="promoFechas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Promocion por Fechas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+            </div>
+            <div class="modal-body">
+                <!-- <form [formGroup]="promoFechas">-->
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="fechaInicio">Fecha de inicio: </label>
+                        <input type="date" id="fechaInicio" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaCierre">Fecha de cierre: </label>
+                        <input type="date" name="fechaCierre" id="fechaCierre" class="form-control">
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="inventario">Inventario: <small>(Cantidad de Boletos a los que se les aplicará la promoción.)</small></label>
+                        <input type="number" min="0" step="1" value="0" id="inventario" class="form-control">
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="precio">Precio por Boleto:</label>
+                        <input type="number" min="0" step="1" value="0" id="precio" class="form-control">
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row pb-2 mt-0">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">Aplicar Promoción</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="promoEvento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Promoción por Evento Relacionado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-12">
+                        <label for="evento">Evento:</label>
+                        <select id="evento" class="form-control">
+                        <option selected>La Arrolladora en C3 2021</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-12">
+                        <label for="boletoReferencia">Boleto de Referencia:</label>
+                        <select id="boletoReferencia" class="form-control">
+                        <option selected>La Arrolladora en C3 2020</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="inventario">Inventario: <small>(Cantidad de Boletos a los que se les aplicará la promoción.)</small></label>
+                        <input type="number" min="0" step="1" value="0" id="inventario" class="form-control">
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="precio">Precio por Boleto:</label>
+                        <input type="number" min="0" step="1" value="0" id="precio" class="form-control">
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row pb-2 mt-0">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">Aplicar Promoción</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="promoCodigo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Promoción por Código</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="codigo">Código: <small>(Clave única de 10 caracteres.)</small></label>
+                        <input type="text" minlength="10" maxlength="10" id="codigo" class="form-control" placeholder="AAAAAAAAAA">
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="inventario">Inventario: <small>(Cantidad de Boletos a los que se les aplicará la promoción.)</small></label>
+                        <input type="number" min="0" step="1" value="0" id="inventario" class="form-control">
+                    </div>
+                </div>
+                <div class="input-group form-row mb-3">
+                    <div class="col-md-6">
+                        <label for="precio">Precio por Boleto:</label>
+                        <input type="number" min="0" step="1" value="0" id="precio" class="form-control">
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row pb-2 mt-0">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">Aplicar Promoción</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

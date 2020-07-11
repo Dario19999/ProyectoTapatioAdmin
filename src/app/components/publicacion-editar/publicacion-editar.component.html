@@ -10,35 +10,21 @@
                     <h4>{{ publicacion.titulo_pub }}</h4>
                 </div>
                 <div class="card-body">
+                    <div class="pt-4 text-center mb-3">
+                        <h4>Imagen Principal.</h4>
+                        <img [src]="'assets/img/publicaciones/'+publicacion.publi_img" alt="img_principal" class="figure-img img-fluid d-block rounded mx-auto" width="950" height="650">
+                    </div>
+                    <hr>
                     <div class="container-fluid">
+                        <h4>Artículo.</h4>
                         <p>{{ publicacion.articulo_pub }}</p>
                     </div>
                     <hr>
                     <div class="container-fluid">
                         <owl-carousel-o [options]="customOptions">
-                            <ng-template carouselSlide>
+                            <ng-template carouselSlide *ngFor="let img of imgs">
                                 <div class="slide">
-                                    <img src="assets/img/publicaciones/img-p1.jpg" height="350px" class="p-1">
-                                </div>
-                            </ng-template>
-                            <ng-template carouselSlide>
-                                <div class="slide">
-                                    <img src="assets/img/publicaciones/img-p2.jpg" height="350px" class="p-1">
-                                </div>
-                            </ng-template>
-                            <ng-template carouselSlide>
-                                <div class="slide">
-                                    <img src="assets/img/publicaciones/img-p3.jpg" height="350px" class="p-1">
-                                </div>
-                            </ng-template>
-                            <ng-template carouselSlide>
-                                <div class="slide">
-                                    <img src="assets/img/publicaciones/img-p4.jpg" height="350px" class="p-1">
-                                </div>
-                            </ng-template>
-                            <ng-template carouselSlide>
-                                <div class="slide">
-                                    <img src="assets/img/publicaciones/img-p5.jpg" height="350px" class="p-1">
+                                    <img [src]="'assets/img/publicaciones/'+img.ruta_imagen_pub" alt="imgs" width="300px" height="300px" class="p-1 figure-img rounded">
                                 </div>
                             </ng-template>
                         </owl-carousel-o>

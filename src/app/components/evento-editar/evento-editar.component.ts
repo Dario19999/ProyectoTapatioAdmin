@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
 
 @Component({
@@ -14,21 +14,51 @@ export class EventoEditarComponent implements OnInit {
   formInfoE:FormGroup;
   formFechas:FormGroup;
   formImgE:FormGroup;
+  formBoletos:FormGroup;
 
   promoFechas:FormGroup;
   promoEvento:FormGroup;
   promoCodigo:FormGroup;
-
-  formBoletos:FormGroup;
 
   urls = [];
   urlPrincipal = null;
   urlCarousel = null;
 
   evento:any = {};
+
+  imgSeleccionada: File;
+  imgCarouselSeleccionada: File;
+  imgsSeleccionadas:File[] = [];
+  listaImg:any[] = [];
+
   imgs:any = null;
 
+  mensajeError = null;
   cantBoletos:number = 0;
+
+  infoEvento:any = {
+    id:null,
+    nombre:null,
+    tipo:null,
+    desc:null,
+    ordenImg:null,
+    enlace:null
+  };
+
+  fechasEvento:any = {
+    id:null,
+    diaInicio: null,
+    diaFin: null,
+    horaInicio: null,
+    horaFin: null
+  };
+
+  imgsEvento:any = {
+    id:null,
+    imgPrincipal:null,
+    imgCarousel:null,
+    imgs:null
+  };
 
   customOptions: OwlOptions = {
     loop: true,
@@ -55,9 +85,14 @@ export class EventoEditarComponent implements OnInit {
     nav: true
   }
 
+  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
+  @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
+  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
+
   constructor(private fb:FormBuilder,
               private activatedRoute:ActivatedRoute,
-              private eventosService:EventosService) {}
+              private eventosService:EventosService,
+              private router:Router) {}
 
   ngOnInit() {
     this.formInfoInit();
@@ -65,8 +100,30 @@ export class EventoEditarComponent implements OnInit {
     this.formImgInit();
     this.formBoletosInit();
     this.activatedRoute.params.subscribe( params => {
-      this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
+      this.eventosService.getEvento(params['id']).subscribe( resultado => {
+        this.evento = resultado[0];
+
+        this.formInfoE.setValue({
+          nombre: this.evento.nombre_evento,
+          tipo: this.evento.tipo_evento,
+          desc: this.evento.descripcion_evento,
+          ordenImg: this.evento.orden_anuncio,
+          enlace: this.evento.enlace_evento
+        });
+
+        this.formFechas.setValue({
+          diaInicio: this.evento.dia_inicio_evento,
+          diaFin: this.evento.dia_conclusion_evento,
+          horaInicio: this.evento.hora_inicio_evento,
+          horaFin: this.evento.hora_conclusion_evento
+        });
+
+      });
       this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado)
+      this.infoEvento.id = params['id'];
+      this.fechasEvento.id = params['id'];
+      this.imgsEvento.id = params['id'];
+
     });
   }
 
@@ -82,23 +139,81 @@ export class EventoEditarComponent implements OnInit {
 
   formFechasInit(){
     this.formFechas = this.fb.group({
-      fecha: this.fb.group({
-        inicio:['',],
-        cierre:['',],
-      }),
-      horario: this.fb.group({
-        inicio:['',],
-        cierre:['',],
-      }),
+      diaInicio:['',],
+      diaFin:['',],
+      horaInicio:['',],
+      horaFin:['',],
     })
   }
 
   formImgInit(){
     this.formImgE = this.fb.group({
       imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
-      imgsEvento: ['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
-      imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})]
+      imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})],
+      imgsEvento: ['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]
     })
+  }
+
+  formBoletosInit(){
+    this.formBoletos = this.fb.group({
+      boletos: this.fb.array([
+
+      ])
+    })
+  }
+
+  compararFechas(){
+    let inicio = new Date(this.formFechas.get('diaInicio').value);
+    inicio.setMinutes(inicio.getMinutes() + inicio.getTimezoneOffset())
+
+    let cierre = new Date(this.formFechas.get('diaFin').value);
+    cierre.setMinutes(cierre.getMinutes() + cierre.getTimezoneOffset())
+
+    let hoy = new Date();
+    hoy.setSeconds(0);
+    hoy.setMinutes(0);
+    hoy.setHours(0);
+
+    if(inicio > cierre){
+      this.mensajeError = "El evento no puede terminar antes de empezar."
+      this.formFechas.setErrors({'incorrect':true});
+      return true
+    }
+    else if( hoy > inicio ){
+      this.mensajeError = "El evento no puede empezar hoy o antes de hoy."
+      this.formFechas.setErrors({'incorrect':true});
+      return true
+    }
+    else if( hoy > cierre ){
+      this.mensajeError = "El evento no puede terminar hoy o antes de hoy."
+      this.formFechas.setErrors({'incorrect':true});
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  compararHorarios(){
+    let inicio = new Date(this.formFechas.get('diaInicio').value);
+    let cierre = new Date(this.formFechas.get('diaFin').value);
+
+
+    if(inicio.getTime() === cierre.getTime()){
+
+      let horarioInicio = this.formFechas.get('horaInicio');
+      let horarioCierre = this.formFechas.get('horaFin');
+
+      if(horarioInicio.value >= horarioCierre.value) {
+        this.formFechas.setErrors({'incorrect': true})
+        return true
+      }
+      else{
+        console.log(this.formFechas);
+        return false
+
+      }
+    }
   }
 
   get validacionTamImg(){
@@ -113,88 +228,80 @@ export class EventoEditarComponent implements OnInit {
     return this.formImgE.get('imgCarousel').invalid && this.formImgE.get('imgCarousel').dirty
   }
 
-  formBoletosInit(){
-    this.formBoletos = this.fb.group({
-      boletos: this.fb.array([
-
-      ])
-    })
-  }
-
   get boletos(){
     return this.formBoletos.get('boletos') as FormArray;
   }
 
-  guardarInfo(){
-    // if(this.formEventos.invalid){
-    //   Object.values(this.formEventos.controls).forEach( control =>{
+  editarBoleto(){
+    this.router.navigate(['editar-boleto'])
+  }
 
-    //     if(control instanceof FormGroup){
-    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
-    //     }
-    //     else{
-    //       control.markAllAsTouched();
-    //     }
-    //   });
-    //   return;
-    // }
+  refresh(){
+    this.activatedRoute.params.subscribe( params => {
+      this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
+    });
+  }
+
+  guardarInfo(){
+    this.infoEvento.nombre = this.formInfoE.get('nombre').value;
+    this.infoEvento.tipo = this.formInfoE.get('tipo').value;
+    this.infoEvento.desc = this.formInfoE.get('desc').value;
+    this.infoEvento.ordenImg = this.formInfoE.get('ordenImg').value;
+    this.infoEvento.enlace = this.formInfoE.get('enlace').value;
+
+    this.eventosService.modificarInfoEvento(this.infoEvento).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }else if(datos['resultado'] == "OK"){
+        this.refresh();
+        window.confirm("Información modificada con éxito");
+      }
+    })
     console.log(this.formInfoE);
   }
+
   guardarFechas(){
-    // if(this.formEventos.invalid){
-    //   Object.values(this.formEventos.controls).forEach( control =>{
+    this.fechasEvento.diaInicio = this.formFechas.get('diaInicio').value;
+    this.fechasEvento.diaFin = this.formFechas.get('diaFin').value;
+    this.fechasEvento.horarioInicio = this.formFechas.get('horaInicio').value;
+    this.fechasEvento.horarioFin = this.formFechas.get('horaFin').value;
 
-    //     if(control instanceof FormGroup){
-    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
-    //     }
-    //     else{
-    //       control.markAllAsTouched();
-    //     }
-    //   });
-    //   return;
-    // }
-    console.log(this.formFechas);
+    this.eventosService.modificarHorarioEvento(this.fechasEvento).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }else if(datos['resultado'] == "OK"){
+        this.refresh();
+        window.confirm("Horario modificado con éxito");
+      }
+    })
   }
-  guardarImg(){
-    // if(this.formEventos.invalid){
-    //   Object.values(this.formEventos.controls).forEach( control =>{
 
-    //     if(control instanceof FormGroup){
-    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
-    //     }
-    //     else{
-    //       control.markAllAsTouched();
-    //     }
-    //   });
-    //   return;
-    // }
-    console.log(this.formImgE);
+  guardarImg(){
+    this.imgsEvento.imgPrincipal = this.imgSeleccionada;
+    this.imgsEvento.imgCarousel = this.imgCarouselSeleccionada;
+    this.imgsEvento.imgs = this.imgsSeleccionadas;
+
+    this.eventosService.modificarImgsEvento(this.imgsEvento).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }else if(datos['resultado'] == "OK"){
+        this.refresh();
+        window.confirm("Imagen(es) modificada(s) con éxito");
+      }
+    })
   }
 
   guardarBoletos(){
      console.log(this.formBoletos);
   }
 
-  borrarImgPrincipal(){
-    this.urlPrincipal = null;
-    this.formImgE.controls['imgPrincipal'].setValue("")
-  }
-
-  borrarImgCarousel(){
-    this.urlCarousel = null;
-    this.formImgE.controls['imgCarousel'].setValue("")
-  }
-
-  borrarImgs( index:number ){
-    if (index !== -1) {
-      this.urls.splice(index, 1);
-    }
-
-    this.formImgE.controls['imgsEvento'].setValue("");
-  }
-
-
   imgPrincipal(event){
+    this.imgSeleccionada = <File>event.target.files[0];
+    this.formImgE.controls['imgPrincipal'].setValue(this.imgSeleccionada);
+
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -207,6 +314,9 @@ export class EventoEditarComponent implements OnInit {
   }
 
   imgCarousel(event){
+    this.imgCarouselSeleccionada = <File>event.target.files[0];
+    this.formImgE.controls['imgCarousel'].setValue(this.imgCarouselSeleccionada);
+
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -219,18 +329,41 @@ export class EventoEditarComponent implements OnInit {
   }
 
   multiImg(event) {
-    if (event.target.files && event.target.files[0]) {
-        var filesAmount = event.target.files.length;
-        for (let i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
 
-          reader.onload = (event:any) => {
-            console.log(event.target.result);
-              this.urls.push(event.target.result);
-          }
-          reader.readAsDataURL(event.target.files[i]);
+    if (event.target.files && event.target.files[0]) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        var reader = new FileReader();
+
+        reader.onload = (event:any) => {
+          this.urls.push(event.target.result);
         }
+        reader.readAsDataURL(event.target.files[i]);
+
+        var selectedFile = event.target.files[i];
+        this.imgsSeleccionadas.push(selectedFile);
+        this.listaImg.push(selectedFile.name)
+      }
     }
+    this.formImgE.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+
+  }
+
+  borrarImgPrincipal(){
+    this.urlPrincipal = null;
+    this.formImgE.controls['imgPrincipal'].setValue("");
+    this.imgInputP.nativeElement.value = null;
+  }
+
+  borrarImgCarousel(){
+    this.urlCarousel = null;
+    this.formImgE.controls['imgCarousel'].setValue("");
+    this.imgInputC.nativeElement.value = null;
+  }
+
+  borrarImgs( url:any, index:number ){
+    this.urls = this.urls.filter((a) => a !== url);
+    this.listaImg.splice(index, 1);
+    this.imgsSeleccionadas.splice(index, 1);
   }
 
   crearBoleto(){
@@ -248,7 +381,6 @@ export class EventoEditarComponent implements OnInit {
   }
 
   quitarBoleto( index:number ){
-
     this.cantBoletos--;
     this.boletos.removeAt(index);
   }
