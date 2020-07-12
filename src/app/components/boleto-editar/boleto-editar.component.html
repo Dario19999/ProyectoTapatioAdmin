@@ -29,15 +29,17 @@
                     <table class="table table-bordered table-sm">
                         <thead class="text-center">
                             <tr>
-                                <th scope="col" style="width: 30%;">Tipo</th>
+                                <th scope="col" style="width: 20%;">Tipo</th>
                                 <th scope="col" style="width: 40%;">Parametros</th>
-                                <th scope="col" style="width: 30%;">Acciones</th>
+                                <th scope="col" style="width: 20%;">Precio</th>
+                                <th scope="col" style="width: 20%;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             <tr *ngFor="let promo of promosFechas">
                                 <td class="align-middle">Por Fechas</td>
                                 <td class="align-middle">({{ promo.fec_ini_pro }}) - ({{ promo.fec_fin_pro }})</td>
+                                <td class="align-middle">${{promo.precio_fec}}.00</td>
                                 <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
                             </tr>
                             <!-- <tr>
@@ -51,6 +53,7 @@
                             <tr *ngFor="let promo of promosCodigo">
                                 <td class="align-middle">Por Codigo</td>
                                 <td class="align-middle">Código: {{promo.codigo}}</td>
+                                <td class="align-middle">${{promo.precio_cod}}.00</td>
                                 <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
                             </tr>
                         </tbody>
