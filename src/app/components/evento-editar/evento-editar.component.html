@@ -45,14 +45,14 @@
                 </div>
             </div>
 
-            <div class="card mb-3 border-success">
+            <div class="card mb-3 border-success" *ngFor="let boleto of boletos">
                 <div class="card-header border-success">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>Boleto General</h4>
+                            <h4> {{boleto.nom_bol}} </h4>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-success float-right" (click)="editarBoleto()">Editar</button>
+                            <button class="btn btn-success float-right" (click)="editarBoleto( boleto.id_boleto )">Editar</button>
                         </div>
                     </div>
                 </div>
@@ -60,97 +60,24 @@
                     <div class="row h-100">
                         <div class="col-md-12">
                             <h5>Descripción</h5>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente a delectus nemo suscipit asperiores ea, odio libero culpa veritatis officiis accusantium dignissimos vero inventore iure nobis alias neque eligendi assumenda?</p>
+                            <p> {{boleto.descripcion_boleto}} </p>
                         </div>
 
                     </div>
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <h5>Inventario</h5>
-                            <p>0 Boletos</p>
+                            <p> {{boleto.stock_boleto}} </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Precio por boleto.</h5>
+                            <h6> {{boleto.precio_bol}} </h6>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <h5 class="text-center">Promociones</h5>
-                    <hr>
-                    <table class="table table-bordered w-50 table-sm mx-auto">
-                        <thead class="text-center">
-                            <tr>
-                                <th scope="col" style="width: 80%;">Promociones</th>
-                                <th scope="col" style="width: 20%;">Aplicada</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            <tr>
-                                <td class="text-center">Por Fechas</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">Por Evento Relacionado</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">Por Codigo</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
             </div>
 
-            <div class="card mb-3 border-success">
-                <div class="card-header border-success">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4>Boleto VIP</h4>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-success float-right" (click)="editarBoleto()">Editar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-12">
-                            <h5>Descripción</h5>
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sapiente a delectus nemo suscipit asperiores ea, odio libero culpa veritatis officiis accusantium dignissimos vero inventore iure nobis alias neque eligendi assumenda?</p>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-9">
-                            <h5>Inventario</h5>
-                            <p>0 Boletos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer table-responsive">
-                    <h5 class="text-center">Promociones</h5>
-                    <hr>
-                    <table class="table table-bordered w-50 table-sm mx-auto">
-                        <thead class="text-center">
-                            <tr>
-                                <th scope="col" style="width: 80%;">Promociones</th>
-                                <th scope="col" style="width: 20%;">Aplicada</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            <tr>
-                                <td class="text-center">Por Fechas</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">Por Evento Relacionado</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                            <tr>
-                                <td class="text-center">Por Codigo</td>
-                                <th scope="row"><i class="fas fa-check-square"></i><i class="fas fa-window-close"></i></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -402,53 +329,30 @@
                     </div>
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
                         <div class="card-body">
-
-                            <div class="input-group form-row mb-3">
-                                <div class="col-md-12">
-                                    <button class="btn btn-outline-success btn-block mx-auto" style="width: 50%; display: block;" type="button" (click)="crearBoleto()">+ Crear Boleto</button>
-                                </div>
-                            </div>
-
                             <form [formGroup]="formBoletos" (ngSubmit)="guardarBoletos()">
-                                <div *ngFor="let boleto of boletos.controls; let i = index" formArrayName="boletos">
-                                    <div [formGroupName]="i" class="border rounded mb-3 p-3">
-                                        <div class="row p-0">
-                                            <div class="col-md-11">
-                                                <h5>Boleto {{ i+1 }}</h5>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" aria-label="Close" class="btn btn-danger" (click)="quitarBoleto(i)">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button>
-                                            </div>
-                                        </div>
-                                        <div class="input-group form-row mb-2">
-                                            <div class="col-md-6">
-                                                <label for="nobmre">Nombre del Boleto: <small class="text-danger">*</small></label>
-                                                <input type="text" id="nombre" class="form-control" placeholder="Ingrese el Nombre del Boleto" formControlName="nombre">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="inventario">Inventario: <small class="text-danger">*</small></label>
-                                                <input type="number" min="0" step="1" value="0" id="inventario" class="form-control" formControlName="inventario">
-                                            </div>
-                                        </div>
-
-                                        <div class="input-group form-row mb-2">
-                                            <div class="col-md-6">
-                                                <label for="desc">Descripción: <small class="text-danger">*</small></label>
-                                                <textarea id="desc" rows="5" class="form-control" formControlName="desc"></textarea>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="precio">Precio por Boleto: <small class="text-danger">*</small></label>
-                                                <input type="number" min="0" step="1" value="0" id="precio" class="form-control" formControlName="precio">
-                                            </div>
-                                        </div>
+                                <div class="input-group form-row mb-2">
+                                    <div class="col-md-6">
+                                        <label for="nobmre">Nombre del Boleto: <small class="text-danger">*</small></label>
+                                        <input type="text" id="nombre" class="form-control" placeholder="Ingrese el Nombre del Boleto" formControlName="nombre">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inventario">Inventario: <small class="text-danger">*</small></label>
+                                        <input type="number" min="0" step="1" value="0" id="inventario" class="form-control" formControlName="inventario">
                                     </div>
                                 </div>
 
-                                <div *ngIf="cantBoletos > 0">
-                                    <button class="btn btn-success btn-block mx-auto" style="width: 25%; display: block;" type="submit">Guardar Boletos</button>
+                                <div class="input-group form-row mb-2">
+                                    <div class="col-md-6">
+                                        <label for="desc">Descripción: <small class="text-danger">*</small></label>
+                                        <textarea id="desc" rows="5" class="form-control" formControlName="desc"></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="precio">Precio por Boleto: <small class="text-danger">*</small></label>
+                                        <input type="number" min="0" step="1" value="0" id="precio" class="form-control" formControlName="precio">
+                                    </div>
                                 </div>
+
+                                <button class="btn btn-success btn-block mx-auto" style="width: 25%; display: block;" type="submit">Crear Boleto</button>
                             </form>
                         </div>
                     </div>

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
+import { BoletosService } from '../../services/boletos.service';
 
 @Component({
   selector: 'app-evento-editar',
@@ -16,9 +17,6 @@ export class EventoEditarComponent implements OnInit {
   formImgE:FormGroup;
   formBoletos:FormGroup;
 
-  promoFechas:FormGroup;
-  promoEvento:FormGroup;
-  promoCodigo:FormGroup;
 
   urls = [];
   urlPrincipal = null;
@@ -32,9 +30,8 @@ export class EventoEditarComponent implements OnInit {
   listaImg:any[] = [];
 
   imgs:any = null;
-
+  boletos:any = null;
   mensajeError = null;
-  cantBoletos:number = 0;
 
   infoEvento:any = {
     id:null,
@@ -59,6 +56,14 @@ export class EventoEditarComponent implements OnInit {
     imgCarousel:null,
     imgs:null
   };
+
+  boletoEvento:any = {
+    id:null,
+    nombre:null,
+    desc:null,
+    inventario:null,
+    precio:null
+  }
 
   customOptions: OwlOptions = {
     loop: true,
@@ -92,6 +97,7 @@ export class EventoEditarComponent implements OnInit {
   constructor(private fb:FormBuilder,
               private activatedRoute:ActivatedRoute,
               private eventosService:EventosService,
+              private boletosService:BoletosService,
               private router:Router) {}
 
   ngOnInit() {
@@ -120,10 +126,11 @@ export class EventoEditarComponent implements OnInit {
 
       });
       this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado)
+      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado);
       this.infoEvento.id = params['id'];
       this.fechasEvento.id = params['id'];
       this.imgsEvento.id = params['id'];
-
+      this.boletoEvento.id = params['id'];
     });
   }
 
@@ -156,9 +163,10 @@ export class EventoEditarComponent implements OnInit {
 
   formBoletosInit(){
     this.formBoletos = this.fb.group({
-      boletos: this.fb.array([
-
-      ])
+      nombre:['', Validators.required],
+      desc:['', Validators.required],
+      inventario:['', Validators.required],
+      precio:['', Validators.required]
     })
   }
 
@@ -228,12 +236,8 @@ export class EventoEditarComponent implements OnInit {
     return this.formImgE.get('imgCarousel').invalid && this.formImgE.get('imgCarousel').dirty
   }
 
-  get boletos(){
-    return this.formBoletos.get('boletos') as FormArray;
-  }
-
-  editarBoleto(){
-    this.router.navigate(['editar-boleto'])
+  editarBoleto( id:number){
+    this.router.navigate(['editar-boleto', id])
   }
 
   refresh(){
@@ -303,7 +307,22 @@ export class EventoEditarComponent implements OnInit {
   }
 
   guardarBoletos(){
-     console.log(this.formBoletos);
+    this.boletoEvento.nombre = this.formBoletos.get('nombre').value;
+    this.boletoEvento.desc = this.formBoletos.get('desc').value;
+    this.boletoEvento.inventario = this.formBoletos.get('inventario').value;
+    this.boletoEvento.precio = this.formBoletos.get('precio').value;
+
+    this.boletosService.crearBoleto(this.boletoEvento).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }
+      else if(datos['resultado'] == "OK"){
+        this.refresh();
+        window.confirm("Boleto creado con éxito")
+        this.formBoletos.reset();
+      }
+    })
   }
 
   imgPrincipal(event){
@@ -383,24 +402,4 @@ export class EventoEditarComponent implements OnInit {
       })
     }
   }
-
-  crearBoleto(){
-    this.cantBoletos++;
-    const BOLETOS = <FormArray>this.formBoletos.get('boletos');
-
-    BOLETOS.push(
-      this.fb.group({
-        nombre:['', Validators.required],
-        desc:['', Validators.required],
-        inventario:['', Validators.required],
-        precio:['', Validators.required]
-      })
-    );
-  }
-
-  quitarBoleto( index:number ){
-    this.cantBoletos--;
-    this.boletos.removeAt(index);
-  }
-
 }

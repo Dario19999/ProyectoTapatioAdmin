@@ -18,8 +18,8 @@ const routes: Routes = [
   { path: 'repartidores', component: RepartidoresComponent },
   { path: 'editar-evento/:id', component: EventoEditarComponent },
   { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
+  { path: 'editar-boleto/:id', component: BoletoEditarComponent },
   { path: 'perfil', component: PerfilComponent },
-  { path: 'editar-boleto', component: BoletoEditarComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
 ];
 
