@@ -172,7 +172,7 @@
                             <label for="imgsEvento">Imagenes del Evento: <small class="text-danger">*</small></label>
                             <input #imgsInput [writeFile]="true" type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
                             <small *ngIf="validacionImgs" class="form-text text-danger">Mínimo una imágen.</small>
-                            <small *ngIf="validacionTamImgs" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
+                            <small *ngIf="validacionTamImgs && formEventos.invalid" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngFor='let url of urls; let i = index'>
                                 <div class="col-md-9">
                                     <img [src]="url " height="200 " class="float-right"><br>

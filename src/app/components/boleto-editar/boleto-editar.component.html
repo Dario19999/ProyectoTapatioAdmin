@@ -40,10 +40,11 @@
                                 <td class="align-middle">Por Fechas</td>
                                 <td class="align-middle">({{ promo.fec_ini_pro }}) - ({{ promo.fec_fin_pro }})</td>
                                 <td class="align-middle">${{promo.precio_fec}}.00</td>
-                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
+                                <td class="align-middle">
+                                    <button type="button" class="btn btn-danger" (click)="eliminarPromoFechas( promo.id_promo_fec )">Eliminar</button></td>
                             </tr>
                             <!-- <tr>
-                                <td class="align-middle">Por Evento Relacionado</td>
+                                <td class=" align-middle">Por Evento Relacionado</td>
                                 <td class="align-middle">
                                     <h6>Evento x</h6>
                                     <h6>Evento y</h6>
@@ -54,7 +55,7 @@
                                 <td class="align-middle">Por Codigo</td>
                                 <td class="align-middle">Código: {{promo.codigo}}</td>
                                 <td class="align-middle">${{promo.precio_cod}}.00</td>
-                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
+                                <td class="align-middle"><button type="button" class="btn btn-danger" (click)="eliminarPromoCodigo( promo.id_pro_cod )">Eliminar</button></td>
                             </tr>
                         </tbody>
                     </table>

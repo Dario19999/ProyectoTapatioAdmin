@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RepartidoresService } from '../../services/repartidores.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-repartidores',
@@ -8,9 +12,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class RepartidoresComponent implements OnInit {
 
   formRepartidor:FormGroup
-  constructor(private fb:FormBuilder) { }
+
+  repartidores:any = null;
+
+  @ViewChild('cerrar',{ static: false }) cerrar;
+
+
+  constructor(private fb:FormBuilder,
+              private repartidoresService:RepartidoresService,
+              private router:Router) { }
 
   ngOnInit() {
+    this.getRepartidores();
     this.formInit();
   }
 
@@ -20,8 +33,10 @@ export class RepartidoresComponent implements OnInit {
       apellidoP:['', Validators.required],
       apellidoM:['', Validators.required],
       correo:['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+      telefono:['', [Validators.required]],
+      telefonoExt:['', [Validators.required]],
+      fechaNacimiento:['', [Validators.required]],
       contra:['', [Validators.required]],
-      documento:['', Validators.required]
     });
   }
 
@@ -41,12 +56,57 @@ export class RepartidoresComponent implements OnInit {
     return this.formRepartidor.get('correo').invalid && this.formRepartidor.get('correo').touched
   }
 
+  get validacionNacimiento(){
+    return this.formRepartidor.get('fechaNacimiento').invalid && this.formRepartidor.get('fechaNacimiento').touched
+  }
+
+  get validacionTelefono(){
+    return this.formRepartidor.get('telefono').invalid && this.formRepartidor.get('telefono').touched
+  }
+
+  get validacionTelefonoExtra(){
+    return this.formRepartidor.get('telefonoExt').invalid && this.formRepartidor.get('telefonoExt').touched
+  }
+
+  get validacionNumero(){
+    return this.esAlfa(this.formRepartidor.get('telefono').value) && this.formRepartidor.get('telefono').value != ""
+  }
+
+  get validacionNumeroExtra(){
+    return this.esAlfa(this.formRepartidor.get('telefonoExt').value) && this.formRepartidor.get('telefonoExt').value != ""
+  }
+
   get validacionContra(){
     return this.formRepartidor.get('contra').invalid && this.formRepartidor.get('contra').touched
   }
 
-  get validacionDoc(){
-    return this.formRepartidor.get('documento').invalid && this.formRepartidor.get('documento').touched
+  esAlfa(str) {
+    if(str != null){
+      if (!str.match(/^[0-9]+$/)){
+        return true
+      }
+      else{
+        return false
+      }
+    }
+  }
+
+  getRepartidores(){
+    this.repartidoresService.getRepartidores().subscribe( resultado => this.repartidores = resultado)
+  }
+
+  editarReapartidor(id_repartidor:number){
+    this.router.navigate(['editar-repartidor', id_repartidor]);
+  }
+
+  eliminarRepartidor( id_repartidor:number ){
+    if(confirm("Está seguro de querer eliminar a este repartidor?")){
+      this.repartidoresService.eliminarRepartidor(id_repartidor).subscribe(datos => {
+        if (datos['resultado']=='OK') {
+          this.getRepartidores();
+        }
+      });
+    }
   }
 
   guardarRepartidor(){
@@ -60,9 +120,28 @@ export class RepartidoresComponent implements OnInit {
           control.markAllAsTouched();
         }
       });
-      return;
+      return
     }
-    console.log(this.formRepartidor);
+    else{
+
+      let nombre = this.formRepartidor.get('nombre').value;
+      let apellidoP = this.formRepartidor.get('apellidoP').value;
+      let apellidoM = this.formRepartidor.get('apellidoM').value;
+      this.formRepartidor.controls['nombre'].setValue(nombre+" "+apellidoP+" "+apellidoM);
+
+      this.repartidoresService.crearRepartidor(this.formRepartidor.value).subscribe( datos => {
+        if(datos['resultado'] == "ERROR"){
+          console.log("ERROR");
+          return
+        }
+        else if(datos['resultado'] == "OK"){
+          this.getRepartidores();
+          this.formRepartidor.reset();
+
+          this.cerrar.nativeElement.click();
+        }
+      });
+    }
   }
 
 }

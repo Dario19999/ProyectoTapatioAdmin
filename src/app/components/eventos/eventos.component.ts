@@ -193,15 +193,15 @@ export class EventosComponent implements OnInit {
   }
 
   get validacionImg(){
-    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').touched
+    return this.formEventos.get('imgPrincipal').invalid && this.formEventos.get('imgPrincipal').touched && this.formEventos.get('imgPrincipal').value == ""
   }
 
   get validacionImgCarousel(){
-    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').touched
+    return this.formEventos.get('imgCarousel').invalid && this.formEventos.get('imgCarousel').touched && this.formEventos.get('imgCarousel').value == ""
   }
 
   get validacionImgs(){
-    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').touched
+    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').touched && this.formEventos.get('imgsEvento').value == ""
   }
 
   get validacionTamImg(){
@@ -249,7 +249,6 @@ export class EventosComponent implements OnInit {
   }
 
   multiImg(event) {
-
     if (event.target.files && event.target.files[0]) {
         for (let i = 0; i < event.target.files.length; i++) {
           var reader = new FileReader();
@@ -263,8 +262,11 @@ export class EventosComponent implements OnInit {
           this.imgsSeleccionadas.push(selectedFile);
           this.listaImg.push(selectedFile.name)
         }
+        this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
       }
-      this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+
+      console.log(this.formEventos.controls['imgsEvento'].value);
+      console.log(this.formEventos);
   }
 
   borrarImgPrincipal(){
@@ -283,6 +285,19 @@ export class EventosComponent implements OnInit {
     this.urls = this.urls.filter((a) => a !== url);
     this.listaImg.splice(index, 1);
     this.imgsSeleccionadas.splice(index, 1);
+
+    this.formEventos.controls['imgsEvento'].reset();
+
+    this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+
+
+    console.log(this.formEventos.get('imgsEvento').value);
+    if(this.imgsSeleccionadas.length == 0){
+      this.formEventos.controls['imgsEvento'].setValue("");
+      this.imgsInput.nativeElement.value = null;
+    }
+
+    console.log(this.formEventos);
   }
 
   lugarOcupado(){
@@ -316,26 +331,23 @@ export class EventosComponent implements OnInit {
     else{
 
       this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
-          console.log(datos['resultado']);
-          if(datos['resultado'] == 'OK'){
-            this.getEventos();
-            this.formEventos.reset();
-            console.log(this.formEventos);
+        if(datos['resultado'] == 'OK'){
+          this.getEventos();
+          this.formEventos.reset();
 
-            this.borrarImgPrincipal();
+          this.borrarImgPrincipal();
 
-            this.borrarImgCarousel();
+          this.borrarImgCarousel();
 
-            this.urls = [];
-            this.imgsInput.nativeElement.value = null;
-            this.cerrar.nativeElement.click();
-          }
-        },(err:HttpErrorResponse)=>{
+          this.urls = [];
+          this.imgsInput.nativeElement.value = null;
+          this.cerrar.nativeElement.click();
+        }
+      },(err:HttpErrorResponse)=>{
           this.formEventos.get('nombre').setErrors({'incorrect':true});
           console.log(err);
           return throwError(err);
-        }
-      );
+        });
     }
   }
 }

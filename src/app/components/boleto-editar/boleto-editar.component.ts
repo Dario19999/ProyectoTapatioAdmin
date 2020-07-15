@@ -68,8 +68,8 @@ export class BoletoEditarComponent implements OnInit {
         });
       });
 
-      this.boletosService.getPromosCodigo(params['id']).subscribe(resultado => this.promosCodigo = resultado)
-      this.boletosService.getPromosFechas(params['id']).subscribe(resultado => this.promosFechas = resultado)
+      this.boletosService.getPromosCodigo(params['id']).subscribe(resultado => this.promosCodigo = resultado);
+      this.boletosService.getPromosFechas(params['id']).subscribe(resultado => this.promosFechas = resultado);
       this.infoPromoCodigo.id = params['id'];
       this.infoBoleto.id = params['id'];
       this.infoPromoFechas.id_boleto = params['id'];
@@ -144,6 +144,8 @@ export class BoletoEditarComponent implements OnInit {
   refresh(){
     this.activatedRoute.params.subscribe( params => {
       this.boletosService.getBoleto(params['id']).subscribe( resultado => this.boleto = resultado[0]);
+      this.boletosService.getPromosCodigo(params['id']).subscribe(resultado => this.promosCodigo = resultado);
+      this.boletosService.getPromosFechas(params['id']).subscribe(resultado => this.promosFechas = resultado);
     });
   }
 
@@ -210,5 +212,33 @@ export class BoletoEditarComponent implements OnInit {
         window.confirm("Promocion creada con éxito")
       }
     })
+  }
+
+  eliminarPromoFechas( id_promo:number ){
+    if(window.confirm("Seguro de querer eliminar ésta promoción?")){
+      this.boletosService.eliminarPromoFechas(id_promo).subscribe( datos => {
+        if(datos['resultado'] == "ERROR"){
+          console.log("ERROR");
+          return
+        }
+        else if(datos['resultado'] == "OK"){
+          this.refresh();
+        }
+      })
+    }
+  }
+
+  eliminarPromoCodigo( id_promo:number ){
+    if(window.confirm("Seguro de querer eliminar ésta promoción?")){
+      this.boletosService.eliminarPromoCodigo(id_promo).subscribe( datos => {
+        if(datos['resultado'] == "ERROR"){
+          console.log("ERROR");
+          return
+        }
+        else if(datos['resultado'] == "OK"){
+          this.refresh();
+        }
+      })
+    }
   }
 }

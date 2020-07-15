@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
@@ -19,6 +19,22 @@ export class PublicacionEditarComponent implements OnInit {
 
   publicacion:any = {};
   imgs:any = null;
+
+  infoPub:any = {
+    id:null,
+    titulo:null,
+    articulo:null,
+  }
+
+  imgsPub:any = {
+    id:null,
+    imgPrincipal:null,
+    imgsPublicacion:null
+  }
+
+  imgSeleccionada: File;
+  imgsSeleccionadas:File[] = [];
+  listaImg:any[] = [];
 
   customOptions: OwlOptions = {
     loop: true,
@@ -45,6 +61,9 @@ export class PublicacionEditarComponent implements OnInit {
     nav: true
   }
 
+  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
+  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
+
   constructor( private fb:FormBuilder,
                private activatedRoute:ActivatedRoute,
                private publicacionesService:PublicacionesService ) {}
@@ -53,15 +72,26 @@ export class PublicacionEditarComponent implements OnInit {
     this.formInfoPInit();
     this.formImgPInit();
     this.activatedRoute.params.subscribe( params => {
-      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => this.publicacion = resultado[0]);
+      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => {
+        this.publicacion = resultado[0];
+
+        this.formInfoP.setValue({
+          titulo:this.publicacion.titulo_pub,
+          articulo:this.publicacion.articulo_pub
+        })
+
+      });
       this.publicacionesService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
+
+      this.infoPub.id = params['id'];
+      this.imgsPub.id = params['id'];
     })
   }
 
   formInfoPInit(){
     this.formInfoP = this.fb.group({
       titulo:[''],
-      cuerpo:['']
+      articulo:['']
     })
   }
 
@@ -72,21 +102,25 @@ export class PublicacionEditarComponent implements OnInit {
     })
   }
 
-  guardarInfo(){
-
-  }
-
   borrarImgPrincipal(){
     this.urlPrincipal = null;
-    this.formImgP.controls['imgPrincipal'].setValue("")
+    this.formImgP.controls['imgPrincipal'].setValue("");
+    this.imgInputP.nativeElement.value = null;
   }
 
-  borrarImgs( index:number ){
-    if (index !== -1) {
-      this.urls.splice(index, 1);
-    }
+  borrarImgs( url:any, index:number ){
+    this.urls = this.urls.filter((a) => a !== url);
+    this.listaImg.splice(index, 1);
+    this.imgsSeleccionadas.splice(index, 1);
 
-    this.formImgP.controls['imgsPublicacion'].setValue("");
+    this.formImgP.controls['imgsPublicacion'].reset();
+    this.formImgP.controls['imgsPublicacion'].setValue(this.imgsSeleccionadas);
+
+
+    if(this.imgsSeleccionadas.length == 0){
+      this.formImgP.controls['imgsPublicacion'].setValue("");
+      this.imgsInput.nativeElement.value = null;
+    }
   }
 
   get validacionTamImg(){
@@ -97,47 +131,92 @@ export class PublicacionEditarComponent implements OnInit {
     return this.formImgP.get('imgsPublicacion').invalid && this.formImgP.get('imgsPublicacion').dirty
   }
 
-  guardarImg(){
-    // if(this.formImgP.invalid){
-    //   Object.values(this.formImgP.controls).forEach( control =>{
+  refresh(){
+    this.activatedRoute.params.subscribe( params => {
+      this.publicacionesService.getPublicacion(params['id']).subscribe( resultado => this.publicacion = resultado[0]);
+      this.publicacionesService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
+    });
+  }
 
-    //     if(control instanceof FormGroup){
-    //       Object.values(control.controls).forEach( control => control.markAllAsTouched())
-    //     }
-    //     else{
-    //       control.markAllAsTouched();
-    //     }
-    //   });
-    //   return;
-    // }
-    console.log(this.formImgP);
+  guardarInfo(){
+    this.infoPub.titulo = this.formInfoP.get('titulo').value;
+    this.infoPub.articulo = this.formInfoP.get('articulo').value;
+
+    this.publicacionesService.modificarInfoPub(this.infoPub).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }
+      else if(datos['resultado'] == "OK"){
+        this.refresh();
+        window.confirm("Información modificada con éxito")
+      }
+    })
+  }
+
+  guardarImg(){
+    this.imgsPub.imgPrincipal = this.imgSeleccionada;
+    this.imgsPub.imgsPublicacion = this.imgsSeleccionadas;
+
+    this.publicacionesService.modificarImgsPub(this.imgsPub).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }
+      else if(datos['resultado'] == "OK"){
+        this.refresh();
+
+        this.borrarImgPrincipal();
+
+        this.urls = [];
+        this.imgsSeleccionadas = [];
+        this.imgsInput.nativeElement.value = null;
+        window.confirm("Imagen(es) modificada(s) con éxito");
+      }
+    })
+  }
+
+  eliminarImg( id_img:number ){
+    if(confirm("Está seguro de querer eliminar esta imagen?")){
+      this.publicacionesService.eliminarImgs(id_img).subscribe( datos => {
+        if(datos['resultado'] == "OK"){
+          this.refresh();
+        }
+      })
+    }
+  }
+
+  multiImg(event) {
+    if (event.target.files && event.target.files[0]) {
+      for (let i = 0; i < event.target.files.length; i++) {
+
+        var reader = new FileReader();
+
+        reader.onload = (event:any) => {
+          this.urls.push(event.target.result);
+        }
+        reader.readAsDataURL(event.target.files[i]);
+
+        var selectedFile = event.target.files[i];
+        this.imgsSeleccionadas.push(selectedFile);
+        this.listaImg.push(selectedFile.name)
+      }
+    }
+
+    this.formImgP.controls['imgsPublicacion'].setValue(this.imgsSeleccionadas);
   }
 
   imgPrincipal(event){
+    this.imgSeleccionada = <File>event.target.files[0];
+    this.formImgP.controls['imgPrincipal'].setValue(this.imgSeleccionada);
+
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        console.log(event.target.result);
           this.urlPrincipal = event.target.result;
       }
-    }
-  }
-
-  multiImg(event) {
-
-    if (event.target.files && event.target.files[0]) {
-        var filesAmount = event.target.files.length;
-        for (let i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
-
-          reader.onload = (event:any) => {
-            console.log(event.target.result);
-              this.urls.push(event.target.result);
-          }
-          reader.readAsDataURL(event.target.files[i]);
-        }
     }
   }
 }

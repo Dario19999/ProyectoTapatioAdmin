@@ -69,11 +69,11 @@ export class PublicacionesComponent implements OnInit {
   }
 
   get validacionImgPrincipal(){
-    return this.formPublicaciones.get('imgPrincipal').invalid && this.formPublicaciones.get('imgPrincipal').touched
+    return this.formPublicaciones.get('imgPrincipal').invalid && this.formPublicaciones.get('imgPrincipal').touched && this.formPublicaciones.get('imgPrincipal').value == ""
   }
 
   get validacionImgs(){
-    return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').touched
+    return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').touched && this.formPublicaciones.get('imgsPublicacion').value == ""
   }
 
   get validacionTamImg(){
@@ -113,7 +113,6 @@ export class PublicacionesComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
       reader.onload = (event:any) => {
-        // console.log(event.target.result);
           this.urlPrincipal = event.target.result;
       }
     }
@@ -129,6 +128,15 @@ export class PublicacionesComponent implements OnInit {
     this.urls = this.urls.filter((a) => a !== url);
     this.listaImg.splice(index, 1);
     this.imgsSeleccionadas.splice(index, 1);
+
+    this.formPublicaciones.controls['imgsPublicacion'].reset();
+    this.formPublicaciones.controls['imgsPublicacion'].setValue(this.imgsSeleccionadas);
+
+
+    if(this.imgsSeleccionadas.length == 0){
+      this.formPublicaciones.controls['imgsPublicacion'].setValue("");
+      this.imgsInput.nativeElement.value = null;
+    }
   }
 
   editarPublicacion( id:number ){

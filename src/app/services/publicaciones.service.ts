@@ -24,12 +24,27 @@ export class PublicacionesService {
   getImgs( id:number ){
     return this.http.get(`${this.url}getImagenes.php?id_pub=${id}`).pipe(retry(3))
   }
+
+  crearPublicacion( publicacion:any ){
+    const PUBLICACION_FD = serialize(publicacion);
+    return this.http.post(`${this.url}crearPublicacion.php`, PUBLICACION_FD).pipe(retry(3))
+  }
+
+  modificarInfoPub( infoPub:any ){
+    const INFO_PUB_FD = serialize(infoPub);
+    return this.http.post(`${this.url}modificarInfoPub.php.php`, INFO_PUB_FD).pipe(retry(3))
+  }
+
+  modificarImgsPub( imgsPub:any ){
+    const IMGS_PUB_FD = serialize(imgsPub);
+    return this.http.post(`${this.url}modificarImgsPub.php`, IMGS_PUB_FD).pipe(retry(3))
+  }
+
   eliminarPublicacion( id_pub:number ){
     return this.http.get(`${this.url}eliminarPublicacion.php?id_publicacion=${id_pub}`).pipe(retry(3))
   }
 
-  crearPublicacion( publicacion:any ){
-    const formdata_publicacion = serialize(publicacion);
-    return this.http.post(`${this.url}crearPublicacion.php`, formdata_publicacion).pipe(retry(3))
+  eliminarImgs( id_img:number ){
+    return this.http.get(`${this.url}eliminarImgs.php?id_img=${id_img}`).pipe(retry(3))
   }
 }

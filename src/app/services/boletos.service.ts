@@ -28,6 +28,18 @@ export class BoletosService {
     return this.http.post(`${this.url}crearPromoCodigo.php`, PROMO_CODIGO_FD).pipe(retry(3))
   }
 
+  eliminarBoleto( id_boleto:number ){
+    return this.http.get(`${this.url}eliminarBoleto.php?id_boleto=${id_boleto}`).pipe(retry(3))
+  }
+
+  eliminarPromoCodigo( id_promo:number ){
+    return this.http.get(`${this.url}eliminarPromoCodigo.php?id_promo=${id_promo}`)
+  }
+
+  eliminarPromoFechas( id_promo:number ){
+    return this.http.get(`${this.url}eliminarPromoFechas.php?id_promo=${id_promo}`)
+  }
+
   modificarBoleto( info:number ){
     const INFO_BOLETO_FD = serialize(info);
     return this.http.post(`${this.url}modificarBoleto.php`, INFO_BOLETO_FD).pipe(retry(3))

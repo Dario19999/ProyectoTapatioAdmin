@@ -244,6 +244,7 @@ export class EventoEditarComponent implements OnInit {
     this.activatedRoute.params.subscribe( params => {
       this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
       this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado)
+      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado)
     });
   }
 
@@ -269,8 +270,12 @@ export class EventoEditarComponent implements OnInit {
   guardarFechas(){
     this.fechasEvento.diaInicio = this.formFechas.get('diaInicio').value;
     this.fechasEvento.diaFin = this.formFechas.get('diaFin').value;
-    this.fechasEvento.horarioInicio = this.formFechas.get('horaInicio').value;
-    this.fechasEvento.horarioFin = this.formFechas.get('horaFin').value;
+    this.fechasEvento.horaInicio = this.formFechas.get('horaInicio').value;
+    this.fechasEvento.horaFin = this.formFechas.get('horaFin').value;
+    console.log(this.fechasEvento.horarioInicio);
+    console.log(this.fechasEvento.horarioFin);
+
+    console.log(this.fechasEvento);
 
     this.eventosService.modificarHorarioEvento(this.fechasEvento).subscribe( datos => {
       if(datos['resultado'] == "ERROR"){
@@ -319,7 +324,7 @@ export class EventoEditarComponent implements OnInit {
       }
       else if(datos['resultado'] == "OK"){
         this.refresh();
-        window.confirm("Boleto creado con éxito")
+        window.confirm("Boleto creado con éxito");
         this.formBoletos.reset();
       }
     })
@@ -394,10 +399,21 @@ export class EventoEditarComponent implements OnInit {
   }
 
   eliminarImg( id:number ){
-    if(confirm("Está seguro de querer eliminar este evento?")){
+    if(confirm("Está seguro de querer eliminar esta imagen?")){
       this.eventosService.eliminarImgs(id).subscribe( datos => {
         if(datos['resultado'] == "OK"){
           this.refresh();
+          window.confirm("Imagen eliminada con éxito");
+        }
+      })
+    }
+  }
+
+  eliminarBoleto( id_boleto:number){
+    if(window.confirm("Está seguro de querer eliminar este boleto?")){
+      this.boletosService.eliminarBoleto(id_boleto).subscribe( datos => {
+        if(datos['resultado'] == "OK"){
+          this.refresh()
         }
       })
     }

@@ -9,6 +9,7 @@ import { EventoEditarComponent } from './components/evento-editar/evento-editar.
 import { PublicacionEditarComponent } from './components/publicacion-editar/publicacion-editar.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { BoletoEditarComponent } from './components/boleto-editar/boleto-editar.component';
+import { RepartidorEditarComponent } from './components/repartidor-editar/repartidor-editar.component';
 
 const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'editar-evento/:id', component: EventoEditarComponent },
   { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
   { path: 'editar-boleto/:id', component: BoletoEditarComponent },
+  { path: 'editar-repartidor/:id', component: RepartidorEditarComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
 ];
