@@ -47,4 +47,8 @@ export class PublicacionesService {
   eliminarImgs( id_img:number ){
     return this.http.get(`${this.url}eliminarImgs.php?id_img=${id_img}`).pipe(retry(3))
   }
+
+  buscarPub( nombre:string ){
+    return this.http.get(`${this.url}buscarPublicacion.php?nombre_pub=${nombre}`).pipe(retry(3))
+  }
 }

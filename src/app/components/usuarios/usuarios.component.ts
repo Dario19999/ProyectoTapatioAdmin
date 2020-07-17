@@ -8,6 +8,9 @@ import { UsuariosService } from '../../services/usuarios.service';
 export class UsuariosComponent implements OnInit {
 
   usuarios = null;
+  busqueda = null;
+
+  encontrado:boolean = null;
 
   usuario = {
     id_usuario: null,
@@ -25,4 +28,21 @@ export class UsuariosComponent implements OnInit {
     this.usuariosService.getUsuarios().subscribe( resultado => this.usuarios = resultado );
   }
 
+  buscarUsuario(nombre:string){
+    if(nombre == null || nombre == ""){
+      return null
+    }
+    else{
+      this.usuariosService.buscarUsuario(nombre).subscribe( resultado => {
+        if(resultado == null){
+          this.encontrado = false;
+        }
+        else{
+          this.busqueda = resultado;
+          this.encontrado = true;
+        }
+
+      });
+    }
+  }
 }

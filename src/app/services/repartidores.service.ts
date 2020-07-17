@@ -25,4 +25,8 @@ export class RepartidoresService {
   eliminarRepartidor( id:number ){
     return this.http.get(`${this.url}eliminarRepartidor.php?id=${id}`).pipe(retry(3))
   }
+
+  buscarRepartidor(nombre:string){
+    return this.http.get(`${this.url}buscarRepartidor.php?nombre_rep=${nombre}`).pipe(retry(3))
+  }
 }

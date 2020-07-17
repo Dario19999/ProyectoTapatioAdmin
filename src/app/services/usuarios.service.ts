@@ -15,4 +15,8 @@ export class UsuariosService {
   getUsuarios(){
     return this.http.get(`${this.url}getUsuarios.php`).pipe(retry(3));
   }
+
+  buscarUsuario(nombre:string){
+    return this.http.get(`${this.url}buscarUsuario.php?nombre_usuario=${nombre}`).pipe(retry(3))
+  }
 }

@@ -15,6 +15,10 @@ export class RepartidoresComponent implements OnInit {
 
   repartidores:any = null;
 
+  busqueda = null;
+
+  encontrado:boolean = null;
+
   @ViewChild('cerrar',{ static: false }) cerrar;
 
 
@@ -105,6 +109,24 @@ export class RepartidoresComponent implements OnInit {
         if (datos['resultado']=='OK') {
           this.getRepartidores();
         }
+      });
+    }
+  }
+
+  buscarRepartidor( nombre:string ){
+    if(nombre == null || nombre == ""){
+      return null
+    }
+    else{
+      this.repartidoresService.buscarRepartidor(nombre).subscribe( resultado => {
+        if(resultado == null){
+          this.encontrado = false;
+        }
+        else{
+          this.busqueda = resultado;
+          this.encontrado = true;
+        }
+
       });
     }
   }

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-repartidor-editar',
-  templateUrl: './repartidor-editar.component.html',
-  styleUrls: ['./repartidor-editar.component.css']
+  templateUrl: './repartidor-editar.component.html'
 })
 export class RepartidorEditarComponent implements OnInit {
 

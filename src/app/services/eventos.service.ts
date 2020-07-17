@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
 import { serialize } from 'object-to-formdata';
+import { runInThisContext } from 'vm';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +54,9 @@ export class EventosService {
 
   eliminarEvento( id:number ){
     return this.http.get(`${this.url}eliminarEvento.php?id=${id}`).pipe(retry(3))
+  }
+
+  buscarEvento( nombre:string ){
+    return this.http.get(`${this.url}buscarEvento.php?nombre_evento=${nombre}`).pipe(retry(3))
   }
 }

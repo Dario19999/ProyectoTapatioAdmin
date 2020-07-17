@@ -21,6 +21,9 @@ export class EventosComponent implements OnInit {
 
   eventos = null;
 
+  busqueda = null;
+  encontrado:boolean = null;
+
   imgSeleccionada: File;
   imgCarouselSeleccionada: File;
   imgsSeleccionadas:File[] = [];
@@ -35,8 +38,8 @@ export class EventosComponent implements OnInit {
   @ViewChild('modalError',{static: false}) modalError:ElementRef;
 
   constructor(private fb:FormBuilder,
-              private router:Router,
-              private eventosService:EventosService) {}
+    private router:Router,
+    private eventosService:EventosService) {}
 
   ngOnInit() {
     this.getEventos();
@@ -46,6 +49,24 @@ export class EventosComponent implements OnInit {
 
   getEventos(){
     this.eventosService.getEventos().subscribe( resultado => this.eventos = resultado);
+  }
+
+  buscarEvento( nombre:string ){
+    if(nombre == null || nombre == ""){
+      return null
+    }
+    else{
+      this.eventosService.buscarEvento(nombre).subscribe( resultado => {
+        if(resultado == null){
+          this.encontrado = false;
+        }
+        else{
+          this.busqueda = resultado;
+          this.encontrado = true;
+        }
+
+      });
+    }
   }
 
   eliminarEvento( id:number ) {
@@ -79,30 +100,31 @@ export class EventosComponent implements OnInit {
     })
   }
 
-  cargarEvento(){
-    this.formEventos.setValue({
-      nombre:"nombre",
-      fecha: {
-        inicio:"2020-07-04",
-        cierre:"2020-07-11",
-      },
-      horario:{
-        inicio:"15:28",
-        cierre:"15:28",
-      },
-      tipo:"0",
-      enlace:"asdasd",
-      desc:"asdasda",
-      ordenImg:"1",
-      imgPrincipal:"",
-      imgCarousel:"",
-      imgsEvento: ""
-    })
-  }
+  // cargarEvento(){
+  //   this.formEventos.setValue({
+  //     nombre:"nombre",
+  //     fecha: {
+  //       inicio:"2020-07-04",
+  //       cierre:"2020-07-11",
+  //     },
+  //     horario:{
+  //       inicio:"15:28",
+  //       cierre:"15:28",
+  //     },
+  //     tipo:"0",
+  //     enlace:"asdasd",
+  //     desc:"asdasda",
+  //     ordenImg:"1",
+  //     imgPrincipal:"",
+  //     imgCarousel:"",
+  //     imgsEvento: ""
+  //   })
+  // }
 
   editarEvento( id:number ){
     this.router.navigate(['editar-evento', id])
   }
+
 
   compararFechas(){
     let inicio = new Date(this.formEventos.get('fecha.inicio').value);

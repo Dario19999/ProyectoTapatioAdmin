@@ -18,6 +18,9 @@ export class PublicacionesComponent implements OnInit {
   urlPrincipal = null;
 
   publicaciones = null;
+  busqueda = null;
+
+  encontrado:boolean = null;
 
   publicacion = {
     id_publicacion:null,
@@ -54,6 +57,24 @@ export class PublicacionesComponent implements OnInit {
 
   getPublicaciones(){
     this.publicacionesService.getPublicaciones().subscribe( resultado => this.publicaciones = resultado )
+  }
+
+  buscarPub( nombre:string ){
+    if(nombre == null || nombre == ""){
+      return null
+    }
+    else{
+      this.publicacionesService.buscarPub(nombre).subscribe( resultado => {
+        if(resultado == null){
+          this.encontrado = false;
+        }
+        else{
+          this.busqueda = resultado;
+          this.encontrado = true;
+        }
+
+      });
+    }
   }
 
   get validacionTitulo(){
