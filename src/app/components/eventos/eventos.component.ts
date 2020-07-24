@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ViewChild,ElementRef } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-eventos',
@@ -29,13 +27,14 @@ export class EventosComponent implements OnInit {
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
 
-  mensajeError = "";
-
+  mensajeError:string = "";
+  errorOrden:string = "";
   @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
   @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
   @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
   @ViewChild('cerrar',{ static: false }) cerrar;
-  @ViewChild('modalError',{static: false}) modalError:ElementRef;
+  @ViewChild('modalError',{static: false}) modalError;
+  @ViewChild('cerrarModalError',{static: false}) cerrarModalError;
 
   constructor(private fb:FormBuilder,
     private router:Router,
@@ -100,26 +99,26 @@ export class EventosComponent implements OnInit {
     })
   }
 
-  // cargarEvento(){
-  //   this.formEventos.setValue({
-  //     nombre:"nombre",
-  //     fecha: {
-  //       inicio:"2020-07-04",
-  //       cierre:"2020-07-11",
-  //     },
-  //     horario:{
-  //       inicio:"15:28",
-  //       cierre:"15:28",
-  //     },
-  //     tipo:"0",
-  //     enlace:"asdasd",
-  //     desc:"asdasda",
-  //     ordenImg:"1",
-  //     imgPrincipal:"",
-  //     imgCarousel:"",
-  //     imgsEvento: ""
-  //   })
-  // }
+  cargarEvento(){
+    this.formEventos.setValue({
+      nombre:"nombre",
+      fecha: {
+        inicio:"2020-07-18",
+        cierre:"2020-07-19",
+      },
+      horario:{
+        inicio:"15:28",
+        cierre:"15:28",
+      },
+      tipo:"0",
+      enlace:"asdasd",
+      desc:"asdasda",
+      orden:"1",
+      imgPrincipal:"",
+      imgCarousel:"",
+      imgsEvento: ""
+    })
+  }
 
   editarEvento( id:number ){
     this.router.navigate(['editar-evento', id])
@@ -309,30 +308,28 @@ export class EventosComponent implements OnInit {
     this.imgsSeleccionadas.splice(index, 1);
 
     this.formEventos.controls['imgsEvento'].reset();
-
-    this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
-
+    this.formEventos.controls['imgsEvento'].setErrors(null);
 
     console.log(this.formEventos.get('imgsEvento').value);
     if(this.imgsSeleccionadas.length == 0){
-      this.formEventos.controls['imgsEvento'].setValue("");
+      this.formEventos.controls['imgsEvento'].setValue(null);
       this.imgsInput.nativeElement.value = null;
     }
 
     console.log(this.formEventos);
   }
 
-  lugarOcupado(){
-    let lugarElegido = this.formEventos.get('orden').value;
-
-    if(lugarElegido == "1"){
-      console.log(lugarElegido);
-      this.modalError.nativeElement.modal("show");
-      return true
-    }
-    else{
-      return false
-    }
+  liberarLugar(){
+    this.eventosService.liberarLugar(this.formEventos.get('orden').value).subscribe( datos => {
+      if(datos['resultado'] == "ERROR"){
+        console.log("ERROR");
+        return
+      }
+      else if(datos['resultado'] == "OK"){
+        window.confirm("Lugar liberado con exito");
+        this.cerrarModalError.nativeElement.click();
+      }
+    })
   }
 
   guardarEvento(){
@@ -352,24 +349,30 @@ export class EventosComponent implements OnInit {
     }
     else{
 
-      this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
-        if(datos['resultado'] == 'OK'){
-          this.getEventos();
-          this.formEventos.reset();
-
-          this.borrarImgPrincipal();
-
-          this.borrarImgCarousel();
-
-          this.urls = [];
-          this.imgsInput.nativeElement.value = null;
-          this.cerrar.nativeElement.click();
+      this.eventosService.buscarLugar(this.formEventos.get('orden').value).subscribe(datos => {
+        if(datos['estado'] == 0){
+          console.log(datos['estado']);
+          this.errorOrden = datos['mensaje'];
+          this.modalError.nativeElement.click();
         }
-      },(err:HttpErrorResponse)=>{
-          this.formEventos.get('nombre').setErrors({'incorrect':true});
-          console.log(err);
-          return throwError(err);
-        });
+        else if(datos['estado'] == 1){
+          console.log(datos['estado']);
+          this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
+            if(datos['resultado'] == 'OK'){
+              this.getEventos();
+              this.formEventos.reset();
+
+              this.borrarImgPrincipal();
+
+              this.borrarImgCarousel();
+
+              this.urls = [];
+              this.imgsInput.nativeElement.value = null;
+              this.cerrar.nativeElement.click();
+            }
+          });
+        }
+      })
     }
   }
 }

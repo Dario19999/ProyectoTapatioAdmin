@@ -2,22 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
 import { serialize } from 'object-to-formdata';
-import { runInThisContext } from 'vm';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventosService {
 
-  // url = "http://proyectotapatio.com/PT-API-P/eventos/";
-  url = "http://localhost:8080/PT-API/eventos/";
+  url = "http://proyectotapatio.com/PT-API-P/eventos/";
+  // url = "http://localhost:8080/PT-API/eventos/";
 
   eventos = null;
 
   constructor(private http:HttpClient ) { }
 
-  getEventos(){
-    return this.http.get(`${this.url}getEventos.php`).pipe(retry(3));
+  getEventos( tipo:number=-1 ){
+    return this.http.get(`${this.url}getEventos.php?tipo=${tipo}`).pipe(retry(3));
   }
 
   getEvento( id:number ){
@@ -58,5 +57,13 @@ export class EventosService {
 
   buscarEvento( nombre:string ){
     return this.http.get(`${this.url}buscarEvento.php?nombre_evento=${nombre}`).pipe(retry(3))
+  }
+
+  buscarLugar( orden:number ){
+    return this.http.get(`${this.url}consultaOrden.php?orden=${orden}`).pipe(retry(3))
+  }
+
+  liberarLugar( orden:number ){
+    return this.http.get(`${this.url}liberarLugar.php?orden=${orden}`).pipe(retry(3))
   }
 }

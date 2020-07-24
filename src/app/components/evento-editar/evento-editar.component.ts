@@ -32,13 +32,14 @@ export class EventoEditarComponent implements OnInit {
   imgs:any = null;
   boletos:any = null;
   mensajeError = null;
+  errorOrden:string = null;
 
   infoEvento:any = {
     id:null,
     nombre:null,
     tipo:null,
     desc:null,
-    ordenImg:null,
+    orden:null,
     enlace:null
   };
 
@@ -93,6 +94,8 @@ export class EventoEditarComponent implements OnInit {
   @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
   @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
   @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
+  @ViewChild('modalError',{static: false}) modalError;
+  @ViewChild('cerrarModalError',{static: false}) cerrarModalError;
 
   constructor(private fb:FormBuilder,
               private activatedRoute:ActivatedRoute,
@@ -113,7 +116,7 @@ export class EventoEditarComponent implements OnInit {
           nombre: this.evento.nombre_evento,
           tipo: this.evento.tipo_evento,
           desc: this.evento.descripcion_evento,
-          ordenImg: this.evento.orden_anuncio,
+          orden: this.evento.orden_anuncio,
           enlace: this.evento.enlace_evento
         });
 
@@ -125,7 +128,7 @@ export class EventoEditarComponent implements OnInit {
         });
 
       });
-      this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado)
+      this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado);
       this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado);
       this.infoEvento.id = params['id'];
       this.fechasEvento.id = params['id'];
@@ -139,7 +142,7 @@ export class EventoEditarComponent implements OnInit {
       nombre:['',],
       tipo:['',],
       desc:['',],
-      ordenImg:['',],
+      orden:['',],
       enlace:['',]
     })
   }
@@ -243,8 +246,8 @@ export class EventoEditarComponent implements OnInit {
   refresh(){
     this.activatedRoute.params.subscribe( params => {
       this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
-      this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado)
-      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado)
+      this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
+      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado);
     });
   }
 
@@ -252,19 +255,44 @@ export class EventoEditarComponent implements OnInit {
     this.infoEvento.nombre = this.formInfoE.get('nombre').value;
     this.infoEvento.tipo = this.formInfoE.get('tipo').value;
     this.infoEvento.desc = this.formInfoE.get('desc').value;
-    this.infoEvento.ordenImg = this.formInfoE.get('ordenImg').value;
+    this.infoEvento.orden = this.formInfoE.get('orden').value;
     this.infoEvento.enlace = this.formInfoE.get('enlace').value;
 
-    this.eventosService.modificarInfoEvento(this.infoEvento).subscribe( datos => {
+
+
+    this.eventosService.buscarLugar(this.formInfoE.get('orden').value).subscribe(datos => {
+      if(datos['estado'] == 0){
+        console.log(datos['estado']);
+        this.errorOrden = datos['mensaje'];
+        this.modalError.nativeElement.click();
+      }
+      else if(datos['estado'] == 1){
+        this.eventosService.modificarInfoEvento(this.infoEvento).subscribe( datos => {
+          if(datos['resultado'] == "ERROR"){
+            console.log("ERROR");
+            return
+          }else if(datos['resultado'] == "OK"){
+            this.refresh();
+            window.confirm("Información modificada con éxito");
+          }
+        })
+        console.log(this.formInfoE);
+      }
+    });
+
+  }
+
+  liberarLugar(){
+    this.eventosService.liberarLugar(this.formInfoE.get('orden').value).subscribe( datos => {
       if(datos['resultado'] == "ERROR"){
         console.log("ERROR");
         return
-      }else if(datos['resultado'] == "OK"){
-        this.refresh();
-        window.confirm("Información modificada con éxito");
+      }
+      else if(datos['resultado'] == "OK"){
+        window.confirm("Lugar liberado con exito");
+        this.cerrarModalError.nativeElement.click();
       }
     })
-    console.log(this.formInfoE);
   }
 
   guardarFechas(){
@@ -396,6 +424,16 @@ export class EventoEditarComponent implements OnInit {
     this.urls = this.urls.filter((a) => a !== url);
     this.listaImg.splice(index, 1);
     this.imgsSeleccionadas.splice(index, 1);
+
+    this.formImgE.controls['imgsEvento'].reset();
+
+    console.log(this.formImgE.get('imgsEvento').value);
+    if(this.imgsSeleccionadas.length == 0){
+      this.formImgE.controls['imgsEvento'].setValue("");
+      this.imgsInput.nativeElement.value = null;
+    }
+
+    console.log(this.formImgE);
   }
 
   eliminarImg( id:number ){
@@ -413,7 +451,8 @@ export class EventoEditarComponent implements OnInit {
     if(window.confirm("Está seguro de querer eliminar este boleto?")){
       this.boletosService.eliminarBoleto(id_boleto).subscribe( datos => {
         if(datos['resultado'] == "OK"){
-          this.refresh()
+          this.refresh();
+          window.confirm("Imagen eliminada con éxito");
         }
       })
     }
