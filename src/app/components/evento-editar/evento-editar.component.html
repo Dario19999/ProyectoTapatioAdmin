@@ -45,39 +45,47 @@
                 </div>
             </div>
 
-            <div class="card mb-3 border-success" *ngFor="let boleto of boletos">
-                <div class="card-header border-success">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4> {{boleto.nom_bol}} </h4>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-danger  float-right m-1" type="button" (click)="eliminarBoleto( boleto.id_boleto )">Eliminar</button>
-                            <button class="btn btn-success float-right m-1" (click)="editarBoleto( boleto.id_boleto )">Editar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-12">
-                            <h5>Descripción</h5>
-                            <p> {{boleto.descripcion_boleto}} </p>
-                        </div>
+            <div class="card mb-3 border-success">
+                <div class="card-header border-success text-center" *ngIf="noBoletos">
 
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h5>Inventario</h5>
-                            <p> {{boleto.stock_boleto}} </p>
-                        </div>
-                        <div class="col-md-4">
-                            <h5>Precio por boleto.</h5>
-                            <h6> {{boleto.precio_bol}} </h6>
-                        </div>
-                    </div>
-                </div>
+                    <h5 class="text-danger"> No hay boletos. </h5>
 
+                </div>
             </div>
+            <ng-container *ngIf="!noBoletos">
+                <div class="card mb-3 border-success" *ngFor="let boleto of boletos">
+                    <div class="card-header border-success">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4> {{boleto.nom_bol}} </h4>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-danger  float-right m-1" type="button" (click)="eliminarBoleto( boleto.id_boleto )">Eliminar</button>
+                                <button class="btn btn-success float-right m-1" (click)="editarBoleto( boleto.id_boleto )">Editar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row h-100">
+                            <div class="col-md-12">
+                                <h5>Descripción</h5>
+                                <p> {{boleto.descripcion_boleto}} </p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>Inventario</h5>
+                                <p> {{boleto.stock_boleto}} </p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Precio por boleto.</h5>
+                                <h6> {{boleto.precio_bol}} </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
 
         </div>
     </div>

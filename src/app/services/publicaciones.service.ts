@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class PublicacionesService {
 
-  url = "http://proyectotapatio.com/PT-API-P/publicaciones/";
-  // url = "http://localhost:8080/PT-API/publicaciones/";
+  // url = "http://proyectotapatio.com/PT-API-P/publicaciones/";
+  url = "http://localhost:8080/PT-API/publicaciones/";
 
   constructor(private http:HttpClient) { }
 
@@ -32,7 +32,7 @@ export class PublicacionesService {
 
   modificarInfoPub( infoPub:any ){
     const INFO_PUB_FD = serialize(infoPub);
-    return this.http.post(`${this.url}modificarInfoPub.php.php`, INFO_PUB_FD).pipe(retry(3))
+    return this.http.post(`${this.url}modificarInfoPub.php`, INFO_PUB_FD).pipe(retry(3))
   }
 
   modificarImgsPub( imgsPub:any ){
@@ -50,5 +50,9 @@ export class PublicacionesService {
 
   buscarPub( nombre:string ){
     return this.http.get(`${this.url}buscarPublicacion.php?nombre_pub=${nombre}`).pipe(retry(3))
+  }
+
+  buscarNombre( nombre:string ){
+    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}`).pipe(retry(3))
   }
 }

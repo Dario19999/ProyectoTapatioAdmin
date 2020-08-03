@@ -36,6 +36,8 @@ export class PublicacionEditarComponent implements OnInit {
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
 
+  errorNombre:string = "";
+
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: true,
@@ -142,16 +144,25 @@ export class PublicacionEditarComponent implements OnInit {
     this.infoPub.titulo = this.formInfoP.get('titulo').value;
     this.infoPub.articulo = this.formInfoP.get('articulo').value;
 
-    this.publicacionesService.modificarInfoPub(this.infoPub).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
+    this.publicacionesService.buscarNombre(this.formInfoP.get('titulo').value).subscribe(datos => {
+      if(datos['estado'] == 0){
+        this.errorNombre = datos['mensaje'];
+        window.confirm(this.errorNombre);
         return
       }
-      else if(datos['resultado'] == "OK"){
-        this.refresh();
-        window.confirm("Información modificada con éxito")
+      else if(datos['estado'] == 1){
+        this.publicacionesService.modificarInfoPub(this.infoPub).subscribe( datos => {
+          if(datos['resultado'] == "ERROR"){
+            console.log("ERROR");
+            return
+          }
+          else if(datos['resultado'] == "OK"){
+            this.refresh();
+            window.confirm("Información modificada con éxito")
+          }
+        })
       }
-    })
+    });
   }
 
   guardarImg(){

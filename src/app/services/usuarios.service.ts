@@ -7,8 +7,8 @@ import { retry } from 'rxjs/operators';
 })
 export class UsuariosService {
 
-  url = "http://proyectotapatio.com/PT-API-P/usuarios/";
-  // url = "http://localhost:8080/PT-API/usuarios/";
+  // url = "http://proyectotapatio.com/PT-API-P/usuarios/";
+  url = "http://localhost:8080/PT-API/usuarios/";
 
   constructor( private http:HttpClient ) { }
 
@@ -18,5 +18,9 @@ export class UsuariosService {
 
   buscarUsuario(nombre:string){
     return this.http.get(`${this.url}buscarUsuario.php?nombre_usuario=${nombre}`).pipe(retry(3))
+  }
+
+  eliminarUsuario( id:number ){
+    return this.http.get(`${this.url}eliminarUsuario.php?id=${id}`).pipe(retry(3))
   }
 }

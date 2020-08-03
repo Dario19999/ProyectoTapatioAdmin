@@ -41,21 +41,27 @@
                                 <td class="align-middle">({{ promo.fec_ini_pro }}) - ({{ promo.fec_fin_pro }})</td>
                                 <td class="align-middle">${{promo.precio_fec}}.00</td>
                                 <td class="align-middle">
-                                    <button type="button" class="btn btn-danger" (click)="eliminarPromoFechas( promo.id_promo_fec )">Eliminar</button></td>
+                                    <button type="button" class="btn btn-danger" (click)="eliminarPromoFechas( promo.id_promo_fec )">Eliminar</button>
+                                </td>
                             </tr>
-                            <!-- <tr>
+                            <tr *ngFor="let promo of promosReferencia">
                                 <td class=" align-middle">Por Evento Relacionado</td>
                                 <td class="align-middle">
-                                    <h6>Evento x</h6>
-                                    <h6>Evento y</h6>
+                                    <h6>Boleto de referencia:</h6>
+                                    {{promo.fk_boleto_ref}}
                                 </td>
-                                <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
-                            </tr> -->
+                                <td class="align-middle"> ${{promo.precio_eve}}0 </td>
+                                <td class="align-middle">
+                                    <button type="button" class="btn btn-danger" (click)="eliminarPromoReferencia( promo.id_promo_eve )">Eliminar</button>
+                                </td>
+                            </tr>
                             <tr *ngFor="let promo of promosCodigo">
                                 <td class="align-middle">Por Codigo</td>
                                 <td class="align-middle">Código: {{promo.codigo}}</td>
                                 <td class="align-middle">${{promo.precio_cod}}.00</td>
-                                <td class="align-middle"><button type="button" class="btn btn-danger" (click)="eliminarPromoCodigo( promo.id_pro_cod )">Eliminar</button></td>
+                                <td class="align-middle">
+                                    <button type="button" class="btn btn-danger" (click)="eliminarPromoCodigo( promo.id_pro_cod )">Eliminar</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,7 +133,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Promocion por Fechas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #cerrarFechas type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
             </div>
@@ -172,46 +178,48 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Promoción por Evento Relacionado</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #cerrarReferencia type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
             </div>
             <div class="modal-body">
-                <div class="input-group form-row mb-3">
-                    <div class="col-md-12">
-                        <label for="evento">Evento:</label>
-                        <select id="evento" class="form-control">
-                        <option selected>La Arrolladora en C3 2021</option>
-                      </select>
+                <form [formGroup]="formPromoReferencia" (ngSubmit)="crearPromoReferecnia()">
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-12">
+                            <label for="evento">Evento:</label>
+                            <select (change)="getBoletos($event)" id="evento" class="form-control">
+                              <option *ngFor="let evento of eventos" [value]="evento.id_evento"> {{evento.nombre_evento}} </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group form-row mb-3">
-                    <div class="col-md-12">
-                        <label for="boletoReferencia">Boleto de Referencia:</label>
-                        <select id="boletoReferencia" class="form-control">
-                        <option selected>La Arrolladora en C3 2020</option>
-                      </select>
+                    <div class="input-group form-row mb-3" *ngIf="id_evento != null">
+                        <div class="col-md-12">
+                            <label for="boletoReferencia">Boleto de Referencia:</label>
+                            <select id="boletoReferencia" class="form-control" formControlName="boletoReferencia">
+                                <option *ngFor="let boleto of boletos" [value]="boleto.id_boleto"> {{boleto.nom_bol}}  </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group form-row mb-3">
-                    <div class="col-md-6">
-                        <label for="inventario">Inventario: <small>(Cantidad de Boletos a los que se les aplicará la promoción.)</small></label>
-                        <input type="number" min="0" step="1" value="0" id="inventario" class="form-control">
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-6">
+                            <label for="inventario">Inventario: <small>(Cantidad de Boletos a los que se les aplicará la promoción.)</small></label>
+                            <input type="number" min="0" step="1" value="0" id="inventario" class="form-control" formControlName="inventarioReferencia">
+                        </div>
                     </div>
-                </div>
-                <div class="input-group form-row mb-3">
-                    <div class="col-md-6">
-                        <label for="precio">Precio por Boleto:</label>
-                        <input type="number" min="0" step="1" value="0" id="precio" class="form-control">
+                    <div class="input-group form-row mb-3">
+                        <div class="col-md-6">
+                            <label for="precio">Precio por Boleto:</label>
+                            <input type="number" min="0" step="1" value="0" id="precio" class="form-control" formControlName="precioReferencia">
+                        </div>
                     </div>
-                </div>
-                <hr>
-            </div>
-            <div class="row pb-2 mt-0">
-                <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">Aplicar Promoción</button>
-                </div>
+                    <hr>
+                    <div class="row pb-2 mt-0">
+                        <div class="col-md-12 text-center">
+                            <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Aplicar Promoción</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -222,7 +230,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Promoción por Código</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button #cerrar type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>

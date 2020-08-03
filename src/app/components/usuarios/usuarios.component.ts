@@ -45,4 +45,14 @@ export class UsuariosComponent implements OnInit {
       });
     }
   }
+
+  eliminarUsuario(id:number){
+    if(confirm("Está seguro de querer eliminar a este usuario?")){
+      this.usuariosService.eliminarUsuario(id).subscribe(datos => {
+        if (datos['resultado']=='OK') {
+          this.getUsuarios();
+        }
+      });
+    }
+  }
 }

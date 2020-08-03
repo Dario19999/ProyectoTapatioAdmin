@@ -29,6 +29,7 @@
                         <th scope="col" style="width: 5%;">ID</th>
                         <th scope="col" style="width: 30%;">Nombre</th>
                         <th scope="col" style="width: 20%;">Correo</th>
+                        <th scope="col" style="width: 10%;">Estado</th>
                         <th scope="col" style="width: 10%;">Acciones</th>
                     </tr>
                 </thead>
@@ -37,8 +38,10 @@
                         <th scope="row" class="align-middle">{{ resultado.id_usuario }}</th>
                         <td class="align-middle">{{ resultado.nombre }}</td>
                         <td class="align-middle">{{ resultado.correo }}</td>
+                        <td class="align-middle" *ngIf="resultado.activo == 1"> Activo </td>
+                        <td class="align-middle" *ngIf="resultado.activo == 0"> Inactivo </td>
                         <td class="align-middle">
-                            <button class="btn btn-danger" type="button">Eliminar</button>
+                            <button class="btn btn-danger" type="button" (click)="eliminarUsuario(resultado.id_usuario)">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -54,6 +57,7 @@
                         <th scope="col" style="width: 5%;">ID</th>
                         <th scope="col" style="width: 30%;">Nombre</th>
                         <th scope="col" style="width: 20%;">Correo</th>
+                        <th scope="col" style="width: 10%;">Estado</th>
                         <th scope="col" style="width: 10%;">Acciones</th>
                     </tr>
                 </thead>
@@ -62,8 +66,10 @@
                         <th scope="row" class="align-middle">{{ usuario.id_usuario }}</th>
                         <td class="align-middle">{{ usuario.nombre }}</td>
                         <td class="align-middle">{{ usuario.correo }}</td>
+                        <td class="align-middle" *ngIf="usuario.activo == 1"> Activo </td>
+                        <td class="align-middle" *ngIf="usuario.activo == 0"> Inactivo </td>
                         <td class="align-middle">
-                            <button class="btn btn-danger" type="button">Eliminar</button>
+                            <button class="btn btn-danger" type="button" (click)="eliminarUsuario(usuario.id_usuario)">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>

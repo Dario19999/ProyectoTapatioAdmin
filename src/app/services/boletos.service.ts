@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class BoletosService {
 
-  url = "http://proyectotapatio.com/PT-API-P/boletos/";
-  // url = "http://localhost:8080/PT-API/boletos/";
+  // url = "http://proyectotapatio.com/PT-API-P/boletos/";
+  url = "http://localhost:8080/PT-API/boletos/";
 
   constructor(private http:HttpClient) { }
 
@@ -28,6 +28,15 @@ export class BoletosService {
     return this.http.post(`${this.url}crearPromoCodigo.php`, PROMO_CODIGO_FD).pipe(retry(3))
   }
 
+  buscarCodigo( codigo:string ){
+    return this.http.get(`${this.url}consultaCodigo.php?codigo=${codigo}`).pipe(retry(3))
+  }
+
+  crearPromoReferencia( datos:any ){
+    const PROMO_REFERENCIA_FD = serialize(datos);
+    return this.http.post(`${this.url}crearPromoReferencia.php`, PROMO_REFERENCIA_FD).pipe(retry(3))
+  }
+
   eliminarBoleto( id_boleto:number ){
     return this.http.get(`${this.url}eliminarBoleto.php?id_boleto=${id_boleto}`).pipe(retry(3))
   }
@@ -38,6 +47,10 @@ export class BoletosService {
 
   eliminarPromoFechas( id_promo:number ){
     return this.http.get(`${this.url}eliminarPromoFechas.php?id_promo=${id_promo}`)
+  }
+
+  eliminarPromoReferencia( id_promo:number ){
+    return this.http.get(`${this.url}eliminarPromoReferencia.php?id_promo=${id_promo}`)
   }
 
   modificarBoleto( info:number ){
@@ -59,5 +72,13 @@ export class BoletosService {
 
   getPromosFechas( id_boleto:number ){
     return this.http.get(`${this.url}getPromosFechas.php?id_boleto=${id_boleto}`).pipe(retry(3))
+  }
+
+  getPromosReferencia( id_boleto:number ){
+    return this.http.get(`${this.url}getPromosReferencia.php?id_boleto=${id_boleto}`).pipe(retry(3))
+  }
+
+  getBoletosTodos(){
+    return this.http.get(`${this.url}getBoletosTodos.php`).pipe(retry(3))
   }
 }

@@ -29,10 +29,14 @@ export class EventoEditarComponent implements OnInit {
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
 
+  errorNombre:string = "";
+
+
   imgs:any = null;
   boletos:any = null;
   mensajeError = null;
   errorOrden:string = null;
+  noBoletos:boolean = null;
 
   infoEvento:any = {
     id:null,
@@ -129,7 +133,14 @@ export class EventoEditarComponent implements OnInit {
 
       });
       this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado);
-      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado);
+      this.boletosService.getBoletos(params['id']).subscribe( resultado => {
+        if(resultado == null){
+          this.noBoletos = true;
+        }else{
+          this.noBoletos = false;
+          this.boletos = resultado;
+        }
+      });
       this.infoEvento.id = params['id'];
       this.fechasEvento.id = params['id'];
       this.imgsEvento.id = params['id'];
@@ -247,7 +258,14 @@ export class EventoEditarComponent implements OnInit {
     this.activatedRoute.params.subscribe( params => {
       this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
       this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
-      this.boletosService.getBoletos(params['id']).subscribe( resultado => this.boletos = resultado);
+      this.boletosService.getBoletos(params['id']).subscribe( resultado => {
+        if(resultado == null){
+          this.noBoletos = true;
+        }else{
+          this.noBoletos = false;
+          this.boletos = resultado;
+        }
+      });
     });
   }
 
@@ -258,27 +276,33 @@ export class EventoEditarComponent implements OnInit {
     this.infoEvento.orden = this.formInfoE.get('orden').value;
     this.infoEvento.enlace = this.formInfoE.get('enlace').value;
 
-
-
-    this.eventosService.buscarLugar(this.formInfoE.get('orden').value).subscribe(datos => {
+    this.eventosService.buscarNombre(this.infoEvento.nombre).subscribe( datos => {
       if(datos['estado'] == 0){
-        console.log(datos['estado']);
-        this.errorOrden = datos['mensaje'];
-        this.modalError.nativeElement.click();
+        this.errorNombre = datos['mensaje'];
+        window.confirm(this.errorNombre);
       }
       else if(datos['estado'] == 1){
-        this.eventosService.modificarInfoEvento(this.infoEvento).subscribe( datos => {
-          if(datos['resultado'] == "ERROR"){
-            console.log("ERROR");
-            return
-          }else if(datos['resultado'] == "OK"){
-            this.refresh();
-            window.confirm("Información modificada con éxito");
+        this.eventosService.buscarLugar(this.infoEvento.id, this.infoEvento.orden).subscribe(datos => {
+          if(datos['estado'] == 0){
+            console.log(datos['estado']);
+            this.errorOrden = datos['mensaje'];
+            this.modalError.nativeElement.click();
           }
-        })
-        console.log(this.formInfoE);
+          else if(datos['estado'] == 1){
+            this.eventosService.modificarInfoEvento(this.infoEvento).subscribe( datos => {
+              if(datos['resultado'] == "ERROR"){
+                console.log("ERROR");
+                return
+              }else if(datos['resultado'] == "OK"){
+                this.refresh();
+                window.confirm("Información modificada con éxito");
+              }
+            })
+          }
+        });
       }
     });
+
 
   }
 

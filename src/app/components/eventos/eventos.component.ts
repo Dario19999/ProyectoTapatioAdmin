@@ -29,6 +29,8 @@ export class EventosComponent implements OnInit {
 
   mensajeError:string = "";
   errorOrden:string = "";
+  errorNombre:string = "";
+
   @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
   @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
   @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
@@ -349,30 +351,39 @@ export class EventosComponent implements OnInit {
     }
     else{
 
-      this.eventosService.buscarLugar(this.formEventos.get('orden').value).subscribe(datos => {
+      this.eventosService.buscarNombre(this.formEventos.get('nombre').value).subscribe( datos => {
         if(datos['estado'] == 0){
-          console.log(datos['estado']);
-          this.errorOrden = datos['mensaje'];
-          this.modalError.nativeElement.click();
+          this.errorNombre = datos['mensaje'];
+          window.confirm(this.errorNombre);
+          this.formEventos.get('nombre').setErrors({'incorrect':true})
         }
         else if(datos['estado'] == 1){
-          console.log(datos['estado']);
-          this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
-            if(datos['resultado'] == 'OK'){
-              this.getEventos();
-              this.formEventos.reset();
+          this.eventosService.buscarLugar(this.formEventos.get('orden').value).subscribe(datos => {
+            if(datos['estado'] == 0){
+              console.log(datos['estado']);
+              this.errorOrden = datos['mensaje'];
+              this.modalError.nativeElement.click();
+            }
+            else if(datos['estado'] == 1){
+              console.log(datos['estado']);
+              this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
+                if(datos['resultado'] == 'OK'){
+                  this.getEventos();
+                  this.formEventos.reset();
 
-              this.borrarImgPrincipal();
+                  this.borrarImgPrincipal();
 
-              this.borrarImgCarousel();
+                  this.borrarImgCarousel();
 
-              this.urls = [];
-              this.imgsInput.nativeElement.value = null;
-              this.cerrar.nativeElement.click();
+                  this.urls = [];
+                  this.imgsInput.nativeElement.value = null;
+                  this.cerrar.nativeElement.click();
+                }
+              });
             }
           });
         }
-      })
+      });
     }
   }
 }

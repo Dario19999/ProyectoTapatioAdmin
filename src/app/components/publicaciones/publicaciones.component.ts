@@ -3,8 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { PublicacionesService } from '../../services/publicaciones.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-publicaciones',
@@ -31,6 +29,8 @@ export class PublicacionesComponent implements OnInit {
   imgSeleccionada: File;
   imgsSeleccionadas:File[] = [];
   listaImg:any[] = [];
+
+  errorNombre:string = "";
 
   @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
   @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
@@ -105,6 +105,9 @@ export class PublicacionesComponent implements OnInit {
     return this.formPublicaciones.get('imgsPublicacion').invalid && this.formPublicaciones.get('imgsPublicacion').dirty && this.formPublicaciones.get('imgsPublicacion').value != ""
   }
 
+  get nombreExistente(){
+    return this.formPublicaciones.get('nombre').invalid && this.formPublicaciones.get('nombre').value != "" && !this.formPublicaciones.get('nombre').pristine
+  }
   multiImg(event) {
     if (event.target.files && event.target.files[0]) {
       for (let i = 0; i < event.target.files.length; i++) {
@@ -189,24 +192,30 @@ export class PublicacionesComponent implements OnInit {
       return;
     }
     else{
-      this.publicacionesService.crearPublicacion(this.formPublicaciones.value).subscribe(datos => {
-        if(datos["resultado"] == "OK"){
-          this.getPublicaciones();
-          this.formPublicaciones.reset();
 
-          this.borrarImgPrincipal();
+      this.publicacionesService.buscarNombre(this.formPublicaciones.get('titulo').value).subscribe(datos => {
+        if(datos['estado'] == 0){
+          this.errorNombre = datos['mensaje'];
+          window.confirm(this.errorNombre);
+          return
+        }
+        else if(datos['estado'] == 1){
+          this.publicacionesService.crearPublicacion(this.formPublicaciones.value).subscribe(datos => {
+            if(datos["resultado"] == "OK"){
+              this.getPublicaciones();
+              this.formPublicaciones.reset();
 
-          this.urls = [];
-          this.imgsInput.nativeElement.value = null;
-          this.cerrar.nativeElement.click();
+              this.borrarImgPrincipal();
+
+              this.urls = [];
+              this.imgsInput.nativeElement.value = null;
+              this.cerrar.nativeElement.click();
+            }
+            else{
+              console.log("ERROR");
+            }
+          });
         }
-        else{
-          console.log("ERROR");
-        }
-      }, (err:HttpErrorResponse) => {
-          this.formPublicaciones.get('titulo').setErrors({'incorrect':true});
-          console.log(err);
-          return throwError(err);
       });
     }
   }
