@@ -8,7 +8,7 @@ import { serialize } from 'object-to-formdata';
 })
 export class RepartidoresService {
 
-  // url = "http://proyectotapatio.com/PT-API-P/repartidores/";
+  // url = "https://proyectotapatio.com/PT-API-P/repartidores/";
   url = "http://localhost:8080/PT-API/repartidores/";
 
   constructor(private http:HttpClient) { }
@@ -22,11 +22,25 @@ export class RepartidoresService {
     return this.http.get(`${this.url}getRepartidores.php`).pipe(retry(3))
   }
 
+  getRepartidor(id:number){
+    return this.http.get(`${this.url}getRepartidor.php?id=${id}`).pipe(retry(3))
+  }
+
+  modificarRepartidor( info:any ){
+    const INFO = serialize(info);
+    return this.http.post(`${this.url}modificarRepartidor.php`, INFO).pipe(retry(3))
+  }
+
   eliminarRepartidor( id:number ){
     return this.http.get(`${this.url}eliminarRepartidor.php?id=${id}`).pipe(retry(3))
   }
 
   buscarRepartidor(nombre:string){
     return this.http.get(`${this.url}buscarRepartidor.php?nombre_rep=${nombre}`).pipe(retry(3))
+  }
+
+  insertarStock( datos:any ){
+    const DATOS = serialize(datos);
+    return this.http.post(`${this.url}insertarStock.php`, DATOS).pipe(retry(3))
   }
 }

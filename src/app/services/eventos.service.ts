@@ -8,7 +8,7 @@ import { serialize } from 'object-to-formdata';
 })
 export class EventosService {
 
-  // url = "http://proyectotapatio.com/PT-API-P/eventos/";
+  // url = "https://proyectotapatio.com/PT-API-P/eventos/";
   url = "http://localhost:8080/PT-API/eventos/";
 
   eventos = null;

@@ -167,11 +167,18 @@
                         </div>
                     </div>
 
+                    <div class="form-row mb-3">
+                        <div class="col-md-12">
+                            <label for="contra">Repita la contraseña: <small class="text-danger">*</small></label>
+                            <input type="password" class="form-control" id="contra" placeholder="Repita la Contraseña del Repartidor/a" formControlName="contra2" [class.is-invalid]="passNoValida()">
+                        </div>
+                    </div>
+
                     <hr>
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-success" type="submit">Crear</button>
+                            <button [disabled]="formRepartidor.invalid" class="btn btn-success" type="submit">Crear</button>
                         </div>
                     </div>
                 </form>

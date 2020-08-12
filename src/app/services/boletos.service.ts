@@ -8,7 +8,7 @@ import { serialize } from 'object-to-formdata';
 })
 export class BoletosService {
 
-  // url = "http://proyectotapatio.com/PT-API-P/boletos/";
+  // url = "https://proyectotapatio.com/PT-API-P/boletos/";
   url = "http://localhost:8080/PT-API/boletos/";
 
   constructor(private http:HttpClient) { }

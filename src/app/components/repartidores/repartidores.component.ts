@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RepartidoresService } from '../../services/repartidores.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -41,6 +39,7 @@ export class RepartidoresComponent implements OnInit {
       telefonoExt:['', [Validators.required]],
       fechaNacimiento:['', [Validators.required]],
       contra:['', [Validators.required]],
+      contra2:['', [Validators.required]],
     });
   }
 
@@ -94,6 +93,20 @@ export class RepartidoresComponent implements OnInit {
       }
     }
   }
+
+  passNoValida(){
+    const P1 = this.formRepartidor.get('contra').value;
+    const P2 = this.formRepartidor.get('contra2').value;
+
+    if(P1 === P2){
+      return false
+    }
+    else{
+      this.formRepartidor.get('contra2').setErrors({'invalid':true})
+      return true
+    }
+  }
+
 
   getRepartidores(){
     this.repartidoresService.getRepartidores().subscribe( resultado => this.repartidores = resultado)
@@ -149,6 +162,7 @@ export class RepartidoresComponent implements OnInit {
       let nombre = this.formRepartidor.get('nombre').value;
       let apellidoP = this.formRepartidor.get('apellidoP').value;
       let apellidoM = this.formRepartidor.get('apellidoM').value;
+
       this.formRepartidor.controls['nombre'].setValue(nombre+" "+apellidoP+" "+apellidoM);
 
       this.repartidoresService.crearRepartidor(this.formRepartidor.value).subscribe( datos => {
