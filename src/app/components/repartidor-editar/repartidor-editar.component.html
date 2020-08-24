@@ -1,4 +1,104 @@
 <div class="container-fluid animated fadeIn fast mt-2">
+
+    <div class="card mb-3 border">
+        <div class="card-header border">
+            <h4>Historial de Cargas.</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-dark text-center">
+                            <tr>
+                                <th scope="col" style="width: 5%;">ID</th>
+                                <th scope="col" style="width: 15%;">Stock Agregado</th>
+                                <th scope="col" style="width: 15%;">Boleto</th>
+                                <th scope="col" style="width: 20%;">Fecha de Carga</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr *ngFor="let carga of historial">
+                                <th scope="row" class="align-middle"> {{carga.id_stock}} </th>
+                                <td class="align-middle"> {{carga.stock_adm}} </td>
+                                <td class="align-middle"> {{carga.fk_boleto}} </td>
+                                <td class="align-middle"> {{carga.fecha_historial | date:'dd/mm/yyyy h:mm a'}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3 border">
+                <div class="card-header border">
+                    <h4>Disponibilidad de Boletos.</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead class="thead-dark text-center">
+                                    <tr>
+                                        <th scope="col" style="width: 5%;">ID</th>
+                                        <th scope="col" style="width: 20%;">Boleto</th>
+                                        <th scope="col" style="width: 15%;">Stock Inicial</th>
+                                        <th scope="col" style="width: 15%;">Stock Actual</th>
+                                        <th scope="col" style="width: 20%;">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let boleto of boletosTodos">
+                                        <th scope="row" class="align-middle"> {{boleto.id_boleto}} </th>
+                                        <td class="align-middle"> {{boleto.nom_bol}} </td>
+                                        <td class="align-middle"> {{boleto.stock_boleto}} </td>
+                                        <td class="align-middle"> {{boleto.stock_repartidor}} </td>
+                                        <td class="align-middle text-danger" *ngIf="boleto.stock_repartidor == 0">Agotado</td>
+                                        <td class="align-middle text-success" *ngIf="boleto.stock_repartidor > 0">Disponible</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3 border">
+                <div class="card-header border">
+                    <h4>Boletos en Stock de Repartidor.</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead class="thead-dark text-center">
+                                    <tr>
+                                        <th scope="col" style="width: 5%;">Boleto</th>
+                                        <th scope="col" style="width: 20%;">Stock Inicial</th>
+                                        <th scope="col" style="width: 15%;">Stock de Rapartidor</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let boleto of boletosRep">
+                                        <th scope="row" class="align-middle"> {{boleto.fk_boleto}} </th>
+                                        <td class="align-middle"> {{boleto.stockadm}} </td>
+                                        <td class="align-middle"> {{boleto.stock_adm_act}} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="card mb-3 border-primary">
         <div class="card-header border-primary">
             <h4>Opciones de edición</h4>

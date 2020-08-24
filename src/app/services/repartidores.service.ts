@@ -43,4 +43,12 @@ export class RepartidoresService {
     const DATOS = serialize(datos);
     return this.http.post(`${this.url}insertarStock.php`, DATOS).pipe(retry(3))
   }
+
+  getHistorial( id:number ){
+    return this.http.get(`${this.url}getHistorial.php?id_rep=${id}`).pipe(retry(3))
+  }
+
+  getBoletos( id:number ){
+    return this.http.get(`${this.url}getBoletos.php?id_rep=${id}`).pipe(retry(3))
+  }
 }

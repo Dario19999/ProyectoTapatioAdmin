@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RepartidoresService } from '../../services/repartidores.service';
@@ -15,9 +15,16 @@ export class RepartidorEditarComponent implements OnInit {
   formStock:FormGroup;
 
   repartidor:any = {};
+
   id_evento:number = null;
+
   boletos:any = null;
+  boletosTodos:any = null;
+  boletosRep:any = null;
+
   eventos:any = null;
+
+  historial:any = null;
 
 
   constructor(private fb:FormBuilder,
@@ -29,6 +36,7 @@ export class RepartidorEditarComponent implements OnInit {
 
   ngOnInit() {
     this.getEventos();
+    this.getBoletosTodos();
     this.formInfoInit();
     this.formsStockInit();
     this.activatedRoute.params.subscribe( params => {
@@ -49,6 +57,9 @@ export class RepartidorEditarComponent implements OnInit {
           contra2: null
         })
       })
+
+      this.repartidoresService.getHistorial(params['id']).subscribe( resultado => this.historial = resultado );
+      this.repartidoresService.getBoletos(params['id']).subscribe( resultado => this.boletosRep = resultado );
 
       this.formInfo.addControl('id', this.fb.control(null));
       this.formStock.addControl('id_repartidor', this.fb.control(null));
@@ -75,6 +86,10 @@ export class RepartidorEditarComponent implements OnInit {
       stock:[0],
       boleto:[null]
     });
+  }
+
+  getBoletosTodos(){
+    this.boletosService.getBoletosTodos().subscribe(resultado => this.boletosTodos = resultado)
   }
 
   get validacionCorreo(){
@@ -145,6 +160,15 @@ export class RepartidorEditarComponent implements OnInit {
     }
   }
 
+  refresh(){
+    this.getBoletosTodos();
+    this.getEventos();
+    this.activatedRoute.params.subscribe( params => {
+      this.repartidoresService.getHistorial(params['id']).subscribe( resultado => this.historial = resultado);
+      this.repartidoresService.getBoletos(params['id']).subscribe( resultado => this.boletosRep = resultado );
+    })
+  }
+
   guardarStock(){
     console.log(this.formStock.value);
 
@@ -160,6 +184,7 @@ export class RepartidorEditarComponent implements OnInit {
         }
         else if( datos['resultado'] == 'OK'){
           window.confirm("Boletos agregados con éxito");
+          this.refresh();
         }
       }
     })

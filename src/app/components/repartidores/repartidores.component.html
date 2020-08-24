@@ -110,15 +110,12 @@
                     </div>
 
                     <div class="form-row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="apellidoP">Apellido Paterno: <small class="text-danger">*</small></label>
                             <input type="text" class="form-control" id="apellidoP" placeholder="Ingrese el Apellido Paterno del Repartidor/a" formControlName="apellidoP" [class.is-invalid]="validacionApellidoP">
                             <small *ngIf="validacionApellidoP" class="form-text text-danger">Apellido Paterno Obligatorio.</small>
                         </div>
-                    </div>
-
-                    <div class="form-row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="apellidoM">Apellido Materno: <small class="text-danger">*</small></label>
                             <input type="text" class="form-control" id="apellidoM" placeholder="Ingrese el Apellido Materno del Repartidor/a" formControlName="apellidoM" [class.is-invalid]="validacionApellidoM">
                             <small *ngIf="validacionApellidoM" class="form-text text-danger">Apellido Materno Obligatorio.</small>
@@ -148,9 +145,6 @@
                             <small *ngIf="validacionTelefono" class="form-text text-danger">Teléfono Obligatorio.</small>
                             <small *ngIf="validacionNumero" class="form-text text-danger">Ingrese un teléfono válido.</small>
                         </div>
-                    </div>
-
-                    <div class="form-row mb-3">
                         <div class="col-md-6">
                             <label for="telext">Teléfono Adicional: <small class="text-danger">*</small></label>
                             <input class="form-control" type="tel" id="telext" placeholder="888 888 8888" maxlength="10" formControlName="telefonoExt" [class.is-invalid]="validacionTelefonoExtra || validacionNumeroExtra">

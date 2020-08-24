@@ -17,7 +17,6 @@ export class EventoEditarComponent implements OnInit {
   formImgE:FormGroup;
   formBoletos:FormGroup;
 
-
   urls = [];
   urlPrincipal = null;
   urlCarousel = null;
@@ -30,7 +29,6 @@ export class EventoEditarComponent implements OnInit {
   listaImg:any[] = [];
 
   errorNombre:string = "";
-
 
   imgs:any = null;
   boletos:any = null;
@@ -231,7 +229,6 @@ export class EventoEditarComponent implements OnInit {
         return true
       }
       else{
-        console.log(this.formFechas);
         return false
 
       }
