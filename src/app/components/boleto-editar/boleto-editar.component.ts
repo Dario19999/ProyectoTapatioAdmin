@@ -10,9 +10,9 @@ import { EventosService } from '../../services/eventos.service';
 })
 export class BoletoEditarComponent implements OnInit {
 
-  @ViewChild('cerrarCodigo',{ static: false }) cerrarCodigo;
-  @ViewChild('cerrarFechas',{ static: false }) cerrarFechas;
-  @ViewChild('cerrarReferencia',{ static: false }) cerrarReferencia;
+  @ViewChild('cerrarCodigo') cerrarCodigo;
+  @ViewChild('cerrarFechas') cerrarFechas;
+  @ViewChild('cerrarReferencia') cerrarReferencia;
 
   boleto:any = {};
 

@@ -63,8 +63,8 @@ export class PublicacionEditarComponent implements OnInit {
     nav: true
   }
 
-  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
-  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
+  @ViewChild('imgInputP') imgInputP:ElementRef;
+  @ViewChild('imgsInput') imgsInput:ElementRef;
 
   constructor( private fb:FormBuilder,
                private activatedRoute:ActivatedRoute,

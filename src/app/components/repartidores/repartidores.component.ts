@@ -17,7 +17,7 @@ export class RepartidoresComponent implements OnInit {
 
   encontrado:boolean = null;
 
-  @ViewChild('cerrar',{ static: false }) cerrar;
+  @ViewChild('cerrar') cerrar;
 
 
   constructor(private fb:FormBuilder,

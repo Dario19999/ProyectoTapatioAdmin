@@ -31,12 +31,12 @@ export class EventosComponent implements OnInit {
   errorOrden:string = "";
   errorNombre:string = "";
 
-  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
-  @ViewChild('imgInputC',{ static: false }) imgInputC:ElementRef;
-  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
-  @ViewChild('cerrar',{ static: false }) cerrar;
-  @ViewChild('modalError',{static: false}) modalError;
-  @ViewChild('cerrarModalError',{static: false}) cerrarModalError;
+  @ViewChild('imgInputP') imgInputP:ElementRef;
+  @ViewChild('imgInputC') imgInputC:ElementRef;
+  @ViewChild('imgsInput') imgsInput:ElementRef;
+  @ViewChild('cerrar') cerrar;
+  @ViewChild('modalError') modalError;
+  @ViewChild('cerrarModalError') cerrarModalError;
 
   constructor(private fb:FormBuilder,
     private router:Router,

@@ -32,9 +32,9 @@ export class PublicacionesComponent implements OnInit {
 
   errorNombre:string = "";
 
-  @ViewChild('imgInputP',{ static: false }) imgInputP:ElementRef;
-  @ViewChild('imgsInput',{ static: false }) imgsInput:ElementRef;
-  @ViewChild('cerrar',{ static: false }) cerrar;
+  @ViewChild('imgInputP') imgInputP:ElementRef;
+  @ViewChild('imgsInput') imgsInput:ElementRef;
+  @ViewChild('cerrar') cerrar;
 
   constructor(private router:Router,
               private fb:FormBuilder,
