@@ -7,8 +7,8 @@ import { EventosService } from '../../services/eventos.service';
 import { BoletosService } from '../../services/boletos.service';
 
 @Component({
-  selector: 'app-evento-editar',
-  templateUrl: './evento-editar.component.html'
+  selector: 'app-eventoEditar',
+  templateUrl: './eventoEditar.component.html'
 })
 export class EventoEditarComponent implements OnInit {
 
@@ -473,7 +473,7 @@ export class EventoEditarComponent implements OnInit {
       this.boletosService.eliminarBoleto(id_boleto).subscribe( datos => {
         if(datos['resultado'] == "OK"){
           this.refresh();
-          window.confirm("Imagen eliminada con éxito");
+          window.confirm("Boleto eliminado con éxito");
         }
       })
     }

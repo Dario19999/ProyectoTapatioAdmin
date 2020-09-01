@@ -15,7 +15,7 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { RepartidoresComponent } from './components/repartidores/repartidores.component';
 
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { EventoEditarComponent } from './components/evento-editar/evento-editar.component';
+import { EventoEditarComponent } from './components/eventoEditar/eventoEditar.component';
 import { PublicacionEditarComponent } from './components/publicacion-editar/publicacion-editar.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 

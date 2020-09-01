@@ -239,7 +239,7 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-8 d-block mx-auto">
                             <label for="codigo">Código: <small>(Clave única de 10 caracteres.)</small></label>
-                            <input type="text" minlength="10" maxlength="10" id="codigo" class="form-control" placeholder="AAAAAAAAAA" formControlName="codigo">
+                            <input type="text" minlength="10" maxlength="10" id="codigo" class="form-control" placeholder="AAAAAAAAAA" [class.is-invalid]="codigoValidacion" formControlName="codigo">
                         </div>
                         <small *ngIf="codigoValidacion" class="form-text text-danger text-center ml-1">Código no válido. Debe contener 10 caracteres.</small>
 

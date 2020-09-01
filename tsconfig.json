@@ -19,7 +19,15 @@
       "es2018",
       "dom",
       "dom.iterable"
-    ]
+    ],
+    "paths": {
+      "rxjs": [
+        "node_modules/rxjs"
+      ],
+      "rxjs/*": [
+        "node_modules/rxjs/*"
+      ]
+  }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

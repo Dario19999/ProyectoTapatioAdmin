@@ -52,7 +52,6 @@ export class RepartidorEditarComponent implements OnInit {
           correo: this.repartidor.correo,
           telefono: this.repartidor.celular,
           telefonoExt: this.repartidor.celular_ext,
-          fechaNacimiento: this.repartidor.fec_nac,
           contra: null,
           contra2: null
         })
@@ -75,7 +74,6 @@ export class RepartidorEditarComponent implements OnInit {
       correo:['', Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
       telefono:[''],
       telefonoExt:[''],
-      fechaNacimiento:[''],
       contra:[''],
       contra2:['']
     })
