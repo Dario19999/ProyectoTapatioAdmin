@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { ViewChild,ElementRef } from '@angular/core';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-eventos',
@@ -287,9 +287,6 @@ export class EventosComponent implements OnInit {
         }
         this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
       }
-
-      console.log(this.formEventos.controls['imgsEvento'].value);
-      console.log(this.formEventos);
   }
 
   borrarImgPrincipal(){
@@ -312,13 +309,11 @@ export class EventosComponent implements OnInit {
     this.formEventos.controls['imgsEvento'].reset();
     this.formEventos.controls['imgsEvento'].setErrors(null);
 
-    console.log(this.formEventos.get('imgsEvento').value);
     if(this.imgsSeleccionadas.length == 0){
       this.formEventos.controls['imgsEvento'].setValue(null);
       this.imgsInput.nativeElement.value = null;
     }
 
-    console.log(this.formEventos);
   }
 
   liberarLugar(){
@@ -335,7 +330,6 @@ export class EventosComponent implements OnInit {
   }
 
   guardarEvento(){
-    console.log(this.formEventos);
 
     if(this.formEventos.invalid){
       Object.values(this.formEventos.controls).forEach( control =>{
@@ -360,12 +354,10 @@ export class EventosComponent implements OnInit {
         else if(datos['estado'] == 1){
           this.eventosService.buscarLugar(this.formEventos.get('orden').value).subscribe(datos => {
             if(datos['estado'] == 0){
-              console.log(datos['estado']);
               this.errorOrden = datos['mensaje'];
               this.modalError.nativeElement.click();
             }
             else if(datos['estado'] == 1){
-              console.log(datos['estado']);
               this.eventosService.crearEvento(this.formEventos.value).subscribe( datos => {
                 if(datos['resultado'] == 'OK'){
                   this.getEventos();
