@@ -114,6 +114,7 @@ export class RepartidorEditarComponent implements OnInit {
   }
 
   guardarInfo(){
+    console.log(this.formInfo.value);
     this.repartidoresService.modificarRepartidor(this.formInfo.value).subscribe( datos => {
       if(datos['resultado'] == "ERROR"){
         console.log("ERROR");

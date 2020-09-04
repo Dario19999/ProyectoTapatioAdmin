@@ -39,7 +39,7 @@
                             <tr *ngFor="let promo of promosFechas">
                                 <td class="align-middle">Por Fechas</td>
                                 <td class="align-middle">({{ promo.fec_ini_pro }}) - ({{ promo.fec_fin_pro }})</td>
-                                <td class="align-middle">${{promo.precio_fec}}.00</td>
+                                <td class="align-middle">{{promo.precio_fec | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoFechas( promo.id_promo_fec )">Eliminar</button>
                                 </td>
@@ -50,7 +50,7 @@
                                     <h6>Boleto de referencia:</h6>
                                     {{promo.fk_boleto_ref}}
                                 </td>
-                                <td class="align-middle"> ${{promo.precio_eve}}0 </td>
+                                <td class="align-middle"> {{promo.precio_eve | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoReferencia( promo.id_promo_eve )">Eliminar</button>
                                 </td>
@@ -58,7 +58,7 @@
                             <tr *ngFor="let promo of promosCodigo">
                                 <td class="align-middle">Por Codigo</td>
                                 <td class="align-middle">Código: {{promo.codigo}}</td>
-                                <td class="align-middle">${{promo.precio_cod}}.00</td>
+                                <td class="align-middle">{{promo.precio_cod | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoCodigo( promo.id_pro_cod )">Eliminar</button>
                                 </td>

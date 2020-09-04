@@ -97,7 +97,6 @@
                             <label for="nombreEvento">Nombre: <small class="text-danger">*</small></label>
                             <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre || nombreExistente">
                             <small *ngIf="validacionNombre" class="form-text text-danger">Obligatorio.</small>
-                            <small *ngIf="nombreExistente" class="form-text text-danger">Ya existe un evento con este nombre.</small>
                         </div>
                     </div>
                     <div class="input-group form-row mb-3" formGroupName="fecha">

@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class EventosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/eventos/";
-  // url = "http://localhost:8080/PT-API/eventos/";
+  // url = "https://proyectotapatio.com/PT-API-P/eventos/";
+  url = "http://localhost:8080/PT-API/eventos/";
 
   eventos = null;
 
@@ -31,8 +31,8 @@ export class EventosService {
     return this.http.get(`${this.url}eliminarImgs.php?id_imagen=${id}`).pipe(retry(3))
   }
 
-  buscarNombre( nombre:string ){
-    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}`).pipe(retry(3))
+  buscarNombre( nombre:string, id:number = null ){
+    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}&id=${id}`).pipe(retry(3))
   }
 
   crearEvento( evento:any ){
@@ -67,8 +67,8 @@ export class EventosService {
     return this.http.get(`${this.url}consultaOrden.php?orden=${orden}&id=${id}`).pipe(retry(3))
   }
 
-  liberarLugar( orden:number ){
-    return this.http.get(`${this.url}liberarLugar.php?orden=${orden}`).pipe(retry(3))
+  liberarLugar( orden:number, id:number=null ){
+    return this.http.get(`${this.url}liberarLugar.php?orden=${orden}&id=${id}`).pipe(retry(3))
   }
 
 }

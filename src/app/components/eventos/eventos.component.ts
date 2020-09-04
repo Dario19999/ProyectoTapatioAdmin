@@ -65,7 +65,6 @@ export class EventosComponent implements OnInit {
           this.busqueda = resultado;
           this.encontrado = true;
         }
-
       });
     }
   }
@@ -125,7 +124,6 @@ export class EventosComponent implements OnInit {
   editarEvento( id:number ){
     this.router.navigate(['editar-evento', id])
   }
-
 
   compararFechas(){
     let inicio = new Date(this.formEventos.get('fecha.inicio').value);
@@ -330,7 +328,6 @@ export class EventosComponent implements OnInit {
   }
 
   guardarEvento(){
-
     if(this.formEventos.invalid){
       Object.values(this.formEventos.controls).forEach( control =>{
 

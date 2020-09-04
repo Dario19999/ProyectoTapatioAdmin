@@ -273,15 +273,14 @@ export class EventoEditarComponent implements OnInit {
     this.infoEvento.orden = this.formInfoE.get('orden').value;
     this.infoEvento.enlace = this.formInfoE.get('enlace').value;
 
-    this.eventosService.buscarNombre(this.infoEvento.nombre).subscribe( datos => {
+    this.eventosService.buscarNombre(this.infoEvento.nombre, this.infoEvento.id).subscribe( datos => {
       if(datos['estado'] == 0){
         this.errorNombre = datos['mensaje'];
         window.confirm(this.errorNombre);
       }
       else if(datos['estado'] == 1){
-        this.eventosService.buscarLugar(this.infoEvento.id, this.infoEvento.orden).subscribe(datos => {
+        this.eventosService.buscarLugar(this.infoEvento.orden, this.infoEvento.id).subscribe(datos => {
           if(datos['estado'] == 0){
-            console.log(datos['estado']);
             this.errorOrden = datos['mensaje'];
             this.modalError.nativeElement.click();
           }
@@ -299,12 +298,10 @@ export class EventoEditarComponent implements OnInit {
         });
       }
     });
-
-
   }
 
   liberarLugar(){
-    this.eventosService.liberarLugar(this.formInfoE.get('orden').value).subscribe( datos => {
+    this.eventosService.liberarLugar(this.formInfoE.get('orden').value, this.infoEvento.id).subscribe( datos => {
       if(datos['resultado'] == "ERROR"){
         console.log("ERROR");
         return
