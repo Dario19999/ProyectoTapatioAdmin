@@ -78,7 +78,7 @@ export class BoletoEditarComponent implements OnInit {
         this.formInfoBoleto.setValue({
           nombre:this.boleto.nom_bol,
           desc:this.boleto.descripcion_boleto,
-          inventario:this.boleto.stock_boleto,
+          inventario:this.boleto.stock_act_boleto,
           precio:this.boleto.precio_bol
         });
       });

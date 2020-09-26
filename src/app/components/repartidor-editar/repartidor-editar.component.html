@@ -21,7 +21,7 @@
                             <tr *ngFor="let carga of historial">
                                 <th scope="row" class="align-middle"> {{carga.id_stock}} </th>
                                 <td class="align-middle"> {{carga.stock_adm}} </td>
-                                <td class="align-middle"> {{carga.fk_boleto}} </td>
+                                <td class="align-middle"> {{carga.nombre_boleto}} </td>
                                 <td class="align-middle"> {{carga.fecha_historial | date:'dd/mm/yyyy h:mm a'}} </td>
                             </tr>
                         </tbody>
@@ -55,9 +55,9 @@
                                         <th scope="row" class="align-middle"> {{boleto.id_boleto}} </th>
                                         <td class="align-middle"> {{boleto.nom_bol}} </td>
                                         <td class="align-middle"> {{boleto.stock_boleto}} </td>
-                                        <td class="align-middle"> {{boleto.stock_repartidor}} </td>
-                                        <td class="align-middle text-danger" *ngIf="boleto.stock_repartidor == 0">Agotado</td>
-                                        <td class="align-middle text-success" *ngIf="boleto.stock_repartidor > 0">Disponible</td>
+                                        <td class="align-middle"> {{boleto.stock_act_boleto}} </td>
+                                        <td class="align-middle text-danger" *ngIf="boleto.stock_act_boleto == 0">Agotado</td>
+                                        <td class="align-middle text-success" *ngIf="boleto.stock_act_boleto > 0">Disponible</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -71,7 +71,7 @@
         <div class="col-md-6">
             <div class="card mb-3 border">
                 <div class="card-header border">
-                    <h4>Boletos en Stock de Repartidor.</h4>
+                    <h4>Boletos en Inventario de Repartidor.</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mt-2">
@@ -81,12 +81,12 @@
                                     <tr>
                                         <th scope="col" style="width: 5%;">Boleto</th>
                                         <th scope="col" style="width: 20%;">Stock Inicial</th>
-                                        <th scope="col" style="width: 15%;">Stock de Rapartidor</th>
+                                        <th scope="col" style="width: 15%;">Stock Actual</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
                                     <tr *ngFor="let boleto of boletosRep">
-                                        <th scope="row" class="align-middle"> {{boleto.fk_boleto}} </th>
+                                        <th scope="row" class="align-middle"> {{boleto.nombre_boleto}} </th>
                                         <td class="align-middle"> {{boleto.stockadm}} </td>
                                         <td class="align-middle"> {{boleto.stock_adm_act}} </td>
                                     </tr>
@@ -158,7 +158,8 @@
                                 <div class="form-row mb-3">
                                     <div class="col-md-12">
                                         <label for="contra">Contraseña: <small class="text-danger">*</small></label>
-                                        <input type="password" class="form-control" id="contra" placeholder="Ingrese la Contraseña del Repartidor/a" formControlName="contra">
+                                        <input type="password" class="form-control" id="contra" placeholder="Ingrese la Contraseña del Repartidor/a" formControlName="contra" [class.is-invalid]="validacionContra">
+                                        <small *ngIf="validacionContra" class="form-text text-danger">Mínimo 8 caracteres, una mayúscula y un número.</small>
                                     </div>
                                 </div>
 
@@ -166,6 +167,7 @@
                                     <div class="col-md-12">
                                         <label for="contra">Repita la contraseña: <small class="text-danger">*</small></label>
                                         <input type="password" class="form-control" id="contra" placeholder="Repita la Contraseña del Repartidor/a" formControlName="contra2" [class.is-invalid]="passNoValida()">
+                                        <small *ngIf=" passNoValida()" class="form-text text-danger">Las contraseñas no coinciden.</small>
                                     </div>
                                 </div>
                                 <hr>
@@ -196,7 +198,7 @@
                                         <label for="evento">Evento:</label>
                                         <select (change)="getBoletos($event)" id="evento" class="form-control">
                                           <option value="" selected>Elija un Evento</option>
-                                          <option *ngFor="let evento of eventos; let i = index" [value]="evento.id_evento"> {{evento.nombre_evento}} </option>
+                                          <option *ngFor="let evento of eventos; let i=i ndex" [value]="evento.id_evento"> {{evento.nombre_evento}} </option>
                                         </select>
                                     </div>
                                 </div>
@@ -219,7 +221,7 @@
 
                                 <div class="input-group form-row mb-3">
                                     <div class="col-md-12 text-center">
-                                        <button [disabled]="stock.value == 0" class="btn btn-success" type="submit">Agregar</button>
+                                        <button [disabled]="stock.value==0" class="btn btn-success" type="submit">Agregar</button>
                                     </div>
                                 </div>
                             </form>

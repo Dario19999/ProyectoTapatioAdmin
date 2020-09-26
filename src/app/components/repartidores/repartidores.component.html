@@ -165,6 +165,7 @@
                         <div class="col-md-12">
                             <label for="contra">Repita la contraseña: <small class="text-danger">*</small></label>
                             <input type="password" class="form-control" id="contra" placeholder="Repita la Contraseña del Repartidor/a" formControlName="contra2" [class.is-invalid]="passNoValida()">
+                            <small *ngIf=" passNoValida()" class="form-text text-danger">Las contraseñas no coinciden.</small>
                         </div>
                     </div>
 

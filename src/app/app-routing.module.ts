@@ -10,19 +10,25 @@ import { PublicacionEditarComponent } from './components/publicacion-editar/publ
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { BoletoEditarComponent } from './components/boleto-editar/boleto-editar.component';
 import { RepartidorEditarComponent } from './components/repartidor-editar/repartidor-editar.component';
+import { LayoutComponent } from './layout/layout.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: 'inicio', component: InicioComponent },
-  { path: 'eventos', component: EventosComponent },
-  { path: 'publicaciones', component: PublicacionesComponent },
-  { path: 'usuarios', component: UsuariosComponent },
-  { path: 'repartidores', component: RepartidoresComponent },
-  { path: 'editar-evento/:id', component: EventoEditarComponent },
-  { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
-  { path: 'editar-boleto/:id', component: BoletoEditarComponent },
-  { path: 'editar-repartidor/:id', component: RepartidorEditarComponent },
-  { path: 'perfil', component: PerfilComponent },
-  { path: '**', pathMatch: 'full', redirectTo: 'inicio' }
+  { path: '', component: LayoutComponent, children: [
+    { path: '', pathMatch: 'full', redirectTo: 'inicio' },
+    { path: 'inicio', component: InicioComponent },
+    { path: 'eventos', component: EventosComponent },
+    { path: 'publicaciones', component: PublicacionesComponent },
+    { path: 'usuarios', component: UsuariosComponent },
+    { path: 'repartidores', component: RepartidoresComponent },
+    { path: 'editar-evento/:id', component: EventoEditarComponent },
+    { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
+    { path: 'editar-boleto/:id', component: BoletoEditarComponent },
+    { path: 'editar-repartidor/:id', component: RepartidorEditarComponent },
+    { path: 'perfil', component: PerfilComponent },
+  ]},
+  { path: 'login', component: LoginComponent },
+  { path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
 
 @NgModule({

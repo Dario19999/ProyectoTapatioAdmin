@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpClientModule } from '@angular/common/http';
 import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators"
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
@@ -28,6 +29,9 @@ import { BoletoEditarComponent } from './components/boleto-editar/boleto-editar.
 import { RepartidorEditarComponent } from './components/repartidor-editar/repartidor-editar.component';
 import { BoletosService } from './services/boletos.service';
 import { RepartidoresService } from './services/repartidores.service';
+import { LoginComponent } from './login/login.component';
+import { LayoutComponent } from './layout/layout.component';
+
 registerLocaleData(es)
 
 @NgModule({
@@ -42,7 +46,9 @@ registerLocaleData(es)
     PublicacionEditarComponent,
     PerfilComponent,
     BoletoEditarComponent,
-    RepartidorEditarComponent
+    RepartidorEditarComponent,
+    LayoutComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +57,8 @@ registerLocaleData(es)
     BrowserAnimationsModule,
     CarouselModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RouterModule
   ],
   providers: [
     UsuariosService,

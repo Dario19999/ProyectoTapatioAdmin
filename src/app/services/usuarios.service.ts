@@ -23,4 +23,8 @@ export class UsuariosService {
   eliminarUsuario( id:number ){
     return this.http.get(`${this.url}eliminarUsuario.php?id=${id}`).pipe(retry(3))
   }
+
+  getAdmin(id:number){
+    return this.http.get(`${this.url}getAdmin.php?id=${id}`).pipe(retry(3))
+  }
 }

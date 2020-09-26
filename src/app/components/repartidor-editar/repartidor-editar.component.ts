@@ -57,7 +57,10 @@ export class RepartidorEditarComponent implements OnInit {
         })
       })
 
-      this.repartidoresService.getHistorial(params['id']).subscribe( resultado => this.historial = resultado );
+      this.repartidoresService.getHistorial(params['id']).subscribe( resultado => {
+        this.historial = resultado;
+        console.log(this.historial);
+      });
       this.repartidoresService.getBoletos(params['id']).subscribe( resultado => this.boletosRep = resultado );
 
       this.formInfo.addControl('id', this.fb.control(null));
@@ -74,8 +77,8 @@ export class RepartidorEditarComponent implements OnInit {
       correo:['', Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')],
       telefono:[''],
       telefonoExt:[''],
-      contra:[''],
-      contra2:['']
+      contra:['', Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$')],
+      contra2:['', Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$')]
     })
   }
 
@@ -100,6 +103,10 @@ export class RepartidorEditarComponent implements OnInit {
 
   get validacionNumeroExtra(){
     return this.esAlfa(this.formInfo.get('telefonoExt').value) && this.formInfo.get('telefonoExt').value != ""
+  }
+
+  get validacionContra(){
+    return this.formInfo.get('contra').invalid && this.formInfo.get('contra').touched
   }
 
   esAlfa(str) {
@@ -143,7 +150,7 @@ export class RepartidorEditarComponent implements OnInit {
   }
 
   getEventos(){
-    this.eventosService.getEventos().subscribe( resultado => {
+    this.eventosService.getEventos(2).subscribe( resultado => {
       this.eventos = resultado
       console.log(this.eventos );
     });

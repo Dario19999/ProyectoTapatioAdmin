@@ -38,8 +38,8 @@ export class RepartidoresComponent implements OnInit {
       telefono:['', [Validators.required]],
       telefonoExt:['', [Validators.required]],
       fechaNacimiento:['', [Validators.required]],
-      contra:['', [Validators.required]],
-      contra2:['', [Validators.required]],
+      contra:['', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$')]],
+      contra2:['', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$')]],
     });
   }
 

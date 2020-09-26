@@ -1,27 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuariosService } from '../../services/usuarios.service';
 import { Router } from '@angular/router';
+import { UsuariosService } from '../services/usuarios.service';
 
 @Component({
-  selector: 'app-perfil',
-  templateUrl: './perfil.component.html'
+  selector: 'app-layout',
+  templateUrl: './layout.component.html'
 })
-export class PerfilComponent implements OnInit {
+export class LayoutComponent implements OnInit {
 
-  admin:any = {};
   id:string = null;
+  usuario:any = {};
 
   constructor(private usuariosService:UsuariosService,
               private router:Router) { }
 
-  ngOnInit() {
-    // this.id = localStorage.getItem("id_admin")
+  ngOnInit(): void {
+    // this.id = localStorage.getItem("id_admin");
+    // if(this.id == null  || this.usuario == {}){
+    //   this.cerrarSesion();
+    // }
     // this.getAdmin();
   }
 
   getAdmin(){
     this.usuariosService.getAdmin(Number(this.id)).subscribe( resultado => {
-        this.admin = resultado[0];
+        this.usuario = resultado[0];
     })
   }
 
@@ -29,5 +32,4 @@ export class PerfilComponent implements OnInit {
     localStorage.removeItem("id_admin");
     this.router.navigate(['login'])
   }
-
 }
