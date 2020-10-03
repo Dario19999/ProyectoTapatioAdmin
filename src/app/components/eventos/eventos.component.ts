@@ -304,6 +304,10 @@ export class EventosComponent implements OnInit {
     })
   }
 
+  cancelarEvento( id_evento:number ){
+
+  }
+
   guardarEvento(){
     this.eventosService.buscarNombre(this.formEventos.get('nombre').value).subscribe( datos => {
       if(datos['estado'] == 0){

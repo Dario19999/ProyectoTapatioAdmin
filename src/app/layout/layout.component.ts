@@ -15,11 +15,11 @@ export class LayoutComponent implements OnInit {
               private router:Router) { }
 
   ngOnInit(): void {
-    // this.id = localStorage.getItem("id_admin");
-    // if(this.id == null  || this.usuario == {}){
-    //   this.cerrarSesion();
-    // }
-    // this.getAdmin();
+    this.id = localStorage.getItem("id_admin");
+    if(this.id == null  || this.usuario == {}){
+      this.cerrarSesion();
+    }
+    this.getAdmin();
   }
 
   getAdmin(){

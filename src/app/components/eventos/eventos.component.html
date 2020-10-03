@@ -41,6 +41,7 @@
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarEvento( resultado.id_evento )">Editar</button>
                             <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button>
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( resultado.id_evento )">Cancelar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -54,8 +55,8 @@
                 <th scope="col" style="width: 10%;">ID</th>
                 <th scope="col" style="width: 20%;">Nombre</th>
                 <th scope="col" style="width: 30%;">Descripcion</th>
-                <th scope="col" style="width: 20%;">Orden de anuncio</th>
-                <th scope="col" style="width: 20%;">Acciones</th>
+                <th scope="col" style="width: 10%;">Orden de anuncio</th>
+                <th scope="col" style="width: 30%;">Acciones</th>
             </tr>
         </thead>
         <tbody class="text-center">
@@ -67,6 +68,7 @@
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>
                     <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( evento.id_evento )">Eliminar</button>
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento )">Cancelar</button>
                 </td>
             </tr>
         </tbody>

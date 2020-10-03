@@ -7,6 +7,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HttpClientModule } from '@angular/common/http';
 import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators"
 import { RouterModule } from '@angular/router';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
@@ -48,7 +49,7 @@ registerLocaleData(es)
     BoletoEditarComponent,
     RepartidorEditarComponent,
     LayoutComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,7 +59,8 @@ registerLocaleData(es)
     CarouselModule,
     HttpClientModule,
     AppRoutingModule,
-    RouterModule
+    RouterModule,
+    ChartsModule
   ],
   providers: [
     UsuariosService,

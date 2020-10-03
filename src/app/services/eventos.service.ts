@@ -71,4 +71,19 @@ export class EventosService {
     return this.http.get(`${this.url}liberarLugar.php?orden=${orden}&id=${id}`).pipe(retry(3))
   }
 
+  getVentasEdad( id_evento:number){
+    return this.http.get(`${this.url}EdadEvento.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
+  getVentasTotales( id_evento:number ){
+    return this.http.get(`${this.url}VentasTotales.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
+  getVentasDia( fecha:any, id_evento:number ){
+    return this.http.get(`${this.url}VentasDia.php?id_evento=${id_evento}&fecha=${fecha}`)
+  }
+
+  getVentasR( fecha_1:any, fecha_2:any, id_evento:number ){
+    return this.http.get(`${this.url}VentasRango.php?id_evento=${id_evento}&fecha_i=${fecha_1}&fecha_f=${fecha_2}`).pipe(retry(3))
+  }
 }

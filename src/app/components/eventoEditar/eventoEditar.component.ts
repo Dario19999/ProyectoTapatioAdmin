@@ -5,6 +5,8 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventosService } from '../../services/eventos.service';
 import { BoletosService } from '../../services/boletos.service';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-eventoEditar',
@@ -22,6 +24,7 @@ export class EventoEditarComponent implements OnInit {
   urlCarousel = null;
 
   evento:any = {};
+  id_evento:number = null;
 
   imgSeleccionada:File = null;
   imgCarouselSeleccionada:File = null;
@@ -35,6 +38,17 @@ export class EventoEditarComponent implements OnInit {
   mensajeError = null;
   errorOrden:string = null;
   noBoletos:boolean = null;
+
+  edadData:any = null;
+
+  chartLabels:string[] = [];
+  chartData:number[] = [];
+
+  ventasTotales:any = null;
+  ventasDia:any = null;
+  ventasRango:any = null;
+  hayVentasDia:boolean = null;
+  hayVentasRango:boolean = null;
 
   infoEvento:any = {
     id:null,
@@ -68,7 +82,7 @@ export class EventoEditarComponent implements OnInit {
     precio:null
   }
 
-  customOptions: OwlOptions = {
+  public customOptions: OwlOptions = {
     loop: true,
     mouseDrag: true,
     touchDrag: true,
@@ -98,6 +112,23 @@ export class EventoEditarComponent implements OnInit {
   @ViewChild('imgsInput') imgsInput:ElementRef;
   @ViewChild('modalError') modalError;
   @ViewChild('cerrarModalError') cerrarModalError;
+
+  public barChartOptions: ChartOptions = {
+    responsive: true
+  };
+  public barChartType:ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartLabels:Label = [];
+  public barChartData:ChartDataSets[] = [];
+
+  public barChartColors:Color[] = [{
+    backgroundColor: 'rgba(63,127,191,1)',
+    borderColor: 'green',
+    pointBackgroundColor: 'rgba(148,159,177,1)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+  }];
 
   constructor(private fb:FormBuilder,
               private activatedRoute:ActivatedRoute,
@@ -139,11 +170,69 @@ export class EventoEditarComponent implements OnInit {
           this.boletos = resultado;
         }
       });
+
+      this.id_evento = params['id'];
+      this.getVentasEdad(params['id']);
+      this.getVentasTotales(params['id']);
       this.infoEvento.id = params['id'];
       this.fechasEvento.id = params['id'];
       this.imgsEvento.id = params['id'];
       this.boletoEvento.id = params['id'];
+
     });
+  }
+
+  getVentasEdad( id_evento:number ){
+    this.eventosService.getVentasEdad(id_evento).subscribe(resultado => {
+        this.edadData = resultado;
+        console.log(this.edadData);
+
+        for(let x in this.edadData){
+          if(x != '0'){
+            this.chartLabels.push(x.toString());
+            this.chartData.push(this.edadData[x]['cantidad']);
+          }
+        }
+        this.barChartLabels = this.chartLabels;
+        this.barChartData = [
+          {data: this.chartData, label: "Compras por edad" }
+        ];
+      })
+  }
+
+  getVentasTotales( id_evento:number ){
+    this.eventosService.getVentasTotales(id_evento).subscribe( resultado => {
+      this.ventasTotales = resultado;
+      console.log(this.ventasTotales);
+    })
+  }
+
+  buscarVentasDia( fecha:any ){
+    this.eventosService.getVentasDia( fecha, this.id_evento).subscribe( resultado => {
+      if(resultado == null){
+        this.hayVentasDia = false;
+        return
+      }
+      else{
+        this.hayVentasDia = true;
+        this.ventasDia = resultado;
+        console.log(this.ventasDia);
+      }
+    })
+  }
+
+  getVentasRango( fecha_1:any, fecha_2:any ){
+    this.eventosService.getVentasR( fecha_1, fecha_2, this.id_evento).subscribe( resultado => {
+      if(resultado == null){
+        this.hayVentasRango = false;
+        return
+      }
+      else{
+        this.hayVentasRango = true;
+        this.ventasRango = resultado;
+        console.log(this.ventasRango);
+      }
+    })
   }
 
   formInfoInit(){
