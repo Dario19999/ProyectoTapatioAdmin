@@ -50,6 +50,9 @@ export class EventoEditarComponent implements OnInit {
   hayVentasDia:boolean = null;
   hayVentasRango:boolean = null;
 
+  comentarios:any = null;
+  sinComentarios:boolean = false;
+
   infoEvento:any = {
     id:null,
     nombre:null,
@@ -172,6 +175,7 @@ export class EventoEditarComponent implements OnInit {
       });
 
       this.id_evento = params['id'];
+      this.getComentarios(params['id']);
       this.getVentasEdad(params['id']);
       this.getVentasTotales(params['id']);
       this.infoEvento.id = params['id'];
@@ -180,6 +184,30 @@ export class EventoEditarComponent implements OnInit {
       this.boletoEvento.id = params['id'];
 
     });
+  }
+
+  getComentarios( id_evento ){
+    this.eventosService.getComentarios(id_evento).subscribe(resultado => {
+      this.comentarios = resultado;
+      if(this.comentarios == null){
+        this.sinComentarios = true;
+      }
+      else{
+        this.sinComentarios = false;
+      }
+    })
+  }
+
+  eliminarComentario( id_calificacion:number ){
+    if(window.confirm("Está seguro de querer eliminar el comentario?")){
+      this.eventosService.eliminarComentrio(id_calificacion).subscribe( () => {
+        this.activatedRoute.params.subscribe( () => {
+          this.activatedRoute.params.subscribe( params => {
+            this.getComentarios(params['id']);
+          });
+        });
+      });
+    }
   }
 
   getVentasEdad( id_evento:number ){

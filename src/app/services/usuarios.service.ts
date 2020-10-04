@@ -27,4 +27,5 @@ export class UsuariosService {
   getAdmin(id:number){
     return this.http.get(`${this.url}getAdmin.php?id=${id}`).pipe(retry(3))
   }
+
 }

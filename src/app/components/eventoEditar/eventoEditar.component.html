@@ -45,8 +45,8 @@
                 </div>
             </div>
 
-            <div class="card mb-3 border-success">
-                <div class="card-header border-success text-center" *ngIf="noBoletos">
+            <div class="card mb-3 border-success" *ngIf="noBoletos">
+                <div class="card-header border-success text-center">
 
                     <h5 class="text-danger"> No hay boletos. </h5>
 
@@ -90,59 +90,30 @@
         </div>
     </div>
 
-    <div class="card border-success">
+    <div class="card">
         <div class="card-header">
             <h4>Comentarios.</h4>
         </div>
         <div class="card-body">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-2 text-center my-auto">
-                            <img src="/assets/img/perfilimg.png" class="rounded-circle" alt="" width="50px" height="50px"><br>
-                            <small>2020/07/8</small>
-                        </div>
-                        <div class="col-md-8 text-left">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet ut a distinctio similique, exercitationem autem impedit commodi. Ratione molestiae amet illo corporis? Dolorem dolores tempore error fugit, cum voluptatem autem.</p>
-                        </div>
-                        <div class="col-md-2 text-center align-self-center">
-                            <button type="button" class="btn btn-danger">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-2 text-center my-auto">
-                            <img src="/assets/img/perfilimg.png" class="rounded-circle" alt="" width="50px" height="50px"><br>
-                            <small>2020/07/8</small>
-                        </div>
-                        <div class="col-md-8 text-left">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet ut a distinctio similique, exercitationem autem impedit commodi. Ratione molestiae amet illo corporis? Dolorem dolores tempore error fugit, cum voluptatem autem.</p>
-                        </div>
-                        <div class="col-md-2 text-center align-self-center">
-                            <button type="button" class="btn btn-danger">Eliminar</button>
+            <h5 class="text-danger" *ngIf="sinComentarios == true"> No hay comentarios. </h5>
+            <ng-container *ngIf="sinComentarios == false">
+                <div class="card" *ngFor="let comentario of comentarios">
+                    <div class="card-body">
+                        <div class="row h-100">
+                            <div class="col-md-2 text-center my-auto">
+                                <h6>{{ comentario.nombre_usuario }}</h6>
+                                <h5>{{ comentario.num_calificacion }} Puntos</h5>
+                            </div>
+                            <div class="col-md-8 text-left">
+                                <p>{{ comentario.opinion }}</p>
+                            </div>
+                            <div class="col-md-2 my-auto">
+                                <button type="button" class="btn btn-danger mx-auto my-auto d-block" (click)="eliminarComentario(comentario.id_calificacion)">Eliminar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row h-100">
-                        <div class="col-md-2 text-center my-auto">
-                            <img src="/assets/img/perfilimg.png" class="rounded-circle" alt="" width="50px" height="50px"><br>
-                            <small>2020/07/8</small>
-                        </div>
-                        <div class="col-md-8 text-left">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet ut a distinctio similique, exercitationem autem impedit commodi. Ratione molestiae amet illo corporis? Dolorem dolores tempore error fugit, cum voluptatem autem.</p>
-                        </div>
-                        <div class="col-md-2 text-center align-self-center">
-                            <button type="button" class="btn btn-danger">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </ng-container>
         </div>
     </div>
 

@@ -86,4 +86,12 @@ export class EventosService {
   getVentasR( fecha_1:any, fecha_2:any, id_evento:number ){
     return this.http.get(`${this.url}VentasRango.php?id_evento=${id_evento}&fecha_i=${fecha_1}&fecha_f=${fecha_2}`).pipe(retry(3))
   }
+
+  getComentarios(id_evento:Number){
+    return this.http.get(`${this.url}VerComentarios.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
+  eliminarComentrio(id_cal:number){
+    return this.http.get(`${this.url}EliminarComentario.php?id_cal=${id_cal}`).pipe(retry(3))
+  }
 }
