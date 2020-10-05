@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { serialize } from 'object-to-formdata';
 import { HttpClient } from '@angular/common/http';
 import { retry } from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
