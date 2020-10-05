@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuarios',
@@ -18,7 +19,8 @@ export class UsuariosComponent implements OnInit {
     correo: null
   }
 
-  constructor(private usuariosService:UsuariosService){ }
+  constructor(private usuariosService:UsuariosService,
+              private router:Router){ }
 
   ngOnInit() {
     this.getUsuarios();
@@ -54,5 +56,9 @@ export class UsuariosComponent implements OnInit {
         }
       });
     }
+  }
+
+  verUsuario(id:number){
+    this.router.navigate(['ver-usuario', id])
   }
 }

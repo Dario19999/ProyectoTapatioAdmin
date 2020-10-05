@@ -12,6 +12,8 @@ import { BoletoEditarComponent } from './components/boleto-editar/boleto-editar.
 import { RepartidorEditarComponent } from './components/repartidor-editar/repartidor-editar.component';
 import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './login/login.component';
+import { UsuarioVerComponent } from './components/usuario-ver/usuario-ver.component';
+import { CompraVerComponent } from './components/compra-ver/compra-ver.component';
 
 const routes: Routes = [
   { path: '', component: LayoutComponent, children: [
@@ -20,6 +22,8 @@ const routes: Routes = [
     { path: 'eventos', component: EventosComponent },
     { path: 'publicaciones', component: PublicacionesComponent },
     { path: 'usuarios', component: UsuariosComponent },
+    { path: 'ver-usuario/:id', component: UsuarioVerComponent },
+    { path: 'ver-compra/:id', component: CompraVerComponent },
     { path: 'repartidores', component: RepartidoresComponent },
     { path: 'editar-evento/:id', component: EventoEditarComponent },
     { path: 'editar-publicacion/:id', component: PublicacionEditarComponent },
