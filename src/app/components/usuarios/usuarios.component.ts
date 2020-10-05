@@ -1,16 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
+import {Router} from '@angular/router';
+
+declare var webkitSpeechRecognition;
+declare var webkitSpeechGrammarList;
+declare var webkitSpeechRecognitionEvent;
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html'
 })
-export class UsuariosComponent implements OnInit {
+export class UsuariosComponent implements OnInit, OnDestroy {
 
   usuarios = null;
   busqueda = null;
 
   encontrado:boolean = null;
+
+  recognition: SpeechRecognition;
 
   usuario = {
     id_usuario: null,
@@ -18,9 +25,69 @@ export class UsuariosComponent implements OnInit {
     correo: null
   }
 
-  constructor(private usuariosService:UsuariosService){ }
+  constructor(private usuariosService:UsuariosService, private router: Router){ }
+
+
+  initSpeech() {
+    const SpeechRecognition = webkitSpeechRecognition;
+    const SpeechGrammarList = webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = webkitSpeechRecognitionEvent;
+
+    this.recognition = new SpeechRecognition();
+    const speechRecognitionList: SpeechGrammarList = new SpeechGrammarList();
+
+    speechRecognitionList.addFromString(`
+      #JSGF V1.0;
+      public navigate = ver (eventos | publicaciones | usuarios | repartidores);
+      `, 1);
+
+    this.recognition.grammars = speechRecognitionList;
+    this.recognition.continuous = false;
+    this.recognition.lang = 'es-MX';
+    this.recognition.interimResults = false;
+    this.recognition.maxAlternatives = 1;
+    let navigate = false;
+    this.recognition.onresult = ev => {
+      const command = ev.results[0][0].transcript.split(' ');
+      console.log('hmmm');
+      if (command.length >= 2) {
+        console.log(command);
+        switch (command[1]) {
+          case 'eventos':
+            this.router.navigate(['eventos']);
+            navigate = true;
+            break;
+          case 'publicaciones':
+            this.router.navigate(['publicaciones']);
+            navigate = true;
+            break;
+          case 'repartidores':
+            this.router.navigate(['repartidores']);
+            navigate = true;
+            break;
+        }
+      }
+    };
+    this.recognition.start();
+
+    this.recognition.onend = () => {
+      this.recognition.stop();
+      if (navigate) {
+        this.recognition.onresult = () => {};
+      }
+      this.recognition.start();
+    };
+  }
+
+  ngOnDestroy() {
+    this.recognition.onend = () => {};
+    this.recognition.stop();
+    this.recognition.onresult = () => {
+    };
+  }
 
   ngOnInit() {
+    this.initSpeech();
     this.getUsuarios();
   }
 

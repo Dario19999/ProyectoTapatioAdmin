@@ -1,14 +1,18 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, OnDestroy} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { PublicacionesService } from '../../services/publicaciones.service';
 
+declare var webkitSpeechRecognition;
+declare var webkitSpeechGrammarList;
+declare var webkitSpeechRecognitionEvent;
+
 @Component({
   selector: 'app-publicaciones',
   templateUrl: './publicaciones.component.html'
 })
-export class PublicacionesComponent implements OnInit {
+export class PublicacionesComponent implements OnInit, OnDestroy {
 
   formPublicaciones:FormGroup
 
@@ -36,12 +40,108 @@ export class PublicacionesComponent implements OnInit {
   @ViewChild('imgsInput') imgsInput:ElementRef;
   @ViewChild('cerrar') cerrar;
 
+  recognition: SpeechRecognition;
+
   constructor(private router:Router,
               private fb:FormBuilder,
               private publicacionesService:PublicacionesService
              ) { }
 
+  ngOnDestroy() {
+    this.recognition.onend = () => {};
+
+    this.recognition.stop();
+    this.recognition.onresult = () => {
+    };
+  }
+
+  initSpeech() {
+    const SpeechRecognition = webkitSpeechRecognition;
+    const SpeechGrammarList = webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = webkitSpeechRecognitionEvent;
+
+    this.recognition = new SpeechRecognition();
+    const speechRecognitionList: SpeechGrammarList = new SpeechGrammarList();
+
+    speechRecognitionList.addFromString(`
+      #JSGF V1.0;
+      public navigate = ver (eventos | publicaciones | usuarios | repartidores);
+      public editar = editar publicacion;
+      public eliminar = eliminar publicacion;
+      `, 1);
+
+    this.recognition.grammars = speechRecognitionList;
+    this.recognition.continuous = false;
+    this.recognition.lang = 'es-MX';
+    this.recognition.interimResults = false;
+    this.recognition.maxAlternatives = 1;
+    let navigate = false;
+    this.recognition.onresult = ev => {
+      console.log('hmm pub');
+      const command = ev.results[0][0].transcript.split(' ');
+      if (command.length >= 2) {
+
+        switch (command[0]) {
+          case 'ver':
+            switch (command[1]) {
+              case 'eventos':
+                this.router.navigate(['eventos']);
+                navigate = true;
+                break;
+              case 'usuarios':
+                this.router.navigate(['usuarios']);
+                navigate = true;
+                break;
+              case 'repartidores':
+                this.router.navigate(['repartidores']);
+                navigate = true;
+                break;
+            }
+            break;
+          case 'editar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.publicaciones) {
+              if (e.nombre_evento.toLowerCase() === event.toLowerCase()) {
+                navigate = true;
+                this.editarPublicacion(e.id_publicacion);
+                break;
+              }
+            }
+            break;
+          }
+          case 'eliminar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.publicaciones) {
+              if (e.nombre_evento.toLowerCase() === event.toLowerCase()) {
+                navigate = true;
+                this.eliminarPublicacion(e.id_publicacion);
+                break;
+              }
+            }
+            break;
+          }
+        }
+
+      }
+
+    };
+    this.recognition.start();
+
+    this.recognition.onend = () => {
+      this.recognition.stop();
+      if (navigate) {
+        this.recognition.onresult = () => {
+        };
+        return;
+      }
+      this.recognition.start();
+    };
+  }
+
   ngOnInit() {
+    this.initSpeech();
     this.getPublicaciones();
     this.formPublicacionesInit();
   }
