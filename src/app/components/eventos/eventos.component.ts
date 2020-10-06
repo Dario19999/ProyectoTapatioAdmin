@@ -71,8 +71,8 @@ export class EventosComponent implements OnInit, OnDestroy {
     speechRecognitionList.addFromString(`
       #JSGF V1.0;
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
-      public editar = editar evento;
-      public eliminar = eliminar evento;
+      public editar = editar;
+      public eliminar = eliminar;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
