@@ -198,16 +198,26 @@ export class BoletoEditarComponent implements OnInit {
     this.infoBoleto.inventario = this.formInfoBoleto.get('inventario').value;
     this.infoBoleto.precio = this.formInfoBoleto.get('precio').value;
 
-    this.boletosService.modificarBoleto(this.infoBoleto).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
+
+    this.boletosService.buscarNombre(this.infoBoleto.nombre, this.infoBoleto.id).subscribe(datos => {
+      if(datos['estado'] == 0){
+        window.confirm(datos['mensaje']);
         return
       }
-      else if(datos['resultado'] == "OK"){
-        this.refresh();
-        window.confirm("Boleto modificado con éxito");
+      else if(datos['estado'] == 1){
+        this.boletosService.modificarBoleto(this.infoBoleto).subscribe( datos => {
+          if(datos['resultado'] == "ERROR"){
+            console.log("ERROR");
+            return
+          }
+          else if(datos['resultado'] == "OK"){
+            this.refresh();
+            window.confirm("Boleto modificado con éxito");
+          }
+        })
       }
-    })
+    });
+
   }
 
   crearPromoFecha(){

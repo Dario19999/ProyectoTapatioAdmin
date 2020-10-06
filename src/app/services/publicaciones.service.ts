@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class PublicacionesService {
 
-  url = "https://proyectotapatio.com/PT-API-P/publicaciones/";
-  // url = "http://localhost:8080/PT-API/publicaciones/";
+  // url = "https://proyectotapatio.com/PT-API-P/publicaciones/";
+  url = "http://localhost:8080/PT-API/publicaciones/";
 
   constructor(private http:HttpClient) { }
 
@@ -52,7 +52,7 @@ export class PublicacionesService {
     return this.http.get(`${this.url}buscarPublicacion.php?nombre_pub=${nombre}`).pipe(retry(3))
   }
 
-  buscarNombre( nombre:string ){
-    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}`).pipe(retry(3))
+  buscarNombre( nombre:string, id:number = null ){
+    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}&id=${id}`).pipe(retry(3))
   }
 }

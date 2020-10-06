@@ -12,33 +12,45 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-6 text-center">
-                    <h5>Inventario</h5>
+                <div class="col-md-3 text-center">
+                    <h5>Inventario Inicial</h5>
                     <h6> {{boleto.stock_boleto}} </h6>
                 </div>
-                <div class="col-md-6 text-center">
+                <div class="col-md-3 text-center">
+                    <h5>Inventario Actual</h5>
+                    <h6> {{boleto.stock_act_boleto}} </h6>
+                </div>
+                <div class="col-md-3 text-center">
+                    <h5>Inventario de Repartidores</h5>
+                    <h6> {{boleto.stock_repartidor}} </h6>
+                </div>
+                <div class="col-md-3 text-center">
                     <h5>Precio por boleto.</h5>
-                    <h6> ${{boleto.precio_bol}}.00</h6>
+                    <h6> {{boleto.precio_bol | currency:'MXN':'symbol'}}</h6>
                 </div>
             </div>
         </div>
         <div class="card-footer">
             <h5 class="text-center">Promociones</h5>
             <div class="row">
-                <div class="col-md-8 d-block mx-auto">
-                    <table class="table table-bordered table-sm">
+                <div class="col-md-10 d-block mx-auto">
+                    <table class="table table-bordered">
                         <thead class="text-center">
                             <tr>
                                 <th scope="col" style="width: 20%;">Tipo</th>
-                                <th scope="col" style="width: 40%;">Parametros</th>
-                                <th scope="col" style="width: 20%;">Precio</th>
-                                <th scope="col" style="width: 20%;">Acciones</th>
+                                <th scope="col" style="width: 30%;">Parametros</th>
+                                <th scope="col" style="width: 15%;">Stock Inicial</th>
+                                <th scope="col" style="width: 15%;">Stock Actual</th>
+                                <th scope="col" style="width: 10%;">Precio</th>
+                                <th scope="col" style="width: 10%;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
                             <tr *ngFor="let promo of promosFechas">
                                 <td class="align-middle">Por Fechas</td>
                                 <td class="align-middle">({{ promo.fec_ini_pro }}) - ({{ promo.fec_fin_pro }})</td>
+                                <td class="align-middle"> {{promo.cantidad_fec}} </td>
+                                <td class="align-middle"> {{promo.cantidad_act_fec}} </td>
                                 <td class="align-middle">{{promo.precio_fec | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoFechas( promo.id_promo_fec )">Eliminar</button>
@@ -50,6 +62,8 @@
                                     <h6>Boleto de referencia:</h6>
                                     {{promo.fk_boleto_ref}}
                                 </td>
+                                <td class="align-middle"> {{promo.cantidad_eve}} </td>
+                                <td class="align-middle"> {{promo.cantidad_act_eve}} </td>
                                 <td class="align-middle"> {{promo.precio_eve | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoReferencia( promo.id_promo_eve )">Eliminar</button>
@@ -58,6 +72,8 @@
                             <tr *ngFor="let promo of promosCodigo">
                                 <td class="align-middle">Por Codigo</td>
                                 <td class="align-middle">Código: {{promo.codigo}}</td>
+                                <td class="align-middle"> {{promo.cantidad_cod}} </td>
+                                <td class="align-middle"> {{promo.cantidad_act_cod}} </td>
                                 <td class="align-middle">{{promo.precio_cod | currency:'MXN':'symbol'}}</td>
                                 <td class="align-middle">
                                     <button type="button" class="btn btn-danger" (click)="eliminarPromoCodigo( promo.id_pro_cod )">Eliminar</button>

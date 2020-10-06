@@ -167,11 +167,27 @@ export class EventosComponent implements OnInit, OnDestroy {
 
   eliminarEvento(id: number) {
     if (confirm('Está seguro de querer eliminar este evento?')) {
-      this.eventosService.eliminarEvento(id).subscribe(datos => {
-        if (datos['resultado'] == 'OK') {
-          this.getEventos();
+      this.eventosService.buscarBoletos(id).subscribe(res => {
+        if(res == 0){
+          window.confirm("El evento tiene boletos. No es posible eliminar el evento.");
+          return
         }
-      });
+        else{
+          this.eventosService.eliminarEvento(id).subscribe(datos => {
+            if (datos['resultado'] == 'OK') {
+              this.getEventos();
+            }
+          });
+        }
+      })
+    }
+  }
+
+  cancelarEvento(id_evento:number){
+    if (confirm('Está seguro de querer cancelar este evento?')) {
+      this.eventosService.cancelarEvento(id_evento).subscribe(() => {
+        this.getEventos();
+      })
     }
   }
 
@@ -394,10 +410,6 @@ export class EventosComponent implements OnInit, OnDestroy {
         this.cerrarModalError.nativeElement.click();
       }
     });
-  }
-
-  cancelarEvento(id_evento: number) {
-
   }
 
   guardarEvento() {

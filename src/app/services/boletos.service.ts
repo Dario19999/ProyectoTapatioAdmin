@@ -8,14 +8,18 @@ import { serialize } from 'object-to-formdata';
 })
 export class BoletosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/boletos/";
-  // url = "http://localhost:8080/PT-API/boletos/";
+  // url = "https://proyectotapatio.com/PT-API-P/boletos/";
+  url = "http://localhost:8080/PT-API/boletos/";
 
   constructor(private http:HttpClient) { }
 
   crearBoleto( boleto:any ){
     const BOLETO_FD = serialize(boleto);
     return this.http.post(`${this.url}crearBoleto.php`, BOLETO_FD).pipe(retry(3))
+  }
+
+  buscarNombre( nombre:string, id:number = null ){
+    return this.http.get(`${this.url}consultaNombre.php?nombre=${nombre}&id=${id}`).pipe(retry(3))
   }
 
   crearPromoFecha( datos:any ){

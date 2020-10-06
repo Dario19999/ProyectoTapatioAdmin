@@ -144,7 +144,7 @@ export class PublicacionEditarComponent implements OnInit {
     this.infoPub.titulo = this.formInfoP.get('titulo').value;
     this.infoPub.articulo = this.formInfoP.get('articulo').value;
 
-    this.publicacionesService.buscarNombre(this.formInfoP.get('titulo').value).subscribe(datos => {
+    this.publicacionesService.buscarNombre(this.formInfoP.get('titulo').value, this.infoPub.id).subscribe(datos => {
       if(datos['estado'] == 0){
         this.errorNombre = datos['mensaje'];
         window.confirm(this.errorNombre);

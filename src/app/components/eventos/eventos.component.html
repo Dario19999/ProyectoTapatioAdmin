@@ -27,9 +27,10 @@
                     <tr>
                         <th scope="col" style="width: 10%;">ID</th>
                         <th scope="col" style="width: 20%;">Nombre</th>
-                        <th scope="col" style="width: 30%;">Descripcion</th>
-                        <th scope="col" style="width: 20%;">Orden de anuncio</th>
-                        <th scope="col" style="width: 20%;">Acciones</th>
+                        <th scope="col" style="width: 20%;">Descripcion</th>
+                        <th scope="col" style="width: 10%;">Estado</th>
+                        <th scope="col" style="width: 10%;">Orden de anuncio</th>
+                        <th scope="col" style="width: 30%;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -37,6 +38,10 @@
                         <th scope="row" class="align-middle">{{ resultado.id_evento }}</th>
                         <td class="align-middle">{{ resultado.nombre_evento }}</td>
                         <td class="align-middle text-left">{{ resultado.descripcion_evento }}</td>
+                        <td class="align-middle text-left text-danger" *ngIf="resultado.estado_evento == 0">Sin Boletos</td>
+                        <td class="align-middle text-left text-success" *ngIf="resultado.estado_evento == 1">Activo</td>
+                        <td class="align-middle text-left text-danger" *ngIf="resultado.estado_evento == 2">Cancelado</td>
+                        <td class="align-middle text-left text-primary" *ngIf="resultado.estado_evento == 3">Finalizado</td>
                         <td class="align-middle">{{ resultado.orden_anuncio }}</td>
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarEvento( resultado.id_evento )">Editar</button>
@@ -54,7 +59,8 @@
             <tr>
                 <th scope="col" style="width: 10%;">ID</th>
                 <th scope="col" style="width: 20%;">Nombre</th>
-                <th scope="col" style="width: 30%;">Descripcion</th>
+                <th scope="col" style="width: 20%;">Descripcion</th>
+                <th scope="col" style="width: 10%;">Estado</th>
                 <th scope="col" style="width: 10%;">Orden de anuncio</th>
                 <th scope="col" style="width: 30%;">Acciones</th>
             </tr>
@@ -64,6 +70,10 @@
                 <th scope="row" class="align-middle">{{ evento.id_evento }}</th>
                 <td class="align-middle">{{ evento.nombre_evento }}</td>
                 <td class="align-middle text-left">{{ evento.descripcion_evento }}</td>
+                <td class="align-middle text-left text-danger" *ngIf="evento.estado_evento == 0">Sin Boletos</td>
+                <td class="align-middle text-left text-success" *ngIf="evento.estado_evento == 1">Activo</td>
+                <td class="align-middle text-left text-danger" *ngIf="evento.estado_evento == 2">Cancelado</td>
+                <td class="align-middle text-left text-primary" *ngIf="evento.estado_evento == 3">Finalizado</td>
                 <td class="align-middle">{{ evento.orden_anuncio }}</td>
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>

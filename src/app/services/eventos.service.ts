@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class EventosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/eventos/";
-  // url = "http://localhost:8080/PT-API/eventos/";
+  // url = "https://proyectotapatio.com/PT-API-P/eventos/";
+  url = "http://localhost:8080/PT-API/eventos/";
 
   eventos = null;
 
@@ -55,8 +55,16 @@ export class EventosService {
     return this.http.post(`${this.url}modificarImgsEvento.php`, IMGSEVENTO_FD).pipe(retry(3))
   }
 
+  buscarBoletos(id_evento:number){
+    return this.http.get(`${this.url}consultaBoletos.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
   eliminarEvento( id:number ){
     return this.http.get(`${this.url}eliminarEvento.php?id=${id}`).pipe(retry(3))
+  }
+
+  cancelarEvento(id_evento:number){
+    return this.http.get(`${this.url}cancelarEvento.php?id_evento=${id_evento}`).pipe(retry(3))
   }
 
   buscarEvento( nombre:string ){

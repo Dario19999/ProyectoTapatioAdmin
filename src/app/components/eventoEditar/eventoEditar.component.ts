@@ -357,7 +357,7 @@ export class EventoEditarComponent implements OnInit {
   }
 
   get validacionTamImgs(){
-    return this.formImgE.get('imgsEvento').invalid && this.formImgE.get('imgsEvento').dirty
+    return this.formImgE.get('imgsEvento').invalid
   }
 
   get validacionTamImgCarousel(){
@@ -480,17 +480,28 @@ export class EventoEditarComponent implements OnInit {
     this.boletoEvento.inventario = this.formBoletos.get('inventario').value;
     this.boletoEvento.precio = this.formBoletos.get('precio').value;
 
-    this.boletosService.crearBoleto(this.boletoEvento).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
+    this.boletosService.buscarNombre(this.boletoEvento.nombre, this.boletoEvento.id).subscribe(datos => {
+      if(datos['estado'] == 0){
+        this.errorNombre = datos['mensaje'];
+        window.confirm(this.errorNombre);
         return
       }
-      else if(datos['resultado'] == "OK"){
-        this.refresh();
-        window.confirm("Boleto creado con éxito");
-        this.formBoletos.reset();
+      else if(datos['estado'] == 1){
+        this.boletosService.crearBoleto(this.boletoEvento).subscribe( datos => {
+          if(datos['resultado'] == "ERROR"){
+            console.log("ERROR");
+            return
+          }
+          else if(datos['resultado'] == "OK"){
+            this.refresh();
+            window.confirm("Boleto creado con éxito");
+            this.formBoletos.reset();
+          }
+        })
       }
-    })
+    });
+
+
   }
 
   imgPrincipal(event){
@@ -529,18 +540,22 @@ export class EventoEditarComponent implements OnInit {
       for (let i = 0; i < event.target.files.length; i++) {
         var reader = new FileReader();
 
-        reader.onload = (event:any) => {
-          this.urls.push(event.target.result);
-        }
         reader.readAsDataURL(event.target.files[i]);
+        reader.onload = (event:any) => {
+          if(!this.validacionTamImgs){
+            this.urls.push(event.target.result);
+          }
+        }
 
         var selectedFile = event.target.files[i];
-        this.imgsSeleccionadas.push(selectedFile);
-        this.listaImg.push(selectedFile.name)
+
+        if(!this.validacionTamImgs){
+          this.imgsSeleccionadas.push(selectedFile);
+        }
       }
     }
-    this.formImgE.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
-
+    console.log(this.imgsSeleccionadas);
+    // this.formImgE.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
   }
 
   borrarImgPrincipal(){
