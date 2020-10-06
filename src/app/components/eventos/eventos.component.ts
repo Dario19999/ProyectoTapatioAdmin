@@ -73,6 +73,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
       public editar = editar;
       public eliminar = eliminar;
+      public cancelar = cancelar;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
@@ -134,6 +135,22 @@ export class EventosComponent implements OnInit, OnDestroy {
                 break;
               }
             }
+            break;
+          }
+          case 'cancelar': {
+
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.eventos) {
+              if (e.id_evento == event) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.cancelarEvento(e.id_evento);
+                });
+                break;
+              }
+            }
+
             break;
           }
         }
