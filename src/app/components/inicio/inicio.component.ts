@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 declare var webkitSpeechRecognition;
@@ -13,7 +13,8 @@ export class InicioComponent implements OnInit, OnDestroy {
 
   recognition: SpeechRecognition;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private ngZone: NgZone) {
+  }
 
   initSpeech() {
     const SpeechRecognition = webkitSpeechRecognition;
@@ -36,27 +37,28 @@ export class InicioComponent implements OnInit, OnDestroy {
     let navigate = false;
     this.recognition.onresult = ev => {
       const command = ev.results[0][0].transcript.split(' ');
-      console.log('hmmm');
       if (command.length >= 2) {
-        console.log(command);
-        switch (command[1]) {
-          case 'eventos':
-            this.router.navigate(['eventos']);
-            navigate = true;
-            break;
-          case 'publicaciones':
-            this.router.navigate(['publicaciones']);
-            navigate = true;
-            break;
-          case 'usuarios':
-            this.router.navigate(['usuarios']);
-            navigate = true;
-            break;
-          case 'repartidores':
-            this.router.navigate(['repartidores']);
-            navigate = true;
-            break;
-        }
+
+        this.ngZone.run(() => {
+          switch (command[1]) {
+            case 'eventos':
+              this.router.navigate(['eventos']);
+              navigate = true;
+              break;
+            case 'publicaciones':
+              this.router.navigate(['publicaciones']);
+              navigate = true;
+              break;
+            case 'usuarios':
+              this.router.navigate(['usuarios']);
+              navigate = true;
+              break;
+            case 'repartidores':
+              this.router.navigate(['repartidores']);
+              navigate = true;
+              break;
+          }
+        });
       }
     };
     this.recognition.start();
@@ -64,14 +66,16 @@ export class InicioComponent implements OnInit, OnDestroy {
     this.recognition.onend = () => {
       this.recognition.stop();
       if (navigate) {
-        this.recognition.onresult = () => {};
+        this.recognition.onresult = () => {
+        };
       }
       this.recognition.start();
     };
   }
 
   ngOnDestroy() {
-    this.recognition.onend = () => {};
+    this.recognition.onend = () => {
+    };
     this.recognition.stop();
     this.recognition.onresult = () => {
     };
