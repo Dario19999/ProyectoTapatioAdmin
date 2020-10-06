@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, NgZone} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {EventosService} from '../../services/eventos.service';
@@ -46,14 +46,18 @@ export class EventosComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private router: Router,
-              private eventosService: EventosService) {
+              private eventosService: EventosService,
+              private ngZone: NgZone) {
   }
 
   ngOnDestroy() {
-    this.recognition.onend = () => {};
-    this.recognition.stop();
+    this.recognition.onend = () => {
+    };
     this.recognition.onresult = () => {
     };
+
+    this.recognition.abort();
+    this.recognition = null;
   }
 
   initSpeech() {
@@ -67,8 +71,8 @@ export class EventosComponent implements OnInit, OnDestroy {
     speechRecognitionList.addFromString(`
       #JSGF V1.0;
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
-      public editar = editar evento;
-      public eliminar = eliminar evento;
+      public editar = editar;
+      public eliminar = eliminar;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
@@ -78,33 +82,41 @@ export class EventosComponent implements OnInit, OnDestroy {
     this.recognition.maxAlternatives = 1;
     let navigate = false;
     this.recognition.onresult = ev => {
+      if (navigate) {
+        return;
+      }
       const command = ev.results[0][0].transcript.split(' ');
       if (command.length >= 2) {
 
         switch (command[0]) {
           case 'ver':
-            switch (command[1]) {
-              case 'publicaciones':
-                this.router.navigate(['publicaciones']);
-                navigate = true;
-                break;
-              case 'usuarios':
-                this.router.navigate(['usuarios']);
-                navigate = true;
-                break;
-              case 'repartidores':
-                this.router.navigate(['repartidores']);
-                navigate = true;
-                break;
-            }
+            this.ngZone.run(() => {
+
+              switch (command[1]) {
+                case 'publicaciones':
+                  this.router.navigate(['publicaciones']);
+                  navigate = true;
+                  break;
+                case 'usuarios':
+                  this.router.navigate(['usuarios']);
+                  navigate = true;
+                  break;
+                case 'repartidores':
+                  this.router.navigate(['repartidores']);
+                  navigate = true;
+                  break;
+              }
+            });
             break;
           case 'editar': {
             const event = command.slice(1, command.length).join(' ');
 
             for (const e of this.eventos) {
-              if (e.nombre_evento.toLowerCase() === event.toLowerCase()) {
+              if (e.id_evento == event) {
                 navigate = true;
-                this.editarEvento(e.id_evento);
+                this.ngZone.run(() => {
+                  this.editarEvento(e.id_evento);
+                });
                 break;
               }
             }
@@ -114,9 +126,11 @@ export class EventosComponent implements OnInit, OnDestroy {
             const event = command.slice(1, command.length).join(' ');
 
             for (const e of this.eventos) {
-              if (e.nombre_evento.toLowerCase() === event.toLowerCase()) {
+              if (e.id_evento == event) {
                 navigate = true;
-                this.eliminarEvento(e.id_evento);
+                this.ngZone.run(() => {
+                  this.eliminarEvento(e.id_evento);
+                });
                 break;
               }
             }

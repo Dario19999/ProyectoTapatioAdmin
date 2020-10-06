@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { UsuariosService } from '../../services/usuarios.service';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {UsuariosService} from '../../services/usuarios.service';
 import {Router} from '@angular/router';
 
 declare var webkitSpeechRecognition;
@@ -15,7 +15,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   usuarios = null;
   busqueda = null;
 
-  encontrado:boolean = null;
+  encontrado: boolean = null;
 
   recognition: SpeechRecognition;
 
@@ -23,9 +23,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     id_usuario: null,
     nombre: null,
     correo: null
-  }
+  };
 
-  constructor(private usuariosService:UsuariosService, private router: Router){ }
+  constructor(private usuariosService: UsuariosService, private router: Router, private ngZone: NgZone) {
+  }
 
 
   initSpeech() {
@@ -49,23 +50,23 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     let navigate = false;
     this.recognition.onresult = ev => {
       const command = ev.results[0][0].transcript.split(' ');
-      console.log('hmmm');
       if (command.length >= 2) {
-        console.log(command);
-        switch (command[1]) {
-          case 'eventos':
-            this.router.navigate(['eventos']);
-            navigate = true;
-            break;
-          case 'publicaciones':
-            this.router.navigate(['publicaciones']);
-            navigate = true;
-            break;
-          case 'repartidores':
-            this.router.navigate(['repartidores']);
-            navigate = true;
-            break;
-        }
+        this.ngZone.run(() => {
+          switch (command[1]) {
+            case 'eventos':
+              this.router.navigate(['/eventos']);
+              navigate = true;
+              break;
+            case 'publicaciones':
+              this.router.navigate(['/publicaciones']);
+              navigate = true;
+              break;
+            case 'repartidores':
+              this.router.navigate(['/repartidores']);
+              navigate = true;
+              break;
+          }
+        });
       }
     };
     this.recognition.start();
@@ -73,17 +74,21 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.recognition.onend = () => {
       this.recognition.stop();
       if (navigate) {
-        this.recognition.onresult = () => {};
+        this.recognition.onresult = () => {
+        };
       }
       this.recognition.start();
     };
   }
 
   ngOnDestroy() {
-    this.recognition.onend = () => {};
-    this.recognition.stop();
+    this.recognition.onend = () => {
+    };
     this.recognition.onresult = () => {
     };
+
+    this.recognition.abort();
+    this.recognition = null;
   }
 
   ngOnInit() {
@@ -91,20 +96,18 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.getUsuarios();
   }
 
-  getUsuarios(){
-    this.usuariosService.getUsuarios().subscribe( resultado => this.usuarios = resultado );
+  getUsuarios() {
+    this.usuariosService.getUsuarios().subscribe(resultado => this.usuarios = resultado);
   }
 
-  buscarUsuario(nombre:string){
-    if(nombre == null || nombre == ""){
-      return null
-    }
-    else{
-      this.usuariosService.buscarUsuario(nombre).subscribe( resultado => {
-        if(resultado == null){
+  buscarUsuario(nombre: string) {
+    if (nombre == null || nombre == '') {
+      return null;
+    } else {
+      this.usuariosService.buscarUsuario(nombre).subscribe(resultado => {
+        if (resultado == null) {
           this.encontrado = false;
-        }
-        else{
+        } else {
           this.busqueda = resultado;
           this.encontrado = true;
         }
@@ -113,10 +116,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
   }
 
-  eliminarUsuario(id:number){
-    if(confirm("Está seguro de querer eliminar a este usuario?")){
+  eliminarUsuario(id: number) {
+    if (confirm('Está seguro de querer eliminar a este usuario?')) {
       this.usuariosService.eliminarUsuario(id).subscribe(datos => {
-        if (datos['resultado']=='OK') {
+        if (datos['resultado'] == 'OK') {
           this.getUsuarios();
         }
       });
