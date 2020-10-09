@@ -22,7 +22,7 @@
                                 <th scope="row" class="align-middle"> {{carga.id_stock}} </th>
                                 <td class="align-middle"> {{carga.stock_adm}} </td>
                                 <td class="align-middle"> {{carga.nombre_boleto}} </td>
-                                <td class="align-middle"> {{carga.fecha_historial | date:'dd/mm/yyyy h:mm a'}} </td>
+                                <td class="align-middle"> {{carga.fecha_historial}} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -46,7 +46,7 @@
                                         <th scope="col" style="width: 5%;">ID</th>
                                         <th scope="col" style="width: 20%;">Boleto</th>
                                         <th scope="col" style="width: 15%;">Stock Inicial</th>
-                                        <th scope="col" style="width: 15%;">Stock Actual</th>
+                                        <th scope="col" style="width: 15%;">Stock de Repartidores</th>
                                         <th scope="col" style="width: 20%;">Estado</th>
                                     </tr>
                                 </thead>
@@ -55,7 +55,7 @@
                                         <th scope="row" class="align-middle"> {{boleto.id_boleto}} </th>
                                         <td class="align-middle"> {{boleto.nom_bol}} </td>
                                         <td class="align-middle"> {{boleto.stock_boleto}} </td>
-                                        <td class="align-middle"> {{boleto.stock_act_boleto}} </td>
+                                        <td class="align-middle"> {{boleto.stock_repartidor}} </td>
                                         <td class="align-middle text-danger" *ngIf="boleto.stock_act_boleto == 0">Agotado</td>
                                         <td class="align-middle text-success" *ngIf="boleto.stock_act_boleto > 0">Disponible</td>
                                     </tr>

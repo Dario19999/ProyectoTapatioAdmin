@@ -121,19 +121,25 @@ export class RepartidorEditarComponent implements OnInit {
   }
 
   guardarInfo(){
-    console.log(this.formInfo.value);
-    this.repartidoresService.modificarRepartidor(this.formInfo.value).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
-        return
-      }else if(datos['resultado'] == "OK"){
-        this.activatedRoute.params.subscribe( params => {
-          this.repartidoresService.getRepartidor(params['id']).subscribe( resultado =>  this.repartidor = resultado[0]);
-        });
-        window.confirm("Información modificada con éxito");
-      }
-    })
-
+    this.activatedRoute.params.subscribe( params => {
+      this.repartidoresService.buscarCorreo(this.formInfo.get('correo').value, params['id']).subscribe(datos => {
+        if(datos['estado'] == 0){
+          window.confirm(datos['mensaje']);
+          return
+        }
+        else if(datos['estado'] == 1){
+          this.repartidoresService.modificarRepartidor(this.formInfo.value).subscribe( datos => {
+              if(datos['resultado'] == "ERROR"){
+                console.log("ERROR");
+                return
+              }else if(datos['resultado'] == "OK"){
+                this.repartidoresService.getRepartidor(params['id']).subscribe( resultado =>  this.repartidor = resultado[0]);
+                window.confirm("Información modificada con éxito");
+              }
+          })
+        }
+      });
+    });
   }
 
   passNoValida(){
@@ -152,7 +158,6 @@ export class RepartidorEditarComponent implements OnInit {
   getEventos(){
     this.eventosService.getEventos(2).subscribe( resultado => {
       this.eventos = resultado
-      console.log(this.eventos );
     });
   }
 

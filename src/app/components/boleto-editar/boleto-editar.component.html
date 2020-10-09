@@ -130,6 +130,12 @@
                                         <input type="number" min="0" step="1" value="0" id="precio" class="form-control" formControlName="precio">
                                     </div>
                                 </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-6 d-block mx-auto text-center">
+                                        <label for="stock">Agregar o Quitar Stock de Boletos:</label>
+                                        <input #stock type="number" step="1" class="form-control text-center" value="0" id="stock" formControlName="stock">
+                                    </div>
+                                </div>
                                 <div class="input-group form-row mb-3">
                                     <div class="col-md-12 text-center">
                                         <button class="btn btn-success" type="submit">Guardar cambios</button>

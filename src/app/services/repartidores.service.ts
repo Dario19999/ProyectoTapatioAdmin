@@ -51,4 +51,9 @@ export class RepartidoresService {
   getBoletos( id:number ){
     return this.http.get(`${this.url}getBoletos.php?id_rep=${id}`).pipe(retry(3))
   }
+
+  buscarCorreo( correo:string, id:number = null ){
+    return this.http.get(`${this.url}consultaCorreo.php?correo=${correo}&id=${id}`).pipe(retry(3))
+  }
+
 }

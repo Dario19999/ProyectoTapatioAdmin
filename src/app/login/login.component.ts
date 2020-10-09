@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
               private router:Router) { }
 
   ngOnInit() {
+    this.loginService.setEstadoSesion(false);
     this.formLoginInit();
   }
 
@@ -59,6 +60,8 @@ export class LoginComponent implements OnInit {
             let id = datos['id_usuario'];
 
             localStorage.setItem("id_admin", id);
+
+            this.loginService.setEstadoSesion(true);
 
             this.router.navigate(['/inicio']);
           }

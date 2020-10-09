@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuariosService } from '../services/usuarios.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,16 +11,21 @@ export class LayoutComponent implements OnInit {
 
   id:string = null;
   usuario:any = {};
+  loggedIn:boolean = false;
 
   constructor(private usuariosService:UsuariosService,
+              private loginService:LoginService,
               private router:Router) { }
 
   ngOnInit(): void {
     this.id = localStorage.getItem("id_admin");
-    if(this.id == null  || this.usuario == {}){
-      this.cerrarSesion();
-    }
-    this.getAdmin();
+
+    // this.loggedIn = this.loginService.getEstadoSesion();
+
+    // if(this.loggedIn == false){
+    //   this.cerrarSesion();
+    // }
+    // this.getAdmin();
   }
 
   getAdmin(){

@@ -224,21 +224,29 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
       return;
     } else {
 
-      let nombre = this.formRepartidor.get('nombre').value;
-      let apellidoP = this.formRepartidor.get('apellidoP').value;
-      let apellidoM = this.formRepartidor.get('apellidoM').value;
+      this.repartidoresService.buscarCorreo(this.formRepartidor.get('correo').value).subscribe(datos => {
+        if(datos['estado'] == 0){
+          window.confirm(datos['mensaje']);
+          return
+        }
+        else if(datos['estado'] == 1){
+          let nombre = this.formRepartidor.get('nombre').value;
+          let apellidoP = this.formRepartidor.get('apellidoP').value;
+          let apellidoM = this.formRepartidor.get('apellidoM').value;
 
-      this.formRepartidor.controls['nombre'].setValue(nombre + ' ' + apellidoP + ' ' + apellidoM);
+          this.formRepartidor.controls['nombre'].setValue(nombre + ' ' + apellidoP + ' ' + apellidoM);
 
-      this.repartidoresService.crearRepartidor(this.formRepartidor.value).subscribe(datos => {
-        if (datos['resultado'] == 'ERROR') {
-          console.log('ERROR');
-          return;
-        } else if (datos['resultado'] == 'OK') {
-          this.getRepartidores();
-          this.formRepartidor.reset();
+          this.repartidoresService.crearRepartidor(this.formRepartidor.value).subscribe(datos => {
+            if (datos['resultado'] == 'ERROR') {
+              console.log('ERROR');
+              return;
+            } else if (datos['resultado'] == 'OK') {
+              this.getRepartidores();
+              this.formRepartidor.reset();
 
-          this.cerrar.nativeElement.click();
+              this.cerrar.nativeElement.click();
+            }
+          });
         }
       });
     }
