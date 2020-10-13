@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class BoletosService {
 
-  // url = "https://proyectotapatio.com/PT-API-P/boletos/";
-  url = "http://localhost:8080/PT-API/boletos/";
+  url = "https://proyectotapatio.com/PT-API-P/boletos/";
+  // url = "http://localhost:8080/PT-API/boletos/";
 
   constructor(private http:HttpClient) { }
 
@@ -84,5 +84,9 @@ export class BoletosService {
 
   getBoletosTodos(){
     return this.http.get(`${this.url}getBoletosTodos.php`).pipe(retry(3))
+  }
+
+  validarPromo(id_boleto:number, inventario:number, precio:number){
+    return this.http.get(`${this.url}validarPromo.php?id=${id_boleto}&inventario=${inventario}&precio=${precio}`).pipe(retry(3))
   }
 }

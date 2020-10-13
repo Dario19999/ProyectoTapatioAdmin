@@ -157,7 +157,7 @@
                         <div class="col-md-12">
                             <label for="contra">Contraseña: <small class="text-danger">*</small></label>
                             <input type="password" class="form-control" id="contra" placeholder="Ingrese la Contraseña del Repartidor/a" formControlName="contra" [class.is-invalid]="validacionContra">
-                            <small *ngIf="validacionContra" class="form-text text-danger">Contraseña Obligatoria.</small>
+                            <small *ngIf="validacionContra" class="form-text text-danger">La contraseña debe contener al menos una mayuscula, una minuscula y un numero.</small>
                         </div>
                     </div>
 

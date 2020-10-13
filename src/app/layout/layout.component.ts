@@ -20,12 +20,12 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.id = localStorage.getItem("id_admin");
 
-    // this.loggedIn = this.loginService.getEstadoSesion();
+    this.loggedIn = this.loginService.getEstadoSesion();
 
-    // if(this.loggedIn == false){
-    //   this.cerrarSesion();
-    // }
-    // this.getAdmin();
+    if(this.id == null || this.usuario == {}){
+      this.cerrarSesion();
+    }
+    this.getAdmin();
   }
 
   getAdmin(){

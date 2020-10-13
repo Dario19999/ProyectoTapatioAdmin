@@ -49,7 +49,7 @@ export class BoletoEditarComponent implements OnInit {
   }
 
   infoPromoCodigo:any = {
-    id: null,
+    id_boleto: null,
     codigo:null,
     inventario:null,
     precio:null
@@ -89,7 +89,7 @@ export class BoletoEditarComponent implements OnInit {
 
       this.formPromoReferencia.addControl('boleto', this.fb.control(null));
       this.formPromoReferencia.get('boleto').setValue(params['id']);
-      this.infoPromoCodigo.id = params['id'];
+      this.infoPromoCodigo.id_boleto = params['id'];
       this.infoBoleto.id = params['id'];
       this.infoPromoFechas.id_boleto = params['id'];
 
@@ -102,7 +102,7 @@ export class BoletoEditarComponent implements OnInit {
       nombre:['',],
       desc:['',],
       inventario:['',],
-      precio:['',]
+      precio:['',],
     })
   }
 
@@ -226,28 +226,43 @@ export class BoletoEditarComponent implements OnInit {
     this.infoPromoFechas.inventario = this.formPromoFechas.get('inventarioFechas').value
     this.infoPromoFechas.precio = this.formPromoFechas.get('precioFechas').value
 
-    this.boletosService.crearPromoFecha(this.infoPromoFechas).subscribe( datos => {
-      if(datos['estado'] == -1){
-        window.confirm(datos['mensaje']);
-        return
-      }
-      else if(datos['estado'] == 0){
-        window.confirm(datos['mensaje']);
+    this.boletosService.validarPromo(this.infoPromoFechas.id_boleto, this.infoPromoFechas.inventario, this.infoPromoFechas.precio).subscribe(datos => {
+      if(datos['resultado'] == "ERROR"){
+        window.confirm("Ha ocurrio un error inesperado. Intentelo más tarde");
         return
       }
       else{
-        if(datos['resultado'] == "ERROR"){
-          window.confirm("Ha habido un error.");
+        if(datos['estado'] == 0){
+          window.confirm(datos['mensaje']);
           return
         }
-        else if(datos['resultado'] == "OK"){
-          this.refresh();
-          this.formPromoFechas.reset();
-          window.confirm("Promoción creada con éxito.");
-          this.cerrarFechas.nativeElement.click();
+        else{
+          this.boletosService.crearPromoFecha(this.infoPromoFechas).subscribe( datos => {
+            if(datos['estado'] == -1){
+              window.confirm(datos['mensaje']);
+              return
+            }
+            else if(datos['estado'] == 0){
+              window.confirm(datos['mensaje']);
+              return
+            }
+            else{
+              if(datos['resultado'] == "ERROR"){
+                window.confirm("Ha habido un error.");
+                return
+              }
+              else if(datos['resultado'] == "OK"){
+                this.refresh();
+                this.formPromoFechas.reset();
+                window.confirm("Promoción creada con éxito.");
+                this.cerrarFechas.nativeElement.click();
+              }
+            }
+          })
         }
       }
     })
+
   }
 
   crearPromoCodigo(){
@@ -255,47 +270,81 @@ export class BoletoEditarComponent implements OnInit {
     this.infoPromoCodigo.inventario = this.formPromoCodigo.get('inventarioCodigo').value;
     this.infoPromoCodigo.precio = this.formPromoCodigo.get('precioCodigo').value;
 
-    this.boletosService.buscarCodigo(this.infoPromoCodigo.codigo).subscribe(datos => {
-      if(datos['estado'] == 0){
-        this.errorCodigo = datos['mensaje'];
-        window.confirm(this.errorCodigo);
+    this.boletosService.validarPromo(this.infoPromoCodigo.id_boleto, this.infoPromoCodigo.inventario, this.infoPromoCodigo.precio).subscribe(datos => {
+      if(datos['resultado'] == "ERROR"){
+        window.confirm("Ha ocurrio un error inesperado. Intentelo más tarde");
+        return
       }
-      else if(datos['estado'] == 1){
-        this.boletosService.crearPromoCodigo(this.infoPromoCodigo).subscribe( datos => {
-          if(datos['resultado'] == "ERROR"){
-            console.log("ERROR");
-            return
-          }
-          else if(datos['resultado'] == "OK"){
-            this.refresh();
-            this.formPromoCodigo.reset()
-            window.confirm("Promocion creada con éxito");
-            this.cerrarCodigo.nativeElement.click();
-          }
-        });
+      else{
+        if(datos['estado'] == 0){
+          window.confirm(datos['mensaje']);
+          return
+        }
+        else{
+          this.boletosService.buscarCodigo(this.infoPromoCodigo.codigo).subscribe(datos => {
+            if(datos['estado'] == 0){
+              this.errorCodigo = datos['mensaje'];
+              window.confirm(this.errorCodigo);
+            }
+            else if(datos['estado'] == 1){
+              this.boletosService.crearPromoCodigo(this.infoPromoCodigo).subscribe( datos => {
+                if(datos['resultado'] == "ERROR"){
+                  console.log("ERROR");
+                  return
+                }
+                else if(datos['resultado'] == "OK"){
+                  this.refresh();
+                  this.formPromoCodigo.reset()
+                  window.confirm("Promocion creada con éxito");
+                  this.cerrarCodigo.nativeElement.click();
+                }
+              });
+            }
+          });
+        }
       }
-    });
+    })
   }
 
   crearPromoReferecnia(){
+
     if(this.formPromoReferencia.get('boleto').value == this.formPromoReferencia.get('boletoReferencia').value ){
       window.confirm("No puede elegir el mismo boleto dos veces.");
       return
     }
     else{
-      this.boletosService.crearPromoReferencia(this.formPromoReferencia.value).subscribe( datos => {
+      this.boletosService.validarPromo(this.formPromoReferencia.get("boleto").value, this.formPromoReferencia.get("inventarioReferencia").value, this.formPromoReferencia.get("precioReferencia").value).subscribe(datos => {
         if(datos['resultado'] == "ERROR"){
-          console.log("ERROR");
+          window.confirm("Ha ocurrio un error inesperado. Intentelo más tarde");
           return
         }
-        else if(datos['resultado'] == "OK"){
-          this.refresh();
-          this.formPromoReferencia.reset();
-          window.confirm("Promocion creada con éxito");
-          this.cerrarReferencia.nativeElement.click();
+        else{
+          if(datos['estado'] == 0){
+            window.confirm(datos['mensaje']);
+            return
+          }
+          else{
+            this.boletosService.crearPromoReferencia(this.formPromoReferencia.value).subscribe( datos => {
+              if(datos['resultado'] == "ERROR"){
+                console.log("ERROR");
+                return
+              }
+              else if(datos['resultado'] == "OK"){
+                this.refresh();
+                this.formPromoReferencia.reset();
+                this.activatedRoute.params.subscribe( params => {
+                  this.formPromoReferencia.get('boleto').setValue(params['id']);
+                });
+                window.confirm("Promocion creada con éxito");
+                this.cerrarReferencia.nativeElement.click();
+                window.location.reload()
+              }
+            })
+          }
         }
       })
     }
+
   }
 
   eliminarPromoFechas( id_promo:number ){

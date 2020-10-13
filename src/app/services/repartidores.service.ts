@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class RepartidoresService {
 
-  // url = "https://proyectotapatio.com/PT-API-P/repartidores/";
-  url = "http://localhost:8080/PT-API/repartidores/";
+  url = "https://proyectotapatio.com/PT-API-P/repartidores/";
+  // url = "http://localhost:8080/PT-API/repartidores/";
 
   constructor(private http:HttpClient) { }
 
