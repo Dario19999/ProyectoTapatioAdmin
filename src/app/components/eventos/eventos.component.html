@@ -107,7 +107,7 @@
                     <div class="form-row mb-3">
                         <div class="col-md-12">
                             <label for="nombreEvento">Nombre: <small class="text-danger">*</small></label>
-                            <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre || nombreExistente">
+                            <input type="text" class="form-control" id="nombreEvento" placeholder="Ingrese el Nombre del Evento" formControlName="nombre" [class.is-invalid]="validacionNombre">
                             <small *ngIf="validacionNombre" class="form-text text-danger">Obligatorio.</small>
                         </div>
                     </div>
@@ -182,7 +182,7 @@
                             <small *ngIf="validacionTamImg" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngIf="(urlPrincipal != null) && (!validacionTamImg)">
                                 <div class="col-md-9">
-                                    <img [src]="urlPrincipal" height="200" class="float-right"><br>
+                                    <img [src]="urlPrincipal" height="200" class="float-right" style="max-width: 300px; max-height: 150;"><br>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgPrincipal()">
@@ -201,7 +201,7 @@
                             <small *ngIf="validacionTamImgCarousel" class="form-text text-danger">Error: Tamaño mínimo 1250x690. Tamaño Máximo: 4096x2160</small>
                             <div class="row" *ngIf="(urlCarousel != null) && (!validacionTamImgCarousel)">
                                 <div class="col-md-9">
-                                    <img [src]="urlCarousel" height="200" class="float-right"><br>
+                                    <img [src]="urlCarousel" height="200" class="float-right" style="max-width: 300px; max-height: 150;"><br>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgCarousel()">
@@ -215,22 +215,24 @@
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
                             <label for="imgsEvento">Imagenes del Evento: <small class="text-danger">*</small></label>
-                            <input #imgsInput [writeFile]="true" type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
+                            <input #imgsInput type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
                             <small *ngIf="validacionImgs" class="form-text text-danger">Mínimo una imágen.</small>
-                            <small *ngIf="validacionTamImgs && formEventos.invalid" class="form-text text-danger">Error: Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
-                            <div class="row" *ngFor='let url of urls; let i = index'>
+                            <div class="row mb-3 mt-3" *ngFor='let url of urls; let i = index'>
                                 <div class="col-md-9">
-                                    <img [src]="url" height="200" class="float-right"><br>
+                                    <h6 class="text-center">{{ listaImg[i] }}</h6>
+                                    <img [src]="url" height="200" class="float-right" style="max-width: 300px; max-height: 150;"><br>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" aria-label="Close" class="btn btn-danger float-left" (click)="borrarImgs(url, i)">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
                                 </div>
+                            </div>
+                            <div class="row mb-3 mt-3" *ngFor='let url of badUrls; let i = index'>
+                                <small *ngIf="errorTamImgs && sinImagen == false" class="form-text text-danger ml-4">La imagen {{ badUrls[i] }} no puede ser ingresada. Tamaño Mínimo: 950x690. Tamaño Máximo: 4096x2160</small>
                             </div>
                         </div>
                     </div>
-
                     <hr>
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
@@ -263,3 +265,7 @@
         </div>
     </div>
 </div>
+<br>
+<br>
+<br>
+<br>

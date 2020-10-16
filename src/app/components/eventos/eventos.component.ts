@@ -20,6 +20,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   urls = [];
   urlPrincipal = null;
   urlCarousel = null;
+  badUrls:any = [];
 
   eventos = null;
 
@@ -34,6 +35,8 @@ export class EventosComponent implements OnInit, OnDestroy {
   mensajeError: string = '';
   errorOrden: string = '';
   errorNombre: string = '';
+  sinImagen: boolean = false;
+  errorTamImgs: boolean = false;
 
   recognition: SpeechRecognition;
 
@@ -175,6 +178,7 @@ export class EventosComponent implements OnInit, OnDestroy {
     this.initSpeech();
     this.getEventos();
     this.formInit();
+    this.cargarEvento();
   }
 
   getEventos() {
@@ -239,7 +243,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       orden: ['', Validators.required],
       imgPrincipal: ['', [Validators.required, RxwebValidators.image({minHeight: 690, maxHeight: 2160, minWidth: 950, maxWidth: 4096})]],
       imgCarousel: ['', [Validators.required, RxwebValidators.image({minWidth: 1250, maxWidth: 4096, minHeight: 690, maxHeight: 2160})]],
-      imgsEvento: ['', [Validators.required, RxwebValidators.image({minHeight: 690, maxHeight: 2160, minWidth: 950, maxWidth: 4096})]]
+      imgsEvento: ['', Validators.required]
     });
   }
 
@@ -299,10 +303,6 @@ export class EventosComponent implements OnInit, OnDestroy {
     return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').touched;
   }
 
-  get nombreExistente() {
-    return this.formEventos.get('nombre').invalid && this.formEventos.get('nombre').value != '' && !this.formEventos.get('nombre').pristine;
-  }
-
   get validacionFechaInicio() {
     return this.formEventos.get('fecha.inicio').invalid && this.formEventos.get('fecha.inicio').touched;
   }
@@ -352,7 +352,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   }
 
   get validacionTamImgs() {
-    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').dirty && this.formEventos.get('imgsEvento').value != '';
+    return this.formEventos.get('imgsEvento').invalid && this.formEventos.get('imgsEvento').touched && this.formEventos.get('imgsEvento').errors.required != true ;
   }
 
   get validacionOrden() {
@@ -389,20 +389,45 @@ export class EventosComponent implements OnInit, OnDestroy {
   }
 
   multiImg(event) {
-    if (event.target.files && event.target.files[0]) {
+    if(event.target.files && event.target.files.length) {
       for (let i = 0; i < event.target.files.length; i++) {
+
         var reader = new FileReader();
+        let file = event.target.files[i];
+        let img = new Image();
+
+        img.src = window.URL.createObjectURL(file);
 
         reader.readAsDataURL(event.target.files[i]);
         reader.onload = (event: any) => {
-          this.urls.push(event.target.result);
+
+          const alto = img.naturalHeight;
+          const ancho = img.naturalWidth;
+
+          window.URL.revokeObjectURL(file);
+
+          if(alto < 690 || alto > 2160 || ancho < 950 ||ancho > 4096){
+            this.errorTamImgs = true;
+            this.badUrls.push(file.name)
+          }
+          else{
+            this.urls.push(event.target.result);
+            this.imgsSeleccionadas.push(file);
+            this.listaImg.push(file.name);
+            this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+          }
         };
 
-        var selectedFile = event.target.files[i];
-        this.imgsSeleccionadas.push(selectedFile);
+        this.sinImagen = false;
       }
-      this.formEventos.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
     }
+    else{
+      this.sinImagen = true;
+      return
+    }
+    console.log(this.formEventos.get('imgsEvento').value);
+    console.log(this.formEventos);
+
   }
 
   borrarImgPrincipal() {
@@ -474,4 +499,26 @@ export class EventosComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  cargarEvento(){
+    this.formEventos.setValue({
+      nombre:"nombre",
+      fecha: {
+        inicio:"2020-11-04",
+        cierre:"2020-11-11",
+      },
+      horario:{
+        inicio:"15:28",
+        cierre:"15:28",
+      },
+      tipo:"0",
+      enlace:"asdasd",
+      desc:"asdasda",
+      orden:"1",
+      imgPrincipal:"",
+      imgCarousel:"",
+      imgsEvento: ""
+    })
+  }
+
 }

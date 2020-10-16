@@ -132,6 +132,9 @@ export class EventoEditarComponent implements OnInit {
     pointHoverBackgroundColor: '#fff',
     pointHoverBorderColor: 'rgba(148,159,177,0.8)'
   }];
+  errorTamImgs: boolean = false;
+  badUrls: any = [];
+  sinImagen: boolean = false;
 
   constructor(private fb:FormBuilder,
               private activatedRoute:ActivatedRoute,
@@ -286,7 +289,7 @@ export class EventoEditarComponent implements OnInit {
     this.formImgE = this.fb.group({
       imgPrincipal:['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})],
       imgCarousel:['', RxwebValidators.image({minWidth:1250, maxWidth:4096, minHeight:690, maxHeight:2160})],
-      imgsEvento: ['', RxwebValidators.image({minHeight:690, maxHeight:2160, minWidth:950, maxWidth:4096})]
+      imgsEvento: ['', ]
     })
   }
 
@@ -535,28 +538,47 @@ export class EventoEditarComponent implements OnInit {
   }
 
   multiImg(event) {
-
-    if (event.target.files && event.target.files[0]) {
+    if(event.target.files && event.target.files.length) {
       for (let i = 0; i < event.target.files.length; i++) {
+
         var reader = new FileReader();
+        let file = event.target.files[i];
+        let img = new Image();
+
+        img.src = window.URL.createObjectURL(file);
 
         reader.readAsDataURL(event.target.files[i]);
-        reader.onload = (event:any) => {
-          if(!this.validacionTamImgs){
-            this.urls.push(event.target.result);
+        reader.onload = (event: any) => {
+
+          const alto = img.naturalHeight;
+          const ancho = img.naturalWidth;
+
+          window.URL.revokeObjectURL(file);
+
+          if(alto < 690 || alto > 2160 || ancho < 950 ||ancho > 4096){
+            this.errorTamImgs = true;
+            this.badUrls.push(file.name)
           }
-        }
+          else{
+            this.urls.push(event.target.result);
+            this.imgsSeleccionadas.push(file);
+            this.listaImg.push(file.name);
+            this.formImgE.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+          }
+        };
 
-        var selectedFile = event.target.files[i];
-
-        if(!this.validacionTamImgs){
-          this.imgsSeleccionadas.push(selectedFile);
-        }
+        this.sinImagen = false;
       }
     }
-    console.log(this.imgsSeleccionadas);
-    // this.formImgE.controls['imgsEvento'].setValue(this.imgsSeleccionadas);
+    else{
+      this.sinImagen = true;
+      return
+    }
+    console.log(this.formImgE.get('imgsEvento').value);
+    console.log(this.formImgE);
+
   }
+
 
   borrarImgPrincipal(){
     this.urlPrincipal = null;

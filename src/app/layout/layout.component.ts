@@ -30,7 +30,7 @@ export class LayoutComponent implements OnInit {
 
   getAdmin(){
     this.usuariosService.getAdmin(Number(this.id)).subscribe( resultado => {
-        this.usuario = resultado[0];
+        // this.usuario = resultado[0];
     })
   }
 

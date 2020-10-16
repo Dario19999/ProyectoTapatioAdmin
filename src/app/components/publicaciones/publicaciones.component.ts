@@ -41,6 +41,9 @@ export class PublicacionesComponent implements OnInit, OnDestroy {
   @ViewChild('cerrar') cerrar;
 
   recognition: SpeechRecognition;
+  errorTamImgs: boolean;
+  badUrls: any = [];
+  sinImagen: boolean;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -162,7 +165,7 @@ export class PublicacionesComponent implements OnInit, OnDestroy {
       titulo: ['', [Validators.required]],
       articulo: ['', [Validators.required]],
       imgPrincipal: ['', [Validators.required, RxwebValidators.image({minHeight: 690, maxHeight: 2160, minWidth: 950, maxWidth: 4096})]],
-      imgsPublicacion: ['', [Validators.required, RxwebValidators.image({minHeight: 690, maxHeight: 2160, minWidth: 950, maxWidth: 4096})]]
+      imgsPublicacion: ['', [Validators.required]]
     });
   }
 
@@ -219,23 +222,43 @@ export class PublicacionesComponent implements OnInit, OnDestroy {
   }
 
   multiImg(event) {
-    if (event.target.files && event.target.files[0]) {
+    if(event.target.files && event.target.files.length) {
       for (let i = 0; i < event.target.files.length; i++) {
 
         var reader = new FileReader();
+        let file = event.target.files[i];
+        let img = new Image();
 
-        reader.onload = (event: any) => {
-          this.urls.push(event.target.result);
-        };
+        img.src = window.URL.createObjectURL(file);
+
         reader.readAsDataURL(event.target.files[i]);
+        reader.onload = (event: any) => {
 
-        var selectedFile = event.target.files[i];
-        this.imgsSeleccionadas.push(selectedFile);
-        this.listaImg.push(selectedFile.name);
+          const alto = img.naturalHeight;
+          const ancho = img.naturalWidth;
+
+          window.URL.revokeObjectURL(file);
+
+          if(alto < 690 || alto > 2160 || ancho < 950 ||ancho > 4096){
+            this.errorTamImgs = true;
+            this.badUrls.push(file.name)
+          }
+          else{
+            this.urls.push(event.target.result);
+            this.imgsSeleccionadas.push(file);
+            this.listaImg.push(file.name);
+            this.formPublicaciones.controls['imgsPublicacion'].setValue(this.imgsSeleccionadas);
+          }
+        };
+
+        this.sinImagen = false;
       }
     }
-
-    this.formPublicaciones.controls['imgsPublicacion'].setValue(this.imgsSeleccionadas);
+    else{
+      this.sinImagen = true;
+      return
+    }
+    console.log(this.urls);
   }
 
   imgPrincipal(event) {
