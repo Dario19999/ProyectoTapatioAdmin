@@ -116,10 +116,6 @@
                                         <input type="text" class="form-control mb-3" id="nombreBoleto" placeholder="Ingrese el Nombre del Boleto" formControlName="nombre">
                                     </div>
                                     <div class="col-md-3">
-                                        <label for="inventarioBol">Inventario:</label>
-                                        <input type="number" class="form-control" id="inventarioBol" min="0" step="1" formControlName="inventario">
-                                    </div>
-                                    <div class="col-md-3">
                                         <label for="preciob">Precio por Boleto:</label>
                                         <input type="number" min="0" step="1" value="0" id="preciob" class="form-control" formControlName="precio">
                                     </div>
@@ -129,6 +125,10 @@
                                         <label for="descEvento">Descripción:</label>
                                         <textarea id="descEvento" class="form-control" rows="5" formControlName="desc"></textarea>
                                     </div>
+                                    <div class="col-md-6 d-block mx-auto text-center">
+                                        <label for="stock">Agregar o Quitar Stock de Boletos:</label>
+                                        <input type="number" step="1" class="form-control text-center" value="0" id="stock" formControlName="inventario">
+                                    </div>
                                 </div>
                                 <div class="input-group form-row mb-3">
                                     <div class="col-md-12 text-center">
@@ -136,15 +136,6 @@
                                     </div>
                                 </div>
                             </form>
-                            <div class="row">
-                                <div class="col-md-6 d-block mx-auto text-center">
-                                    <label for="stock">Agregar o Quitar Stock de Boletos:</label>
-                                    <input #stock type="number" step="1" class="form-control text-center" value="0" id="stock">
-                                </div>
-                                <div class="col-md-12 text-center">
-                                    <button class="btn btn-success" type="button">Cambiar Stock de Evento</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

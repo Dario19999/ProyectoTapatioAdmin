@@ -20,7 +20,7 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.id = localStorage.getItem("id_admin");
 
-    this.loggedIn = this.loginService.getEstadoSesion();
+    // this.loggedIn = this.loginService.getEstadoSesion();
 
     if(this.id == null || this.usuario == {}){
       this.cerrarSesion();
@@ -30,7 +30,7 @@ export class LayoutComponent implements OnInit {
 
   getAdmin(){
     this.usuariosService.getAdmin(Number(this.id)).subscribe( resultado => {
-        // this.usuario = resultado[0];
+        this.usuario = resultado[0];
     })
   }
 

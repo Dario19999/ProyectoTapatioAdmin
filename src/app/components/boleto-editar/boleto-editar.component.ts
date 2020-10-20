@@ -78,7 +78,7 @@ export class BoletoEditarComponent implements OnInit {
         this.formInfoBoleto.setValue({
           nombre:this.boleto.nom_bol,
           desc:this.boleto.descripcion_boleto,
-          inventario:this.boleto.stock_act_boleto,
+          inventario:0,
           precio:this.boleto.precio_bol
         });
       });
@@ -211,8 +211,13 @@ export class BoletoEditarComponent implements OnInit {
             return
           }
           else if(datos['resultado'] == "OK"){
-            this.refresh();
-            window.confirm("Boleto modificado con éxito");
+            if(datos['estado'] == 0){
+              window.confirm(datos['mensaje']);
+            }
+            else{
+              this.refresh();
+              window.confirm("Boleto modificado con éxito");
+            }
           }
         })
       }
