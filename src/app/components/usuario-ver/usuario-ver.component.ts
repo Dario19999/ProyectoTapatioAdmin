@@ -19,7 +19,6 @@ export class UsuarioVerComponent implements OnInit {
   ngOnInit(): void {
 
     this.activatedRoute.params.subscribe(params => {
-      console.log(params['id']);
       this.usuariosService.getUsuario(params['id']).subscribe( resultado => {
         this.usuario = resultado;
         this.usuariosService.verVentas(this.usuario['id_usuario']).subscribe(resultado => {

@@ -89,4 +89,9 @@ export class BoletosService {
   validarPromo(id_boleto:number, inventario:number, precio:number){
     return this.http.get(`${this.url}validarPromo.php?id=${id_boleto}&inventario=${inventario}&precio=${precio}`).pipe(retry(3))
   }
+
+  consultaPromoReferencia( boleto:number, boletoRef:number ){
+    return this.http.get(`${this.url}consultaPromoReferencia.php?boleto=${boleto}&boletoRef=${boletoRef}`).pipe(retry(3))
+  }
+
 }

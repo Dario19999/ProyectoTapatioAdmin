@@ -329,20 +329,28 @@ export class BoletoEditarComponent implements OnInit {
             return
           }
           else{
-            this.boletosService.crearPromoReferencia(this.formPromoReferencia.value).subscribe( datos => {
-              if(datos['resultado'] == "ERROR"){
-                console.log("ERROR");
+            this.boletosService.consultaPromoReferencia(this.formPromoReferencia.get('boleto').value, this.formPromoReferencia.get('boletoReferencia').value).subscribe( datos => {
+              if(datos['estado'] == 0){
+                window.confirm(datos['mensaje']);
                 return
               }
-              else if(datos['resultado'] == "OK"){
-                this.refresh();
-                this.formPromoReferencia.reset();
-                this.activatedRoute.params.subscribe( params => {
-                  this.formPromoReferencia.get('boleto').setValue(params['id']);
-                });
-                window.confirm("Promocion creada con éxito");
-                this.cerrarReferencia.nativeElement.click();
-                window.location.reload()
+              else{
+                this.boletosService.crearPromoReferencia(this.formPromoReferencia.value).subscribe( datos => {
+                  if(datos['resultado'] == "ERROR"){
+                    console.log("ERROR");
+                    return
+                  }
+                  else if(datos['resultado'] == "OK"){
+                    this.refresh();
+                    this.formPromoReferencia.reset();
+                    this.activatedRoute.params.subscribe( params => {
+                      this.formPromoReferencia.get('boleto').setValue(params['id']);
+                    });
+                    window.confirm("Promocion creada con éxito");
+                    this.cerrarReferencia.nativeElement.click();
+                    window.location.reload()
+                  }
+                })
               }
             })
           }
