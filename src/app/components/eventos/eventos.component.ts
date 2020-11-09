@@ -521,4 +521,7 @@ export class EventosComponent implements OnInit, OnDestroy {
     })
   }
 
+  irEstadisticas( id ){
+    this.router.navigate(['estadisticas-evento', id]);
+  }
 }

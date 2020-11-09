@@ -34,6 +34,8 @@ import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { UsuarioVerComponent } from './components/usuario-ver/usuario-ver.component';
 import { CompraVerComponent } from './components/compra-ver/compra-ver.component';
+import { EstadisticasComponent } from './components/estadisticas/estadisticas.component';
+import { EstadisticasEventoComponent } from './components/estadisticas-evento/estadisticas-evento.component';
 
 registerLocaleData(es)
 
@@ -54,6 +56,8 @@ registerLocaleData(es)
     LoginComponent,
     UsuarioVerComponent,
     CompraVerComponent,
+    EstadisticasComponent,
+    EstadisticasEventoComponent,
   ],
   imports: [
     BrowserModule,
