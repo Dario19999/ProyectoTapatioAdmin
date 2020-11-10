@@ -133,7 +133,7 @@ export class EventosComponent implements OnInit, OnDestroy {
               if (e.id_evento == event) {
                 navigate = true;
                 this.ngZone.run(() => {
-                  this.eliminarEvento(e.id_evento);
+                  this.cancelarEvento(e.id_evento);
                 });
                 break;
               }
@@ -200,24 +200,15 @@ export class EventosComponent implements OnInit, OnDestroy {
     }
   }
 
-  eliminarEvento(id: number) {
-    if (confirm('Está seguro de querer eliminar este evento?')) {
-      this.eventosService.buscarBoletos(id).subscribe(res => {
-        if(res == 0){
-          window.confirm("El evento tiene boletos. No es posible eliminar el evento.");
-          return
-        }
-        else{
-          this.eventosService.eliminarEvento(id).subscribe(datos => {
-            if (datos['resultado'] == 'OK') {
+  activarEvento(id: number) {
+    if (confirm('Está seguro de querer activar este evento?')) {
+          this.eventosService.activarEvento(id).subscribe(datos => {
+            if (datos == true) {
               this.getEventos();
             }
           });
-        }
-      })
     }
   }
-
   cancelarEvento(id_evento:number){
     if (confirm('Está seguro de querer cancelar este evento?')) {
       this.eventosService.cancelarEvento(id_evento).subscribe(() => {

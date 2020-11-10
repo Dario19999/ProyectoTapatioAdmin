@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class BoletosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/boletos/";
-  // url = "http://localhost:8080/PT-API/boletos/";
+  //url = "https://proyectotapatio.com/PT-API-P/boletos/";
+  url = "http://localhost/PHP---Eventos/PT-API-P/boletos/";
 
   constructor(private http:HttpClient) { }
 
@@ -44,6 +44,9 @@ export class BoletosService {
   eliminarBoleto( id_boleto:number ){
     return this.http.get(`${this.url}eliminarBoleto.php?id_boleto=${id_boleto}`).pipe(retry(3))
   }
+  activarBoleto( id_boleto:number ){
+    return this.http.get(`${this.url}activarBoleto.php?id_boleto=${id_boleto}`).pipe(retry(3))
+  }
 
   eliminarPromoCodigo( id_promo:number ){
     return this.http.get(`${this.url}eliminarPromoCodigo.php?id_promo=${id_promo}`)
@@ -64,6 +67,10 @@ export class BoletosService {
 
   getBoletos( id_evento:number ){
     return this.http.get(`${this.url}getBoletos.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
+  getBoletosEvento( id_evento:number ){
+    return this.http.get(`${this.url}getBoletosEvento.php?id_evento=${id_evento}`).pipe(retry(3))
   }
 
   getBoleto( id_boleto:number ){

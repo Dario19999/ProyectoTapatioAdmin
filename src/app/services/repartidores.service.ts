@@ -9,7 +9,7 @@ import { serialize } from 'object-to-formdata';
 export class RepartidoresService {
 
   url = "https://proyectotapatio.com/PT-API-P/repartidores/";
-  // url = "http://localhost:8080/PT-API/repartidores/";
+  // url = "http://localhost/PHP---Eventos/PT-API-P/repartidores/";
 
   constructor(private http:HttpClient) { }
 

@@ -9,7 +9,7 @@ import { serialize } from 'object-to-formdata';
 export class EventosService {
 
   //url = "https://proyectotapatio.com/PT-API-P/eventos/";
-   url = "http://localhost:80/PHP---Eventos/PT-API-P/eventos/";
+   url = "http://localhost/PHP---Eventos/PT-API-P/eventos/";
 
   eventos = null;
 
@@ -59,8 +59,8 @@ export class EventosService {
     return this.http.get(`${this.url}consultaBoletos.php?id_evento=${id_evento}`).pipe(retry(3))
   }
 
-  eliminarEvento( id:number ){
-    return this.http.get(`${this.url}eliminarEvento.php?id=${id}`).pipe(retry(3))
+  activarEvento( id:number ){
+    return this.http.get(`${this.url}activarEvento.php?id_evento=${id}`).pipe(retry(3))
   }
 
   cancelarEvento(id_evento:number){

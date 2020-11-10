@@ -7,8 +7,8 @@ import { retry } from 'rxjs/operators';
 })
 export class UsuariosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/usuarios/";
-  // url = "http://localhost:8080/PT-API/usuarios/";
+  //url = "https://proyectotapatio.com/PT-API-P/usuarios/";
+  url = "http://localhost/PHP---Eventos/PT-API-P/usuarios/";
 
   constructor( private http:HttpClient ) { }
 

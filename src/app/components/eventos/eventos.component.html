@@ -46,8 +46,9 @@
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarEvento( resultado.id_evento )">Editar</button>
                             <button class="btn btn-info ml-lg-2" type="button" (click)="irEstadisticas( resultado.id_evento )">Estadísticas</button>
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button>
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( resultado.id_evento )">Cancelar</button>
+                            <!-- <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button> -->
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( resultado.id_evento)" ngif="resultado.estado_evento == 1">Cancelar</button>
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( resultado.id_evento)" ngif="resultado.estado_evento == 2">Activar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -79,8 +80,9 @@
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>
                     <button class="btn btn-info ml-lg-2" type="button" (click)="irEstadisticas( evento.id_evento )">Estadísticas</button>
-                    <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( evento.id_evento )">Eliminar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento )">Cancelar</button>
+                    <!-- <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button> -->
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento)" ngif="evento.estado_evento == 1">Cancelar</button>
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( evento.id_evento)" ngif="evento.estado_evento == 2">Activar</button>
                 </td>
             </tr>
         </tbody>

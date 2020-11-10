@@ -60,7 +60,8 @@
                                 <h4> {{boleto.nom_bol}} </h4>
                             </div>
                             <div class="col-md-6">
-                                <button class="btn btn-danger  float-right m-1" type="button" (click)="eliminarBoleto( boleto.id_boleto )">Eliminar</button>
+                                <button class="btn btn-danger  float-right m-1" type="button" (click)="eliminarBoleto( boleto.id_boleto )" *ngIf ="boleto.estado_boleto == 1">Desactivar</button>
+                                <button class="btn btn-danger  float-right m-1" type="button" (click)="activarBoleto( boleto.id_boleto )" *ngIf ="boleto.estado_boleto == 0">Activar</button>
                                 <button class="btn btn-success float-right m-1" (click)="editarBoleto( boleto.id_boleto )">Editar</button>
                             </div>
                         </div>

@@ -168,7 +168,7 @@ export class EventoEditarComponent implements OnInit {
 
       });
       this.eventosService.getImgs(params['id']).subscribe(resultado => this.imgs = resultado);
-      this.boletosService.getBoletos(params['id']).subscribe( resultado => {
+      this.boletosService.getBoletosEvento(params['id']).subscribe( resultado => {
         if(resultado == null){
           this.noBoletos = true;
         }else{
@@ -375,7 +375,7 @@ export class EventoEditarComponent implements OnInit {
     this.activatedRoute.params.subscribe( params => {
       this.eventosService.getEvento(params['id']).subscribe( resultado => this.evento = resultado[0]);
       this.eventosService.getImgs(params['id']).subscribe( resultado => this.imgs = resultado);
-      this.boletosService.getBoletos(params['id']).subscribe( resultado => {
+      this.boletosService.getBoletosEvento(params['id']).subscribe( resultado => {
         if(resultado == null){
           this.noBoletos = true;
         }else{
@@ -624,7 +624,17 @@ export class EventoEditarComponent implements OnInit {
       this.boletosService.eliminarBoleto(id_boleto).subscribe( datos => {
         if(datos['resultado'] == "OK"){
           this.refresh();
-          window.confirm("Boleto eliminado con éxito");
+          window.confirm("Boleto desactivado con éxito");
+        }
+      })
+    }
+  }
+  activarBoleto( id_boleto:number){
+    if(window.confirm("Está seguro de querer activar este boleto?")){
+      this.boletosService.activarBoleto(id_boleto).subscribe( datos => {
+        if(datos['resultado'] == "OK"){
+          this.refresh();
+          window.confirm("Boleto activado con éxito");
         }
       })
     }
