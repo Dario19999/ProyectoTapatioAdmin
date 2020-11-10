@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class EventosService {
 
-  url = "https://proyectotapatio.com/PT-API-P/eventos/";
-  // url = "http://localhost:8080/PT-API/eventos/";
+  //url = "https://proyectotapatio.com/PT-API-P/eventos/";
+   url = "http://localhost:80/PHP---Eventos/PT-API-P/eventos/";
 
   eventos = null;
 
@@ -81,6 +81,10 @@ export class EventosService {
 
   getVentasEdad( id_evento:number){
     return this.http.get(`${this.url}EdadEvento.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
+  getVentasEdadGeneral(){
+    return this.http.get(`${this.url}EdadGeneral.php`).pipe(retry(3))
   }
 
   getVentasTotales( id_evento:number ){
