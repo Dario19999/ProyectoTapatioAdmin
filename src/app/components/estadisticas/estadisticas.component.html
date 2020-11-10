@@ -2,17 +2,17 @@
     <li class="nav-item">
       <a (click)="mostrarEdades()" class="nav-link"  [ngClass]="{
         'active':tabActive === 1
-      }" >Estadísticas de nacionalidades</a>
+      }" >Estadísticas de edades</a>
     </li>
     <li class="nav-item"  >
-        <a (click)="mostrarCasas()" class="nav-link active" [ngClass]="{
+        <a (click)="mostrarCompras()" class="nav-link active" [ngClass]="{
             'active':tabActive === 2
-          }" >Estadísticas de casas</a>
+          }" >Estadísticas de ventas totales</a>
     </li>
     <li class="nav-item" >
-        <a (click)="mostrarColonias()" class="nav-link active" [ngClass]="{
+        <a (click)="mostrarDias()" class="nav-link active" [ngClass]="{
             'active':tabActive === 3
-          }" >Estadísticas de colonias</a> 
+          }" >Estadísticas de ventas por semana</a> 
     </li>
 </ul>
 
@@ -26,7 +26,7 @@
         </thead>
         <tbody class="text-center">
             <tr *ngFor="let edad of edades">
-                <th scope="row" class="align-middle">{{ edad.nacionalidad }}</th>
+                <th scope="row" class="align-middle">{{ edad.edad }}</th>
                 <td class="align-middle">{{ edad.cantidad }}</td>
             </tr>
         </tbody>
@@ -36,22 +36,16 @@
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark text-center">
             <tr>
-                <th scope="col" style="width: 10%;">ID</th>
-                <th scope="col" style="width: 20%;">Nombre</th>
-                <th scope="col" style="width: 10%;">Dias</th>
-                <th scope="col" style="width: 10%;">Orden de anuncio</th>
-                <th scope="col" style="width: 30%;">Acciones</th>
+                <th scope="col" style="width: 10%;">Cantidad de boletos</th>
+                <th scope="col" style="width: 20%;">Ventas</th>
+                <th scope="col" style="width: 10%;">Resultado</th>
             </tr>
         </thead>
         <tbody class="text-center">
-            <tr *ngFor="let casa of casas">
-                <!-- <th scope="row" class="align-middle">{{ casa.id_casa }}</th>
-                <td class="align-middle">{{ casa.nombre_casa }}</td>
-                <td class="align-middle">{{casa.promedio}}</td>
-                <td class="align-middle">{{ casa.orden_anuncio }}</td>
-                <td class="align-middle">
-                    <button class="btn btn-primary" type="button" (click)="editarCasa( casa.id_casa )">Editar</button>
-                </td> -->
+            <tr>
+                <th scope="row" class="align-middle">{{ compras.cantidad_boletos }}</th>
+                <td class="align-middle">{{ compras.ventas }}</td>
+                <td class="align-middle">{{compras.resultado}}</td>
             </tr>
         </tbody>
     </table>
@@ -60,15 +54,15 @@
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark text-center">
             <tr>
-                <th scope="col" style="width: 50%;">Nombre</th>
-                <th scope="col" style="width: 50%;">Dias</th>
+                <th scope="col" style="width: 50%;">Dia</th>
+                <th scope="col" style="width: 50%;">Cantidad</th>
             </tr>
         </thead>
         <tbody class="text-center">
-            <!-- <tr *ngFor="let colonia of colonias">
-                <th scope="row" class="align-middle">{{ colonia.nombre_colonia }}</th>
-                <td class="align-middle">{{ colonia.promedio }}</td>
-            </tr> -->
+            <tr *ngFor="let semana of semanas">
+                <th scope="row" class="align-middle">{{ semana.dia }}</th>
+                <td class="align-middle">{{ semana.cantidad }}</td>
+            </tr>
         </tbody>
     </table>
 </div>

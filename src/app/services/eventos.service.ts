@@ -83,9 +83,22 @@ export class EventosService {
     return this.http.get(`${this.url}EdadEvento.php?id_evento=${id_evento}`).pipe(retry(3))
   }
 
+  getDiasVendidos( id_evento:number){
+    return this.http.get(`${this.url}dias_vendidos_evento.php?id_evento=${id_evento}`).pipe(retry(3))
+  }
+
   getVentasEdadGeneral(){
     return this.http.get(`${this.url}EdadGeneral.php`).pipe(retry(3))
   }
+
+  getCompraUsuarioTotal(){
+    return this.http.get(`${this.url}compra_usuario_total.php`).pipe(retry(3))
+  }
+
+  getDiasVendidosTotal(){
+    return this.http.get(`${this.url}dias_vendidos_total.php`).pipe(retry(3))
+  }
+
 
   getVentasTotales( id_evento:number ){
     return this.http.get(`${this.url}VentasTotales.php?id_evento=${id_evento}`).pipe(retry(3))

@@ -10,14 +10,23 @@ import { EventosService } from 'src/app/services/eventos.service';
 export class EstadisticasComponent implements OnInit {
 
   tabActive=1;
-  edades:any;
+  edades:any=[];
+  compras:any=[];
+  semanas:any=[];
 
   constructor(private router:Router, private eventosService:EventosService) { }
 
   ngOnInit(): void {
     this.eventosService.getVentasEdadGeneral().subscribe(resultado=>{
-      resultado=this.edades
-      console.log(resultado)
+      this.edades=resultado
+    })
+
+    this.eventosService.getCompraUsuarioTotal().subscribe(resultado=>{
+      this.compras=resultado
+    })
+
+    this.eventosService.getDiasVendidosTotal().subscribe(resultado=>{
+      this.semanas=resultado
     })
   }
 
@@ -25,11 +34,11 @@ export class EstadisticasComponent implements OnInit {
     this.tabActive=1;
   }
   
-  mostrarCasas(){
+  mostrarCompras(){
     this.tabActive=2;
   }
 
-  mostrarColonias(){
+  mostrarDias(){
     this.tabActive=3;
   }
 
