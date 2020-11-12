@@ -77,6 +77,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
       public editar = editar;
       public cancelar = cancelar;
+      public activar = activar;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
@@ -92,7 +93,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       const command = ev.results[0][0].transcript.split(' ');
       if (command.length >= 2) {
 
-        switch (command[0]) {
+        switch (command[0].toLowerCase()) {
           case 'ver':
             this.ngZone.run(() => {
 
@@ -131,10 +132,25 @@ export class EventosComponent implements OnInit, OnDestroy {
             const event = command.slice(1, command.length).join(' ');
 
             for (const e of this.eventos) {
-              if (e.id_evento == event) {
+              if (e.id_evento == event && e.estado_evento == 1) {
                 navigate = true;
                 this.ngZone.run(() => {
                   this.cancelarEvento(e.id_evento);
+                });
+                break;
+              }
+            }
+
+            break;
+          }
+          case 'activar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.eventos) {
+              if (e.id_evento == event && e.estado_evento === 2) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.activarEvento(e.id_evento);
                 });
                 break;
               }

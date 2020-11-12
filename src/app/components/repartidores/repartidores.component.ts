@@ -43,6 +43,9 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
     speechRecognitionList.addFromString(`
       #JSGF V1.0;
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
+      public editar = editar;
+      public activar = activar;
+      public bloquear = bloquear;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
@@ -54,22 +57,69 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
     this.recognition.onresult = ev => {
       const command = ev.results[0][0].transcript.split(' ');
       if (command.length >= 2) {
-        this.ngZone.run(() => {
-          switch (command[1]) {
-            case 'eventos':
-              this.router.navigate(['eventos']);
-              navigate = true;
-              break;
-            case 'publicaciones':
-              this.router.navigate(['publicaciones']);
-              navigate = true;
-              break;
-            case 'usuarios':
-              this.router.navigate(['usuarios']);
-              navigate = true;
-              break;
+        switch (command[0].toLowerCase()) {
+          case 'ver': {
+            this.ngZone.run(() => {
+              switch (command[1]) {
+                case 'eventos':
+                  this.router.navigate(['eventos']);
+                  navigate = true;
+                  break;
+                case 'publicaciones':
+                  this.router.navigate(['publicaciones']);
+                  navigate = true;
+                  break;
+                case 'usuarios':
+                  this.router.navigate(['usuarios']);
+                  navigate = true;
+                  break;
+              }
+            });
+            break;
           }
-        });
+          case 'editar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.repartidores) {
+              if (e.id_usuario == event) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.editarReapartidor(e.id_usuario);
+                });
+                break;
+              }
+            }
+            break;
+          }
+          case 'activar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.repartidores) {
+              if (e.id_usuario == event && e.activo == 2) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.activarRepartidor(e.id_usuario);
+                });
+                break;
+              }
+            }
+            break;
+          }
+          case 'bloquear': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.repartidores) {
+              if (e.id_usuario == event && e.activo == 1) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.eliminarRepartidor(e.id_usuario);
+                });
+                break;
+              }
+            }
+            break;
+          }
+        }
       }
     };
     this.recognition.start();
@@ -194,6 +244,7 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
       });
     }
   }
+
   activarRepartidor(id_repartidor: number) {
     if (confirm('Está seguro de querer activar a este repartidor?')) {
       this.repartidoresService.activarRepartidor(id_repartidor).subscribe(datos => {
@@ -234,11 +285,10 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
     } else {
 
       this.repartidoresService.buscarCorreo(this.formRepartidor.get('correo').value).subscribe(datos => {
-        if(datos['estado'] == 0){
+        if (datos['estado'] == 0) {
           window.confirm(datos['mensaje']);
-          return
-        }
-        else if(datos['estado'] == 1){
+          return;
+        } else if (datos['estado'] == 1) {
           let nombre = this.formRepartidor.get('nombre').value;
           let apellidoP = this.formRepartidor.get('apellidoP').value;
           let apellidoM = this.formRepartidor.get('apellidoM').value;
