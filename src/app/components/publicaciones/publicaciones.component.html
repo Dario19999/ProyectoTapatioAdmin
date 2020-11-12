@@ -126,7 +126,7 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgsPub">Imagenes de la Publicación: <small class="text-danger">*</small></label>
+                            <label for="imgsPub">Imagenes de la Publicación(De 1 a 20 Imagenes): <small class="text-danger">*</small></label>
                             <input #imgsInput type='file' id="imgsPub" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsPublicacion">
                             <small *ngIf="validacionImgs" class="form-text text-danger">Mínimo una imágen.</small>
                             <div class="row mb-3 mt-3" *ngFor='let url of urls; let i = index'>
@@ -149,7 +149,7 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
-                            <button [disabled]="formPublicaciones.invalid" class="btn btn-success" type="submit">Crear</button>
+                            <button [disabled]="formPublicaciones.invalid" class="btn btn-success" type="submit" *ngIf="cantidad_imagenes < 21">Crear</button>
                         </div>
                     </div>
                 </form>

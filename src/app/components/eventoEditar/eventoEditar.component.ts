@@ -19,6 +19,7 @@ export class EventoEditarComponent implements OnInit {
   formImgE:FormGroup;
   formBoletos:FormGroup;
 
+
   urls = [];
   urlPrincipal = null;
   urlCarousel = null;
@@ -458,23 +459,26 @@ export class EventoEditarComponent implements OnInit {
     this.imgsEvento.imgPrincipal = this.imgSeleccionada;
     this.imgsEvento.imgCarousel = this.imgCarouselSeleccionada;
     this.imgsEvento.imgs = this.imgsSeleccionadas;
+    if((this.imgsSeleccionadas.length + this.imgs.length) > 30){
+      window.confirm("El evento no puede tener mas de 30 imagenes");
+    }else{
+      this.eventosService.modificarImgsEvento(this.imgsEvento).subscribe( datos => {
+        if(datos['resultado'] == "ERROR"){
+          console.log("ERROR");
+          return
+        }else if(datos['resultado'] == "OK"){
+          this.refresh();
 
-    this.eventosService.modificarImgsEvento(this.imgsEvento).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
-        return
-      }else if(datos['resultado'] == "OK"){
-        this.refresh();
+          this.borrarImgPrincipal();
+          this.borrarImgCarousel();
 
-        this.borrarImgPrincipal();
-        this.borrarImgCarousel();
-
-        this.urls = [];
-        this.imgsSeleccionadas = [];
-        this.imgsInput.nativeElement.value = null;
-        window.confirm("Imagen(es) modificada(s) con éxito");
-      }
-    });
+          this.urls = [];
+          this.imgsSeleccionadas = [];
+          this.imgsInput.nativeElement.value = null;
+          window.confirm("Imagen(es) modificada(s) con éxito");
+        }
+      });
+    }
   }
 
   guardarBoletos(){
@@ -609,14 +613,19 @@ export class EventoEditarComponent implements OnInit {
   }
 
   eliminarImg( id:number ){
-    if(confirm("Está seguro de querer eliminar esta imagen?")){
-      this.eventosService.eliminarImgs(id).subscribe( datos => {
-        if(datos['resultado'] == "OK"){
-          this.refresh();
-          window.confirm("Imagen eliminada con éxito");
-        }
-      })
+    if((this.imgs.length) < 6){
+      window.confirm("El evento no puede tener menos de 5 imagenes");
+    }else{
+      if(confirm("Está seguro de querer eliminar esta imagen?")){
+        this.eventosService.eliminarImgs(id).subscribe( datos => {
+          if(datos['resultado'] == "OK"){
+            this.refresh();
+            window.confirm("Imagen eliminada con éxito");
+          }
+        })
+      }
     }
+
   }
 
   eliminarBoleto( id_boleto:number){

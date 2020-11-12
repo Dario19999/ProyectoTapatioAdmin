@@ -15,7 +15,7 @@ declare var webkitSpeechRecognitionEvent;
 export class PublicacionesComponent implements OnInit, OnDestroy {
 
   formPublicaciones: FormGroup;
-
+  cantidad_imagenes:number = 0;
   urls = [];
   urlPrincipal = null;
 
@@ -244,6 +244,7 @@ export class PublicacionesComponent implements OnInit, OnDestroy {
             this.badUrls.push(file.name)
           }
           else{
+            this.cantidad_imagenes = this.cantidad_imagenes + 1;
             this.urls.push(event.target.result);
             this.imgsSeleccionadas.push(file);
             this.listaImg.push(file.name);
@@ -294,6 +295,7 @@ export class PublicacionesComponent implements OnInit, OnDestroy {
       this.formPublicaciones.controls['imgsPublicacion'].setValue('');
       this.imgsInput.nativeElement.value = null;
     }
+    this.cantidad_imagenes = this.cantidad_imagenes - 1;
   }
 
   editarPublicacion(id: number) {

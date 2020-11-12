@@ -14,8 +14,8 @@ export class LoginService {
 
   login( credenciales:any ){
     const CRED = serialize(credenciales);
-    //return this.http.post(`https://proyectotapatio.com/PT-API-P/login/login.php`, CRED).pipe(retry(3))
-    return this.http.post(`http://localhost/PHP---Eventos/PT-API-P/login/login.php`, CRED).pipe(retry(3))
+    return this.http.post(`https://proyectotapatio.com/PT-API-P/login/login.php`, CRED).pipe(retry(3))
+    //return this.http.post(`http://localhost/PHP---Eventos/PT-API-P/login/login.php`, CRED).pipe(retry(3))
   }
 
   setEstadoSesion( estado:boolean ){

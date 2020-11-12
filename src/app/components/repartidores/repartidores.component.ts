@@ -186,8 +186,17 @@ export class RepartidoresComponent implements OnInit, OnDestroy {
   }
 
   eliminarRepartidor(id_repartidor: number) {
-    if (confirm('Está seguro de querer eliminar a este repartidor?')) {
+    if (confirm('Está seguro de querer bloquear a este repartidor?')) {
       this.repartidoresService.eliminarRepartidor(id_repartidor).subscribe(datos => {
+        if (datos['resultado'] == 'OK') {
+          this.getRepartidores();
+        }
+      });
+    }
+  }
+  activarRepartidor(id_repartidor: number) {
+    if (confirm('Está seguro de querer activar a este repartidor?')) {
+      this.repartidoresService.activarRepartidor(id_repartidor).subscribe(datos => {
         if (datos['resultado'] == 'OK') {
           this.getRepartidores();
         }

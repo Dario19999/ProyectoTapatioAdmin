@@ -171,33 +171,41 @@ export class PublicacionEditarComponent implements OnInit {
   guardarImg(){
     this.imgsPub.imgPrincipal = this.imgSeleccionada;
     this.imgsPub.imgsPublicacion = this.imgsSeleccionadas;
-
-    this.publicacionesService.modificarImgsPub(this.imgsPub).subscribe( datos => {
-      if(datos['resultado'] == "ERROR"){
-        console.log("ERROR");
-        return
-      }
-      else if(datos['resultado'] == "OK"){
-        this.refresh();
-
-        this.borrarImgPrincipal();
-
-        this.urls = [];
-        this.imgsSeleccionadas = [];
-        this.imgsInput.nativeElement.value = null;
-        window.confirm("Imagen(es) modificada(s) con éxito");
-      }
-    })
-  }
-
-  eliminarImg( id_img:number ){
-    if(confirm("Está seguro de querer eliminar esta imagen?")){
-      this.publicacionesService.eliminarImgs(id_img).subscribe( datos => {
-        if(datos['resultado'] == "OK"){
+    if((this.imgs,length + this.imgsSeleccionadas.length) > 20){
+      window.confirm("La publicacion no debe de tener mas de 20 imagenes");
+    }else{
+      this.publicacionesService.modificarImgsPub(this.imgsPub).subscribe( datos => {
+        if(datos['resultado'] == "ERROR"){
+          console.log("ERROR");
+          return
+        }
+        else if(datos['resultado'] == "OK"){
           this.refresh();
+
+          this.borrarImgPrincipal();
+
+          this.urls = [];
+          this.imgsSeleccionadas = [];
+          this.imgsInput.nativeElement.value = null;
+          window.confirm("Imagen(es) modificada(s) con éxito");
         }
       })
     }
+  }
+
+  eliminarImg( id_img:number ){
+    if(this.imgs,length > 1){
+      if(confirm("Está seguro de querer eliminar esta imagen?")){
+        this.publicacionesService.eliminarImgs(id_img).subscribe( datos => {
+          if(datos['resultado'] == "OK"){
+            this.refresh();
+          }
+        })
+      }
+    }else{
+      window.confirm("La publicacion debe de tener al menos una imagen");
+    }
+
   }
 
   multiImg(event) {

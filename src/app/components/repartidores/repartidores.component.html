@@ -42,9 +42,11 @@
                         <td class="align-middle"> {{resultado.celular}} </td>
                         <td class="align-middle" *ngIf="resultado.activo == 1"> Activo </td>
                         <td class="align-middle" *ngIf="resultado.activo == 0"> Inactivo </td>
+                        <td class="align-middle" *ngIf="resultado.activo == 2"> Bloqueado </td>
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarReapartidor( resultado.id_usuario )">Editar</button>
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarRepartidor( resultado.id_usuario )">Eliminar</button>
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarRepartidor( resultado.id_usuario )" *ngIf="resultado.activo == 1">Bloquear</button>
+                            <button class="btn btn-success ml-lg-2" type="button" (click)="activarRepartidor( resultado.id_usuario )" *ngIf="resultado.activo == 2">Activar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -73,9 +75,11 @@
                         <td class="align-middle"> {{repartidor.celular}} </td>
                         <td class="align-middle" *ngIf="repartidor.activo == 1"> Activo </td>
                         <td class="align-middle" *ngIf="repartidor.activo == 0"> Inactivo </td>
+                        <td class="align-middle" *ngIf="repartidor.activo == 2"> Bloqueado </td>
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarReapartidor( repartidor.id_usuario )">Editar</button>
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarRepartidor( repartidor.id_usuario )">Eliminar</button>
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarRepartidor( repartidor.id_usuario )" *ngIf="repartidor.activo == 1">Bloquear</button>
+                            <button class="btn btn-success ml-lg-2" type="button" (click)="activarRepartidor( repartidor.id_usuario )" *ngIf="repartidor.activo == 2">Activar</button>
                         </td>
                     </tr>
                 </tbody>

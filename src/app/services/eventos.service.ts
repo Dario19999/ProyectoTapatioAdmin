@@ -8,8 +8,8 @@ import { serialize } from 'object-to-formdata';
 })
 export class EventosService {
 
-  //url = "https://proyectotapatio.com/PT-API-P/eventos/";
-   url = "http://localhost/PHP---Eventos/PT-API-P/eventos/";
+  url = "https://proyectotapatio.com/PT-API-P/eventos/";
+  //url = "http://localhost/PHP---Eventos/PT-API-P/eventos/";
 
   eventos = null;
 

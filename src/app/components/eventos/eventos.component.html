@@ -45,10 +45,10 @@
                         <td class="align-middle">{{ resultado.orden_anuncio }}</td>
                         <td class="align-middle">
                             <button class="btn btn-primary" type="button" (click)="editarEvento( resultado.id_evento )">Editar</button>
-                            <button class="btn btn-info ml-lg-2" type="button" (click)="irEstadisticas( resultado.id_evento )">Estadísticas</button>
+                            <button class="btn btn-secondary ml-lg-2" type="button" (click)="irEstadisticas( resultado.id_evento )">Estadísticas</button>
                             <!-- <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button> -->
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( resultado.id_evento)" ngif="resultado.estado_evento == 1">Cancelar</button>
-                            <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( resultado.id_evento)" ngif="resultado.estado_evento == 2">Activar</button>
+                            <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( resultado.id_evento)" *ngIf="resultado.estado_evento == 1">Cancelar</button>
+                            <button class="btn btn-success ml-lg-2" type="button" (click)="activarEvento( resultado.id_evento)" *ngIf="resultado.estado_evento == 2">Activar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -79,10 +79,10 @@
                 <td class="align-middle">{{ evento.orden_anuncio }}</td>
                 <td class="align-middle">
                     <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>
-                    <button class="btn btn-info ml-lg-2" type="button" (click)="irEstadisticas( evento.id_evento )">Estadísticas</button>
+                    <button class="btn btn-secondary ml-lg-2" type="button" (click)="irEstadisticas( evento.id_evento )">Estadísticas</button>
                     <!-- <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button> -->
-                    <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento)" ngif="evento.estado_evento == 1">Cancelar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( evento.id_evento)" ngif="evento.estado_evento == 2">Activar</button>
+                    <button class="btn btn-success ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 1">Cancelar</button>
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 2">Activar</button>
                 </td>
             </tr>
         </tbody>
@@ -218,7 +218,7 @@
 
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12">
-                            <label for="imgsEvento">Imagenes del Evento: <small class="text-danger">*</small></label>
+                            <label for="imgsEvento">Imagenes del Evento(De 5 a 30): <small class="text-danger">*</small></label>
                             <input #imgsInput type='file' id="imgsEvento" accept=".jpg" (change)="multiImg($event)" multiple formControlName="imgsEvento">
                             <small *ngIf="validacionImgs" class="form-text text-danger">Mínimo una imágen.</small>
                             <div class="row mb-3 mt-3" *ngFor='let url of urls; let i = index'>
@@ -240,7 +240,7 @@
                     <hr>
                     <div class="input-group form-row mb-3">
                         <div class="col-md-12 text-center">
-                            <button [disabled]="formEventos.invalid" class="btn btn-success" type="submit">Crear</button>
+                            <button [disabled]="formEventos.invalid" class="btn btn-success" type="submit" *ngIf="(cantidad_imagenes<31)&&(cantidad_imagenes>4)">Crear</button>
                         </div>
                         <button #modalError type="button" class="invisible" data-toggle="modal" data-target="#modalError"></button>
                     </div>

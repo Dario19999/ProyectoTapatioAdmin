@@ -37,6 +37,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   errorNombre: string = '';
   sinImagen: boolean = false;
   errorTamImgs: boolean = false;
+  cantidad_imagenes:number = 0;
 
   recognition: SpeechRecognition;
 
@@ -75,7 +76,6 @@ export class EventosComponent implements OnInit, OnDestroy {
       #JSGF V1.0;
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
       public editar = editar;
-      public eliminar = eliminar;
       public cancelar = cancelar;
       `, 1);
 
@@ -120,20 +120,6 @@ export class EventosComponent implements OnInit, OnDestroy {
                 navigate = true;
                 this.ngZone.run(() => {
                   this.editarEvento(e.id_evento);
-                });
-                break;
-              }
-            }
-            break;
-          }
-          case 'eliminar': {
-            const event = command.slice(1, command.length).join(' ');
-
-            for (const e of this.eventos) {
-              if (e.id_evento == event) {
-                navigate = true;
-                this.ngZone.run(() => {
-                  this.cancelarEvento(e.id_evento);
                 });
                 break;
               }
@@ -203,9 +189,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   activarEvento(id: number) {
     if (confirm('Está seguro de querer activar este evento?')) {
           this.eventosService.activarEvento(id).subscribe(datos => {
-            if (datos == true) {
               this.getEventos();
-            }
           });
     }
   }
@@ -402,6 +386,7 @@ export class EventosComponent implements OnInit, OnDestroy {
             this.badUrls.push(file.name)
           }
           else{
+            this.cantidad_imagenes =this.cantidad_imagenes + 1;
             this.urls.push(event.target.result);
             this.imgsSeleccionadas.push(file);
             this.listaImg.push(file.name);
@@ -444,6 +429,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       this.formEventos.controls['imgsEvento'].setValue(null);
       this.imgsInput.nativeElement.value = null;
     }
+    this.cantidad_imagenes =this.cantidad_imagenes - 1;
 
   }
 
