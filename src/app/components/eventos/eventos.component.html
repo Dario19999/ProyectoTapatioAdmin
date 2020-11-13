@@ -81,8 +81,8 @@
                     <button class="btn btn-primary" type="button" (click)="editarEvento( evento.id_evento )">Editar</button>
                     <button class="btn btn-secondary ml-lg-2" type="button" (click)="irEstadisticas( evento.id_evento )">Estadísticas</button>
                     <!-- <button class="btn btn-danger ml-lg-2" type="button" (click)="eliminarEvento( resultado.id_evento )">Eliminar</button> -->
-                    <button class="btn btn-success ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 1">Cancelar</button>
-                    <button class="btn btn-danger ml-lg-2" type="button" (click)="activarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 2">Activar</button>
+                    <button class="btn btn-danger ml-lg-2" type="button" (click)="cancelarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 1">Cancelar</button>
+                    <button class="btn btn-success ml-lg-2" type="button" (click)="activarEvento( evento.id_evento)" *ngIf="evento.estado_evento == 2">Activar</button>
                 </td>
             </tr>
         </tbody>

@@ -42,6 +42,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       public navigate = ver (eventos | publicaciones | usuarios | repartidores);
       public eliminar = eliminar;
       public mostrar = mostrar;
+      public activar = activar;
       `, 1);
 
     this.recognition.grammars = speechRecognitionList;
@@ -71,14 +72,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             }
             break;
           }
-          case 'eliminar': {
+          case 'bloquear': {
             const event = command.slice(1, command.length).join(' ');
 
             for (const e of this.usuarios) {
-              if (e.id_usuario == event) {
+              if ((e.id_usuario == event)&&(e.activo == 1)) {
                 navigate = true;
                 this.ngZone.run(() => {
                   this.eliminarUsuario(e.id_usuario);
+                });
+                break;
+              }
+            }
+            break;
+          }
+          case 'activar': {
+            const event = command.slice(1, command.length).join(' ');
+
+            for (const e of this.usuarios) {
+              if ((e.id_usuario == event)&&(e.activo == 2)) {
+                navigate = true;
+                this.ngZone.run(() => {
+                  this.activarUsuario(e.id_usuario);
                 });
                 break;
               }
